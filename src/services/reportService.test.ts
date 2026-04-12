@@ -338,24 +338,53 @@ describe('reportService', () => {
 
   // --- deleteReport ---
 
-  it('deleteReport elimina en colección principal cuando funciona', async () => {
+  it('deleteReport elimina historial y reporte en colección principal cuando funciona', async () => {
+    firestoreMocks.getDocs.mockResolvedValue({
+      docs: [{ ref: 'reports/r1/updates/u1' }, { ref: 'reports/r1/updates/u2' }],
+    });
+    const batch = { delete: vi.fn(), commit: vi.fn().mockResolvedValue(undefined) };
+    firestoreMocks.writeBatch.mockReturnValue(batch);
+
     await deleteReport('r1', 'ambiental');
-    expect(firestoreMocks.deleteDoc).toHaveBeenCalledWith('reports/r1');
+
+    expect(firestoreMocks.getDocs).toHaveBeenCalledWith('reports/r1/updates');
+    expect(batch.delete).toHaveBeenNthCalledWith(1, 'reports/r1/updates/u1');
+    expect(batch.delete).toHaveBeenNthCalledWith(2, 'reports/r1/updates/u2');
+    expect(batch.delete).toHaveBeenNthCalledWith(3, 'reports/r1');
+    expect(batch.commit).toHaveBeenCalledTimes(1);
+  });
+
+  it('deleteReport elimina reporte aunque no tenga historial de updates', async () => {
+    firestoreMocks.getDocs.mockResolvedValue({ docs: [] });
+    const batch = { delete: vi.fn(), commit: vi.fn().mockResolvedValue(undefined) };
+    firestoreMocks.writeBatch.mockReturnValue(batch);
+
+    await deleteReport('r1', 'ambiental');
+
+    expect(firestoreMocks.getDocs).toHaveBeenCalledWith('reports/r1/updates');
+    expect(batch.delete).toHaveBeenCalledTimes(1);
+    expect(batch.delete).toHaveBeenCalledWith('reports/r1');
+    expect(batch.commit).toHaveBeenCalledTimes(1);
   });
 
   it('deleteReport usa fallback de colección cuando falla el primer intento', async () => {
-    firestoreMocks.deleteDoc.mockRejectedValueOnce(new Error('primary fail')).mockResolvedValueOnce(
-      undefined,
-    );
+    firestoreMocks.getDocs
+      .mockRejectedValueOnce(new Error('primary fail'))
+      .mockResolvedValueOnce({ docs: [{ ref: 'reports/r1/updates/u1' }] });
+    const batch = { delete: vi.fn(), commit: vi.fn().mockResolvedValue(undefined) };
+    firestoreMocks.writeBatch.mockReturnValue(batch);
 
     await deleteReport('r1', 'crisis');
 
-    expect(firestoreMocks.deleteDoc).toHaveBeenNthCalledWith(1, 'emergency_reports/r1');
-    expect(firestoreMocks.deleteDoc).toHaveBeenNthCalledWith(2, 'reports/r1');
+    expect(firestoreMocks.getDocs).toHaveBeenNthCalledWith(1, 'emergency_reports/r1/updates');
+    expect(firestoreMocks.getDocs).toHaveBeenNthCalledWith(2, 'reports/r1/updates');
+    expect(batch.delete).toHaveBeenNthCalledWith(1, 'reports/r1/updates/u1');
+    expect(batch.delete).toHaveBeenNthCalledWith(2, 'reports/r1');
+    expect(batch.commit).toHaveBeenCalledTimes(1);
   });
 
   it('deleteReport reporta error si fallan ambos intentos', async () => {
-    firestoreMocks.deleteDoc
+    firestoreMocks.getDocs
       .mockRejectedValueOnce(new Error('primary fail'))
       .mockRejectedValueOnce(new Error('fallback fail'));
 
