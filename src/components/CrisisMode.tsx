@@ -256,29 +256,32 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   };
 
   const handleAddContact = () => {
-    if (newContact.name && newContact.phone) {
-      const sanitizedContact = {
-        name: sanitizeText(newContact.name),
-        phone: sanitizeText(newContact.phone)
-      };
+    const nameError = validateField('contact_name', newContact.name);
+    const phoneError = validateField('contact_phone', newContact.phone);
+    if (nameError || phoneError) return;
 
-      if (editingContactIndex !== null) {
-        const updatedContacts = [...contacts];
-        updatedContacts[editingContactIndex] = sanitizedContact;
-        setContacts(updatedContacts);
-        setEditingContactIndex(null);
-      } else {
-        setContacts([...contacts, sanitizedContact]);
-      }
-      setNewContact({ name: '', phone: '' });
-      setIsAddingContact(false);
+    const sanitizedContact = {
+      name: sanitizeText(newContact.name),
+      phone: sanitizeText(newContact.phone)
+    };
+
+    if (editingContactIndex !== null) {
+      const updatedContacts = [...contacts];
+      updatedContacts[editingContactIndex] = sanitizedContact;
+      setContacts(updatedContacts);
+      setEditingContactIndex(null);
+    } else {
+      setContacts([...contacts, sanitizedContact]);
     }
+    setNewContact({ name: '', phone: '' });
+    setIsAddingContact(false);
   };
 
   const handleEditContact = (index: number) => {
     setNewContact(contacts[index]);
     setEditingContactIndex(index);
     setIsAddingContact(true);
+    setFieldErrors(prev => ({ ...prev, contact_name: null, contact_phone: null }));
   };
 
   const handleGetLocation = (): Promise<{ lat: number; lng: number } | null> => {
@@ -321,10 +324,19 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
   const handleSubmitDamageReport = async (e: React.FormEvent) => {
     e.preventDefault();
+    const descriptionError = validateField('description', description);
+    if (descriptionError) return;
     
     let finalCoords = currentCoords;
 
     if (isManualLocation) {
+      const latError = validateField('lat', manualCoords.lat);
+      const lngError = validateField('lng', manualCoords.lng);
+      if (latError || lngError) {
+        setLocationError(t('validation.coordinate_invalid'));
+        return;
+      }
+
       const lat = parseFloat(manualCoords.lat);
       const lng = parseFloat(manualCoords.lng);
       
@@ -1006,29 +1018,51 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       placeholder={t('crisis.name_placeholder')}
                       value={newContact.name}
                       onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                      className="w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none"
+                      onBlur={(e) => validateField('contact_name', e.target.value)}
+                      className={cn(
+                        "w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none",
+                        fieldErrors.contact_name && "border-red-300"
+                      )}
                     />
+                    {fieldErrors.contact_name && (
+                      <p className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_name}</p>
+                    )}
                     <input 
                       type="tel" 
                       placeholder={t('crisis.phone_placeholder')}
                       value={newContact.phone}
                       onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                      className="w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none"
+                      onBlur={(e) => validateField('contact_phone', e.target.value)}
+                      className={cn(
+                        "w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none",
+                        fieldErrors.contact_phone && "border-red-300"
+                      )}
                     />
+                    {fieldErrors.contact_phone && (
+                      <p className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_phone}</p>
+                    )}
                     <div className="flex gap-2">
                       <button onClick={() => {
                         setIsAddingContact(false);
                         setEditingContactIndex(null);
                         setNewContact({ name: '', phone: '' });
+                        setFieldErrors(prev => ({ ...prev, contact_name: null, contact_phone: null }));
                       }} className="flex-1 py-3 bg-white/10 rounded-xl font-bold text-xs">{t('crisis.cancel')}</button>
-                      <button onClick={handleAddContact} className="flex-1 py-3 bg-yellow-400 text-red-900 rounded-xl font-bold text-xs">
+                      <button
+                        onClick={handleAddContact}
+                        disabled={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone}
+                        className="flex-1 py-3 bg-yellow-400 text-red-900 rounded-xl font-bold text-xs disabled:opacity-50"
+                      >
                         {editingContactIndex !== null ? t('crisis.update') : t('crisis.save')}
                       </button>
                     </div>
                   </div>
                 ) : (
                   <button 
-                    onClick={() => setIsAddingContact(true)}
+                    onClick={() => {
+                      setFieldErrors(prev => ({ ...prev, contact_name: null, contact_phone: null }));
+                      setIsAddingContact(true);
+                    }}
                     className="w-full py-3 bg-white/10 rounded-xl font-bold text-xs"
                   >
                     {t('crisis.add_contact')}

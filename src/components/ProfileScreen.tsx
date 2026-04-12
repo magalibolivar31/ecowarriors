@@ -198,6 +198,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
   const handleUpdateProfile = async () => {
     if (!currentUser || !editName.trim()) return;
+    const nameError = validateField('editName', editName);
+    if (nameError) return;
 
     try {
       const sanitizedAlias = sanitizeText(editName);

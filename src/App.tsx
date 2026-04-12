@@ -1035,7 +1035,8 @@ function AppContent() {
 
     const titleError = validateField('sTitle', sTitle);
     const descError = validateField('sDescription', sDescription);
-    if (titleError || descError) return;
+    const locationError = validateField('sLocation', sLocation);
+    if (titleError || descError || locationError) return;
 
     // Past date validation
     const squadDateTime = new Date(`${sDate}T${sTime}`);
@@ -1132,8 +1133,9 @@ function AppContent() {
 
     const nameError = validateField('vName', vName);
     const contactError = validateField('vContact', vContact);
+    const zoneError = validateField('vZone', vZone);
     const helpError = validateField('vHelpType', vHelpType);
-    if (nameError || contactError || helpError) return;
+    if (nameError || contactError || zoneError || helpError) return;
 
     setIsSubmittingVolunteer(true);
     try {
@@ -2848,9 +2850,16 @@ function AppContent() {
               type="text"
               value={vZone}
               onChange={(e) => setVZone(e.target.value)}
+              onBlur={(e) => validateField('vZone', e.target.value)}
               placeholder={t('community.volunteer_zone')}
-              className="w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white"
+              className={cn(
+                "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
+                fieldErrors.vZone && "border-red-500 focus:ring-red-500"
+              )}
             />
+            {fieldErrors.vZone && (
+              <p className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.vZone}</p>
+            )}
           </div>
           <div className="space-y-3">
             <label className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest ml-2">{t('community.volunteer_help_label')}</label>
@@ -3432,9 +3441,16 @@ function AppContent() {
               type="text" 
               value={sLocation}
               onChange={(e) => setSLocation(e.target.value)}
+              onBlur={(e) => validateField('sLocation', e.target.value)}
               placeholder={t('community.squad_location_placeholder')}
-              className="w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
+              className={cn(
+                "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
+                fieldErrors.sLocation && "border-red-500 focus:ring-red-500"
+              )}
             />
+            {fieldErrors.sLocation && (
+              <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">{fieldErrors.sLocation}</p>
+            )}
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{t('community.squad_max_participants_label')}</label>
