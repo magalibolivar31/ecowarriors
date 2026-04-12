@@ -1,5 +1,5 @@
 const PHONE_FIELDS = new Set(['vContact', 'contact']);
-const NAME_FIELDS = new Set(['vName', 'sTitle', 'title', 'vZone']);
+const NAME_FIELDS = new Set(['vName', 'sTitle', 'title', 'vZone', 'sLocation']);
 const DESCRIPTION_FIELDS = new Set(['sDescription', 'description', 'vHelpType']);
 
 export function getValidationErrorKey(name: string, value: string): string | null {

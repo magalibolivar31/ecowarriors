@@ -11,6 +11,8 @@ describe('getValidationErrorKey', () => {
   it('valida longitud en campos de nombre', () => {
     expect(getValidationErrorKey('title', 'a')).toBe('validation.name_invalid');
     expect(getValidationErrorKey('vZone', 'Zona Norte')).toBeNull();
+    expect(getValidationErrorKey('sLocation', 'X')).toBe('validation.name_invalid');
+    expect(getValidationErrorKey('sLocation', 'Plaza San Martín')).toBeNull();
   });
 
   it('valida longitud en campos descriptivos', () => {
