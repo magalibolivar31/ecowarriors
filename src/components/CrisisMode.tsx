@@ -1019,13 +1019,14 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       value={newContact.name}
                       onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                       onBlur={(e) => validateField('contact_name', e.target.value)}
+                      aria-describedby={fieldErrors.contact_name ? 'crisis-contact-name-error' : undefined}
                       className={cn(
                         "w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none",
                         fieldErrors.contact_name && "border-red-300"
                       )}
                     />
                     {fieldErrors.contact_name && (
-                      <p className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_name}</p>
+                      <p id="crisis-contact-name-error" className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_name}</p>
                     )}
                     <input 
                       type="tel" 
@@ -1033,13 +1034,14 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       value={newContact.phone}
                       onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
                       onBlur={(e) => validateField('contact_phone', e.target.value)}
+                      aria-describedby={fieldErrors.contact_phone ? 'crisis-contact-phone-error' : undefined}
                       className={cn(
                         "w-full p-3 bg-red-800/40 rounded-xl border border-red-400/30 font-bold outline-none",
                         fieldErrors.contact_phone && "border-red-300"
                       )}
                     />
                     {fieldErrors.contact_phone && (
-                      <p className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_phone}</p>
+                      <p id="crisis-contact-phone-error" className="text-red-300 text-[10px] font-bold uppercase tracking-widest">{fieldErrors.contact_phone}</p>
                     )}
                     <div className="flex gap-2">
                       <button onClick={() => {
@@ -1051,6 +1053,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       <button
                         onClick={handleAddContact}
                         disabled={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone}
+                        aria-disabled={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone}
+                        title={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone ? t('reports.fill_all_fields') : undefined}
                         className="flex-1 py-3 bg-yellow-400 text-red-900 rounded-xl font-bold text-xs disabled:opacity-50"
                       >
                         {editingContactIndex !== null ? t('crisis.update') : t('crisis.save')}

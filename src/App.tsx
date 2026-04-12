@@ -2851,6 +2851,7 @@ function AppContent() {
               value={vZone}
               onChange={(e) => setVZone(e.target.value)}
               onBlur={(e) => validateField('vZone', e.target.value)}
+              aria-describedby={fieldErrors.vZone ? 'volunteer-zone-error' : undefined}
               placeholder={t('community.volunteer_zone')}
               className={cn(
                 "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
@@ -2858,7 +2859,7 @@ function AppContent() {
               )}
             />
             {fieldErrors.vZone && (
-              <p className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.vZone}</p>
+              <p id="volunteer-zone-error" className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.vZone}</p>
             )}
           </div>
           <div className="space-y-3">
@@ -3442,6 +3443,7 @@ function AppContent() {
               value={sLocation}
               onChange={(e) => setSLocation(e.target.value)}
               onBlur={(e) => validateField('sLocation', e.target.value)}
+              aria-describedby={fieldErrors.sLocation ? 'squad-location-error' : undefined}
               placeholder={t('community.squad_location_placeholder')}
               className={cn(
                 "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
@@ -3449,7 +3451,7 @@ function AppContent() {
               )}
             />
             {fieldErrors.sLocation && (
-              <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">{fieldErrors.sLocation}</p>
+              <p id="squad-location-error" className="text-red-500 text-[10px] font-bold mt-1 ml-2">{fieldErrors.sLocation}</p>
             )}
           </div>
           <div className="space-y-2">
