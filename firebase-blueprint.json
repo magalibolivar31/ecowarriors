@@ -1,0 +1,145 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Perfil del ciudadano sensor",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "alias": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "zone": { "type": "string" },
+        "level": { "type": "number" },
+        "xp": { "type": "number" },
+        "badges": { "type": "array", "items": { "type": "string" } },
+        "commitment": { "type": "string" },
+        "onboardingCompleted": { "type": "boolean" },
+        "role": { "type": "string", "enum": ["citizen", "reporter", "volunteer", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "alias", "email", "role"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Reporte ciudadano con trazabilidad completa (Ambiental o Crisis)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "ID del usuario creador" },
+        "type": { "type": "string", "enum": ["ambiental", "crisis"] },
+        "category": { "type": "string", "description": "Categoría específica (ej: basura, inundación, daño_techo)" },
+        "location": { "type": "string" },
+        "coords": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "initialDescription": { "type": "string" },
+        "initialImage": { "type": "string" },
+        "status": { "type": "string", "enum": ["Abierto (nuevo)", "Abierto (en seguimiento)", "Abierto (agravado)", "Resuelto"] },
+        "urgency": { "type": "number", "minimum": 1, "maximum": 5 },
+        "isDeleted": { "type": "boolean", "description": "Baja lógica" },
+        "deletionReason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "type", "location", "coords", "status", "urgency", "createdAt"]
+    },
+    "ReportUpdate": {
+      "title": "ReportUpdate",
+      "description": "Actualización en el historial de un reporte",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "ID del usuario que actualiza" },
+        "status": { "type": "string", "enum": ["Abierto (nuevo)", "Abierto (en seguimiento)", "Abierto (agravado)", "Resuelto"] },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "status", "description", "timestamp"]
+    },
+    "Squad": {
+      "title": "Squad",
+      "description": "Cuadrilla comunitaria",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "time": { "type": "string" },
+        "location": { "type": "string" },
+        "attendees": { "type": "array", "items": { "type": "string" } },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["próxima", "completa", "finalizada"] },
+        "maxParticipants": { "type": "number" }
+      },
+      "required": ["title", "description", "date", "time", "location", "attendees", "createdBy", "createdAt", "status"]
+    },
+    "MarketplacePost": {
+      "title": "MarketplacePost",
+      "description": "Publicación de Te doy / Recibo",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "type": { "type": "string", "enum": ["doy", "recibo"] },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "tag": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "contact": { "type": "string" },
+        "status": { "type": "string", "enum": ["disponible", "reservado", "entregado/resuelto", "vencido"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "type", "title", "content", "tag", "status", "createdAt"]
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "Configuraciones de usuario y modo crisis",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "crisisModeOnboardingCompleted": { "type": "boolean" },
+        "trustedContacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "phone": { "type": "string" }
+            }
+          }
+        }
+      },
+      "required": ["uid", "crisisModeOnboardingCompleted"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Datos de perfil de usuario"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Colección global de reportes ciudadanos"
+    },
+    "/reports/{reportId}/updates/{updateId}": {
+      "schema": "ReportUpdate",
+      "description": "Historial de actualizaciones del reporte"
+    },
+    "/squads/{squadId}": {
+      "schema": "Squad",
+      "description": "Cuadrillas comunitarias"
+    },
+    "/marketplace/{postId}": {
+      "schema": "MarketplacePost",
+      "description": "Publicaciones de Te doy / Recibo"
+    },
+    "/userSettings/{userId}": {
+      "schema": "UserSettings",
+      "description": "Configuraciones privadas de usuario"
+    }
+  }
+}

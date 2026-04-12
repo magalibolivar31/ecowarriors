@@ -1,0 +1,107 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "equipoecowarriors@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'alias', 'email', 'role']) &&
+             data.uid is string &&
+             data.alias is string && data.alias.size() < 50 &&
+             data.email is string &&
+             data.role in ['citizen', 'reporter', 'volunteer', 'admin'];
+    }
+
+    function isValidReport(data) {
+      return data.keys().hasAll(['createdBy', 'type', 'location', 'currentStatus', 'isActive', 'createdAt']) &&
+             data.createdBy is string &&
+             data.type in ['ambiental', 'crisis'] &&
+             data.currentStatus in ["Abierto (nuevo)", "Abierto (en seguimiento)", "Abierto (agravado)", "Resuelto", "Cancelado", "Cargado por error"] &&
+             data.location.lat is number && data.location.lng is number;
+    }
+
+    function isValidReportUpdate(data) {
+      return data.keys().hasAll(['createdBy', 'newStatus', 'description', 'createdAt']) &&
+             data.createdBy is string &&
+             data.newStatus in ["Abierto (nuevo)", "Abierto (en seguimiento)", "Abierto (agravado)", "Resuelto", "Cancelado", "Cargado por error"] &&
+             data.description is string && data.description.size() > 0;
+    }
+
+    function isValidSquad(data) {
+      return data.keys().hasAll(['title', 'description', 'date', 'time', 'location', 'attendees', 'createdBy', 'createdAt', 'status']) &&
+             data.title is string && data.title.size() > 0 &&
+             data.attendees is list &&
+             data.status in ['próxima', 'completa', 'finalizada', 'cancelada'];
+    }
+
+    function isValidMarketplacePost(data) {
+      return data.keys().hasAll(['uid', 'type', 'title', 'content', 'tag', 'status', 'createdAt']) &&
+             data.uid is string &&
+             data.type in ['doy', 'recibo'] &&
+             data.status in ['disponible', 'reservado', 'entregado/resuelto', 'vencido'];
+    }
+
+    function isValidUserSettings(data) {
+      return data.keys().hasAll(['uid', 'crisisModeOnboardingCompleted']) &&
+             data.uid is string &&
+             data.crisisModeOnboardingCompleted is bool;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+    }
+
+    match /reports/{reportId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidReport(request.resource.data) && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && (isAdmin() || resource.data.createdBy == request.auth.uid);
+      
+      match /updates/{updateId} {
+        allow read: if true;
+        allow create: if isAuthenticated() && isValidReportUpdate(request.resource.data) && request.resource.data.createdBy == request.auth.uid;
+      }
+    }
+
+    match /squads/{squadId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidSquad(request.resource.data) && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['attendees']) ||
+        resource.data.createdBy == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.createdBy == request.auth.uid);
+    }
+
+    match /marketplace/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidMarketplacePost(request.resource.data) && request.resource.data.uid == request.auth.uid;
+      allow update: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+    }
+
+    match /userSettings/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) && isValidUserSettings(request.resource.data);
+    }
+  }
+}

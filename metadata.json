@@ -1,0 +1,8 @@
+{
+  "name": "EcoWarriors: Resiliencia Urbana",
+  "description": "Plataforma colaborativa para la mitigación de impacto ambiental y gestión de riesgos hídricos. Transforma ciudadanos en sensores activos para reportar contaminación y alertas climáticas.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
