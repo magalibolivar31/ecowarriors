@@ -207,7 +207,7 @@ export const OnboardingLanding: React.FC = () => {
           </p>
 
           {/* Team Composition */}
-          <div className="pt-12 grid grid-cols-3 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+          <div className="pt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
             {TEAM_MEMBERS.map((member, idx) => (
               <motion.div
                 key={member.name}
@@ -216,7 +216,7 @@ export const OnboardingLanding: React.FC = () => {
                 transition={{ delay: 0.2 + idx * 0.1 }}
                 className={cn(
                   "relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl border-4 border-white",
-                  idx % 2 === 0 ? "translate-y-4" : "-translate-y-4"
+                  idx % 2 === 0 ? "md:translate-y-4" : "md:-translate-y-4"
                 )}
               >
                 {member.image ? (
