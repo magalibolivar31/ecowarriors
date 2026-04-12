@@ -117,4 +117,49 @@ describe('marketplaceService', () => {
     expect(callback).toHaveBeenCalledWith([{ id: 'p1', title: 'Publicación' }]);
     expect(unSub).toBe(unsubscribe);
   });
+
+  it('subscribeToMarketplace llama handleFirestoreError en error', () => {
+    const callback = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_q, _onNext, onError) => {
+      onError(new Error('marketplace error'));
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledTimes(1);
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('deleteMarketplacePost propaga error de Firestore', async () => {
+    firestoreMocks.deleteDoc.mockRejectedValueOnce(new Error('delete error'));
+    await expect(deleteMarketplacePost('post-1')).rejects.toThrow('delete error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('cancelMarketplacePost propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('cancel error'));
+    await expect(cancelMarketplacePost('post-1')).rejects.toThrow('cancel error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('updatePostStatus requiere usuario autenticado', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(updatePostStatus('post-1', 'reservado')).rejects.toThrow('User must be authenticated');
+  });
+
+  it('updatePostStatus propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('update error'));
+    await expect(updatePostStatus('post-1', 'reservado')).rejects.toThrow('update error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('createMarketplacePost propaga error de Firestore', async () => {
+    firestoreMocks.addDoc.mockRejectedValueOnce(new Error('create error'));
+    await expect(
+      createMarketplacePost('doy', 'T', 'C', 'otros', [], 'contacto'),
+    ).rejects.toThrow('create error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
 });

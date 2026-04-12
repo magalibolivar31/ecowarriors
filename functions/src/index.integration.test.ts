@@ -127,6 +127,66 @@ describe("functions/index integration", () => {
     if (previousEnv) process.env.GEMINI_API_KEY = previousEnv;
   });
 
+  const noApiKeyCases = [
+    {
+      name: "analyzeReport",
+      handler: analyzeReport,
+      body: { image: "base64", description: "desc", language: "es" },
+    },
+    {
+      name: "chatWithRocco",
+      handler: chatWithRocco,
+      body: { messages: [{ role: "user", content: "Hola" }], systemInstruction: "system" },
+    },
+    {
+      name: "validateDonation",
+      handler: validateDonation,
+      body: { images: ["img"], title: "T", tag: "ropa" },
+    },
+    {
+      name: "generateMissions",
+      handler: generateMissions,
+      body: { userContext: "ctx" },
+    },
+    {
+      name: "getRoccoFeedback",
+      handler: getRoccoFeedback,
+      body: { behavior: "limpió plaza" },
+    },
+    {
+      name: "summarizeNews",
+      handler: summarizeNews,
+      body: { isCrisis: false },
+    },
+    {
+      name: "summarizeFile",
+      handler: summarizeFile,
+      body: { base64Data: "abc", mimeType: "image/jpeg" },
+    },
+    {
+      name: "analyzePollutionImage",
+      handler: analyzePollutionImage,
+      body: { base64Image: "img" },
+    },
+  ] as const;
+
+  it.each(noApiKeyCases)(
+    "$name devuelve 500 cuando no hay API key",
+    async ({ handler, body }) => {
+      runtimeMocks.configValue = {};
+      const previousEnv = process.env.GEMINI_API_KEY;
+      delete process.env.GEMINI_API_KEY;
+
+      const res = createRes();
+      await handler({ method: "POST", body } as any, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("API Key not configured");
+
+      if (previousEnv) process.env.GEMINI_API_KEY = previousEnv;
+    }
+  );
+
   it("analyzeReport parsea JSON y responde 200", async () => {
     const model = mockModelWithText("```json\n{\"ok\":true}\n```");
     const res = createRes();
@@ -225,6 +285,18 @@ describe("functions/index integration", () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith([
       { title: "t", summary: "s", source: "x", isCrisis: false },
+    ]);
+  });
+
+  it("summarizeNews parsea JSON en modo crisis", async () => {
+    mockModelWithText("[{\"title\":\"Alerta\",\"summary\":\"Inundación\",\"source\":\"noticias\",\"isCrisis\":true}]");
+    const res = createRes();
+
+    await summarizeNews({ method: "POST", body: { isCrisis: true } } as any, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith([
+      { title: "Alerta", summary: "Inundación", source: "noticias", isCrisis: true },
     ]);
   });
 

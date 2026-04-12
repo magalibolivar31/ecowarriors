@@ -160,4 +160,93 @@ describe('squadService', () => {
     expect(callback).toHaveBeenCalledWith([{ id: 'sq1', title: 'Acción 1' }]);
     expect(unSub).toBe(unsubscribe);
   });
+
+  it('subscribeToSquads llama handleFirestoreError en error de snapshot', () => {
+    const callback = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_q, _onNext, onError) => {
+      onError(new Error('snapshot error'));
+      return vi.fn();
+    });
+
+    subscribeToSquads(callback);
+
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledTimes(1);
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('updateSquadStatus propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('status error'));
+    await expect(updateSquadStatus('squad-1', 'finalizada')).rejects.toThrow('status error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('toggleSquadAttendance falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(toggleSquadAttendance('squad-1', false)).rejects.toThrow('User must be authenticated');
+  });
+
+  it('toggleSquadAttendance propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('toggle error'));
+    await expect(toggleSquadAttendance('squad-1', false)).rejects.toThrow('toggle error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('toggleSquadAttendance omite log de email cuando email es null', async () => {
+    firebaseMocks.auth.currentUser = { uid: 'user-1', email: null };
+
+    await toggleSquadAttendance('squad-1', false);
+
+    expect(firestoreMocks.updateDoc).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancelSquad falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(cancelSquad('squad-1')).rejects.toThrow('User must be authenticated');
+  });
+
+  it('cancelSquad propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('cancel error'));
+    await expect(cancelSquad('squad-1')).rejects.toThrow('cancel error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('deleteSquad falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(deleteSquad('squad-1')).rejects.toThrow('User must be authenticated');
+  });
+
+  it('deleteSquad propaga error de Firestore', async () => {
+    firestoreMocks.deleteDoc.mockRejectedValueOnce(new Error('delete error'));
+    await expect(deleteSquad('squad-1')).rejects.toThrow('delete error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('updateSquad falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(updateSquad('squad-1', { title: 'T' } as any)).rejects.toThrow('User must be authenticated');
+  });
+
+  it('updateSquad propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('update error'));
+    await expect(updateSquad('squad-1', { title: 'T' } as any)).rejects.toThrow('update error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('createSquad usa maxParticipants null cuando no se provee', async () => {
+    firestoreMocks.addDoc.mockResolvedValueOnce({ id: 'squad-2' });
+
+    const id = await createSquad('Limpieza', 'Descripción', '2026-04-12', '10:00', 'Plaza');
+
+    expect(id).toBe('squad-2');
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', expect.objectContaining({
+      maxParticipants: null,
+    }));
+  });
+
+  it('createSquad propaga error de Firestore', async () => {
+    firestoreMocks.addDoc.mockRejectedValueOnce(new Error('create error'));
+    await expect(createSquad('T', 'D', '2026-04-12', '10:00', 'Plaza')).rejects.toThrow('create error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
 });

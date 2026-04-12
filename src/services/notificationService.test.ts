@@ -67,6 +67,13 @@ describe('notificationService', () => {
     expect(NotificationMock.requestPermission).toHaveBeenCalledTimes(1);
   });
 
+  it('requestNotificationPermission devuelve false si requestPermission lanza error', async () => {
+    const { NotificationMock } = installNotification('default');
+    NotificationMock.requestPermission.mockRejectedValueOnce(new Error('permission denied'));
+
+    await expect(requestNotificationPermission()).resolves.toBe(false);
+  });
+
   it('showNotification crea notificación solo con permiso granted', () => {
     const granted = installNotification('granted');
     showNotification('Título', 'Mensaje', '/icon.png');
@@ -84,6 +91,25 @@ describe('notificationService', () => {
     const denied = installNotification('denied');
     showNotification('Otro', 'Mensaje');
     expect(denied.created).toHaveLength(0);
+  });
+
+  it('showNotification maneja error al crear la notificación sin lanzar', () => {
+    const { NotificationMock } = installNotification('granted');
+    // Make the constructor throw
+    (NotificationMock as any).mockImplementation = undefined;
+    (globalThis as any).Notification = function () {
+      throw new Error('constructor error');
+    };
+    (globalThis as any).Notification.permission = 'granted';
+
+    expect(() => showNotification('T', 'B')).not.toThrow();
+  });
+
+  it('showNotification no hace nada sin soporte de Notification', () => {
+    (globalThis as any).window = {};
+    delete (globalThis as any).Notification;
+
+    expect(() => showNotification('T', 'B')).not.toThrow();
   });
 
   it('wrappers de notificación emiten mensajes específicos', () => {
