@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { consumeRoccoChatQuota, toWholeSeconds } from './roccoRateLimit';
+import { ceilToSeconds, consumeRoccoChatQuota } from './roccoRateLimit';
 
 function createStorage(initialValue: string | null = null) {
   let value = initialValue;
@@ -51,7 +51,7 @@ describe('roccoRateLimit', () => {
     expect(storage.readRaw()).toContain('"lastSentAt":5000');
   });
 
-  it('toWholeSeconds redondea hacia arriba', () => {
-    expect(toWholeSeconds(1_001)).toBe(2);
+  it('ceilToSeconds redondea hacia arriba', () => {
+    expect(ceilToSeconds(1_001)).toBe(2);
   });
 });

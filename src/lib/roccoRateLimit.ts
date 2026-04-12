@@ -35,7 +35,7 @@ function saveState(storage: StorageLike, key: string, state: ChatRateLimitState)
   storage.setItem(key, JSON.stringify(state));
 }
 
-export function toWholeSeconds(milliseconds: number): number {
+export function ceilToSeconds(milliseconds: number): number {
   return Math.ceil(milliseconds / 1000);
 }
 
