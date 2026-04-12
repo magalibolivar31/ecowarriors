@@ -460,13 +460,13 @@ export function subscribeToAllUpdates(callback: (updates: ReportUpdate[]) => voi
  * Deletes a report (Admin only).
  */
 export async function deleteReport(reportId: string, type: ReportType): Promise<void> {
-  const deleteReportCollectionData = async (collectionName: string): Promise<void> => {
+  const deleteReportWithHistory = async (collectionName: string): Promise<void> => {
     const updatesRef = collection(db, collectionName, reportId, UPDATES_SUBCOLLECTION);
     const updatesSnapshot = await getDocs(updatesRef);
     const batch = writeBatch(db);
 
-    updatesSnapshot.docs.forEach((updateDocSnapshot) => {
-      batch.delete(updateDocSnapshot.ref);
+    updatesSnapshot.docs.forEach((updateDoc) => {
+      batch.delete(updateDoc.ref);
     });
 
     batch.delete(doc(db, collectionName, reportId));
@@ -475,12 +475,12 @@ export async function deleteReport(reportId: string, type: ReportType): Promise<
 
   try {
     const collectionName = (type === 'crisis') ? EMERGENCY_REPORTS_COLLECTION : REPORTS_COLLECTION;
-    await deleteReportCollectionData(collectionName);
+    await deleteReportWithHistory(collectionName);
     console.log(`Reporte ${reportId} eliminado de ${collectionName}`);
   } catch (error) {
     try {
       const fallbackCollection = (type === 'crisis') ? REPORTS_COLLECTION : EMERGENCY_REPORTS_COLLECTION;
-      await deleteReportCollectionData(fallbackCollection);
+      await deleteReportWithHistory(fallbackCollection);
       console.log(`Reporte ${reportId} eliminado de ${fallbackCollection} (fallback)`);
     } catch (fallbackError) {
       console.error('Error eliminando reporte en ambas colecciones:', fallbackError);

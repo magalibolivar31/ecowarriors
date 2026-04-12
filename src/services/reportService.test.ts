@@ -354,6 +354,19 @@ describe('reportService', () => {
     expect(batch.commit).toHaveBeenCalledTimes(1);
   });
 
+  it('deleteReport elimina reporte aunque no tenga historial de updates', async () => {
+    firestoreMocks.getDocs.mockResolvedValue({ docs: [] });
+    const batch = { delete: vi.fn(), commit: vi.fn().mockResolvedValue(undefined) };
+    firestoreMocks.writeBatch.mockReturnValue(batch);
+
+    await deleteReport('r1', 'ambiental');
+
+    expect(firestoreMocks.getDocs).toHaveBeenCalledWith('reports/r1/updates');
+    expect(batch.delete).toHaveBeenCalledTimes(1);
+    expect(batch.delete).toHaveBeenCalledWith('reports/r1');
+    expect(batch.commit).toHaveBeenCalledTimes(1);
+  });
+
   it('deleteReport usa fallback de colección cuando falla el primer intento', async () => {
     firestoreMocks.getDocs
       .mockRejectedValueOnce(new Error('primary fail'))
