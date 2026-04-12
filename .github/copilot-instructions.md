@@ -18,6 +18,9 @@ The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEM
 - Install deps: `cd functions && npm install`
 - Lint: `cd functions && npm run lint`
 - Build: `cd functions && npm run build`
+- Run unit + integration tests: `cd functions && npm run test`
+- Run tests with coverage: `cd functions && npm run test:coverage`
+- Run a single test file: `cd functions && npm run test -- src/index.integration.test.ts`
 - Run local emulator for functions: `cd functions && npm run serve`
 - Deploy functions: `cd functions && npm run deploy`
 
@@ -25,7 +28,7 @@ The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEM
 - Root app uses Vitest.
 - Test files follow `src/**/*.test.ts` and include both **unit** and **integration** tests.
 - Coverage is enforced via `npm run test:coverage` (configured in `vitest.config.ts`).
-- `functions/` still has no dedicated test runner configured.
+- `functions/` also uses Vitest, with coverage configured in `functions/vitest.config.ts`.
 
 ## High-level architecture
 
@@ -38,6 +41,7 @@ The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEM
   - `marketplaceService.ts`, `squadService.ts`, `userService.ts`, and `missionService.ts` implement feature-specific Firestore behavior.
   - `geminiService.ts` runs client-side Gemini validation/analysis used by report and marketplace flows.
 - `functions/src/index.ts` exposes Firebase HTTPS functions for AI-related operations (analysis, chat, validation, summaries, mission generation); this is a separate backend surface from client-side `geminiService`.
+- `functions/src/lib/*` centralizes reusable backend helpers (Gemini client + HTTP/API-key/JSON utilities) used by handlers in `index.ts`.
 - Access/security constraints are defined in `firestore.rules` and `storage.rules` and must stay aligned with client data shapes.
 
 ## Key conventions in this repository

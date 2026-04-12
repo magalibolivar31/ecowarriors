@@ -38,10 +38,16 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
+      - name: Install functions dependencies
+        run: npm --prefix functions ci
       - name: Lint
         run: npm run lint
       - name: Test (coverage)
         run: npm run test:coverage
+      - name: Functions build
+        run: npm --prefix functions run build
+      - name: Functions test (coverage)
+        run: npm --prefix functions run test:coverage
       - name: Build
         run: npm run build
         env:

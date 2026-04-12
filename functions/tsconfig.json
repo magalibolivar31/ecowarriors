@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir": "lib",
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
-    "target": "es2018",
+    "target": "es2020",
     "esModuleInterop": true,
-    "lib": ["es2018"]
+    "lib": ["es2020"],
+    "types": ["node"],
+    "skipLibCheck": true
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
