@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import Markdown from 'react-markdown';
 import { cn } from '../lib/utils';
+import { consumeRoccoChatQuota, toWholeSeconds } from '../lib/roccoRateLimit';
 
 import { useSettings } from '../contexts/SettingsContext';
 import { chatWithRocco } from '../services/geminiService';
@@ -37,70 +38,6 @@ interface EcoMission {
 }
 
 // --- Constants ---
-const ROCCO_CHAT_RATE_LIMIT_KEY = 'rocco_chat_rate_limit';
-const ROCCO_CHAT_WINDOW_MS = 60_000;
-const ROCCO_CHAT_MAX_MESSAGES = 8;
-const ROCCO_CHAT_MIN_INTERVAL_MS = 3_000;
-const ROCCO_CHAT_MIN_WAIT_MS = 1_000;
-
-interface ChatRateLimitState {
-  timestamps: number[];
-  lastSentAt: number;
-}
-
-function loadRateLimitState(): ChatRateLimitState {
-  if (typeof window === 'undefined') return { timestamps: [], lastSentAt: 0 };
-
-  try {
-    const raw = window.localStorage.getItem(ROCCO_CHAT_RATE_LIMIT_KEY);
-    if (!raw) return { timestamps: [], lastSentAt: 0 };
-
-    const parsed = JSON.parse(raw) as ChatRateLimitState;
-    return {
-      timestamps: Array.isArray(parsed.timestamps)
-        ? parsed.timestamps.filter((value): value is number => Number.isFinite(value))
-        : [],
-      lastSentAt: Number.isFinite(parsed.lastSentAt) ? parsed.lastSentAt : 0,
-    };
-  } catch {
-    return { timestamps: [], lastSentAt: 0 };
-  }
-}
-
-function saveRateLimitState(state: ChatRateLimitState) {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(ROCCO_CHAT_RATE_LIMIT_KEY, JSON.stringify(state));
-}
-
-function consumeChatQuota(now = Date.now()): { allowed: true } | { allowed: false; waitMs: number } {
-  const state = loadRateLimitState();
-  const recentMessages = state.timestamps.filter((timestamp) => now - timestamp < ROCCO_CHAT_WINDOW_MS);
-  saveRateLimitState({
-    timestamps: recentMessages,
-    lastSentAt: state.lastSentAt,
-  });
-
-  const minIntervalRemaining = ROCCO_CHAT_MIN_INTERVAL_MS - (now - state.lastSentAt);
-  if (minIntervalRemaining > 0) {
-    return { allowed: false, waitMs: minIntervalRemaining };
-  }
-
-  if (recentMessages.length >= ROCCO_CHAT_MAX_MESSAGES) {
-    const windowRemaining = ROCCO_CHAT_WINDOW_MS - (now - recentMessages[0]);
-    return { allowed: false, waitMs: Math.max(windowRemaining, ROCCO_CHAT_MIN_WAIT_MS) };
-  }
-
-  saveRateLimitState({
-    timestamps: [...recentMessages, now],
-    lastSentAt: now,
-  });
-
-  return { allowed: true };
-}
-
-function toWholeSeconds(milliseconds: number): number {
-  return Math.ceil(milliseconds / 1000);
-}
 
 // --- Main Component ---
 
@@ -136,7 +73,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
 
   const handleSend = async (text: string = input) => {
     if (!text.trim() || isLoading) return;
-    const quotaCheck = consumeChatQuota();
+    const quotaCheck = consumeRoccoChatQuota();
     if (quotaCheck.allowed === false) {
       const waitSeconds = toWholeSeconds(quotaCheck.waitMs);
       showAlert(
