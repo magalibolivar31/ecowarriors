@@ -153,6 +153,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const [isLocating, setIsLocating] = useState(false);
   const [isManualLocation, setIsManualLocation] = useState(false);
   const [manualCoords, setManualCoords] = useState({ lat: '', lng: '' });
+  const isContactInvalid = !newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone;
 
   // Guide step state
   const [activeGuideIndex, setActiveGuideIndex] = useState<number | null>(null);
@@ -1052,9 +1053,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       }} className="flex-1 py-3 bg-white/10 rounded-xl font-bold text-xs">{t('crisis.cancel')}</button>
                       <button
                         onClick={handleAddContact}
-                        disabled={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone}
-                        aria-disabled={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone}
-                        title={!newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone ? t('reports.fill_all_fields') : undefined}
+                        disabled={isContactInvalid}
+                        aria-disabled={isContactInvalid}
+                        title={isContactInvalid ? t('reports.fill_all_fields') : undefined}
                         className="flex-1 py-3 bg-yellow-400 text-red-900 rounded-xl font-bold text-xs disabled:opacity-50"
                       >
                         {editingContactIndex !== null ? t('crisis.update') : t('crisis.save')}
