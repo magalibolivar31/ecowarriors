@@ -64,6 +64,24 @@ describe('userService', () => {
     });
   });
 
+  it('getUserSettings retorna null cuando el documento no existe', async () => {
+    firestoreMocks.getDoc.mockResolvedValueOnce({ exists: () => false });
+
+    await expect(getUserSettings()).resolves.toBeNull();
+  });
+
+  it('getUserSettings retorna null cuando falla getDoc', async () => {
+    firestoreMocks.getDoc.mockRejectedValueOnce(new Error('getDoc failed'));
+
+    await expect(getUserSettings()).resolves.toBeNull();
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('updateUserSettings requiere usuario autenticado', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(updateUserSettings({ onboardingCompleted: true })).rejects.toThrow('User must be authenticated');
+  });
+
   it('updateUserSettings usa updateDoc si ya existe', async () => {
     firestoreMocks.getDoc.mockResolvedValueOnce({ exists: () => true });
 
@@ -85,6 +103,13 @@ describe('userService', () => {
     });
   });
 
+  it('updateUserSettings propaga error de Firestore', async () => {
+    firestoreMocks.getDoc.mockRejectedValueOnce(new Error('settings error'));
+
+    await expect(updateUserSettings({ onboardingCompleted: true })).rejects.toThrow('settings error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
   it('updateUserProfile sanea texto antes de persistir', async () => {
     await updateUserProfile('user-1', {
       alias: '<b>Ana</b>',
@@ -99,6 +124,27 @@ describe('userService', () => {
       commitment: 'alto',
       xp: 120,
     });
+  });
+
+  it('updateUserProfile propaga error', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('profile update error'));
+
+    await expect(updateUserProfile('user-1', { alias: 'Test' })).rejects.toThrow('profile update error');
+  });
+
+  it('getUserProfile devuelve datos cuando el documento existe', async () => {
+    firestoreMocks.getDoc.mockResolvedValueOnce({
+      exists: () => true,
+      data: () => ({ alias: 'Eco', xp: 200 }),
+    });
+
+    await expect(getUserProfile('user-1')).resolves.toEqual({ alias: 'Eco', xp: 200 });
+  });
+
+  it('getUserProfile devuelve null cuando el documento no existe', async () => {
+    firestoreMocks.getDoc.mockResolvedValueOnce({ exists: () => false });
+
+    await expect(getUserProfile('user-1')).resolves.toBeNull();
   });
 
   it('getUserProfile devuelve null cuando falla getDoc', async () => {

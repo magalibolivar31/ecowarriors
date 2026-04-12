@@ -153,4 +153,111 @@ describe('communityService', () => {
     expect(squadsCb).toHaveBeenCalledWith([{ id: 's1', title: 'Sq' }]);
     expect(postsCb).toHaveBeenCalledWith([{ id: 'p1', title: 'Post' }]);
   });
+
+  it('subscribeToSquads invoca handleFirestoreError en error', () => {
+    const cb = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_q, _onNext, onError) => {
+      onError(new Error('snapshot error'));
+      return vi.fn();
+    });
+
+    subscribeToSquads(cb);
+
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledTimes(1);
+    expect(cb).not.toHaveBeenCalled();
+  });
+
+  it('subscribeToPosts invoca handleFirestoreError en error', () => {
+    const cb = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_q, _onNext, onError) => {
+      onError(new Error('posts error'));
+      return vi.fn();
+    });
+
+    subscribeToPosts(cb);
+
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledTimes(1);
+    expect(cb).not.toHaveBeenCalled();
+  });
+
+  it('createSquad usa displayName por defecto cuando es null', async () => {
+    firebaseMocks.auth.currentUser = { uid: 'user-2', displayName: null };
+    firestoreMocks.addDoc.mockResolvedValueOnce({ id: 'sq-2' });
+
+    const id = await createSquad({ title: 'Evento', description: 'D' } as any);
+
+    expect(id).toBe('sq-2');
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', expect.objectContaining({
+      createdByName: 'Usuario EcoWarrior',
+    }));
+  });
+
+  it('createSquad falla sin usuario autenticado', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(createSquad({ title: 'T' } as any)).rejects.toThrow('User must be authenticated');
+  });
+
+  it('createSquad propaga error de Firestore', async () => {
+    firestoreMocks.addDoc.mockRejectedValueOnce(new Error('fs error'));
+    await expect(createSquad({ title: 'T', description: 'D' } as any)).rejects.toThrow('fs error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('joinSquad falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(joinSquad('sq-1')).rejects.toThrow('User must be authenticated');
+  });
+
+  it('joinSquad propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('join error'));
+    await expect(joinSquad('sq-1')).rejects.toThrow('join error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('leaveSquad falla sin usuario', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(leaveSquad('sq-1')).rejects.toThrow('User must be authenticated');
+  });
+
+  it('leaveSquad propaga error de Firestore', async () => {
+    firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('leave error'));
+    await expect(leaveSquad('sq-1')).rejects.toThrow('leave error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('createPost falla sin usuario autenticado', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(createPost({ content: 'c' } as any)).rejects.toThrow('User must be authenticated');
+  });
+
+  it('createPost usa displayName por defecto cuando no existe', async () => {
+    firebaseMocks.auth.currentUser = { uid: 'user-2', displayName: null };
+    firestoreMocks.addDoc.mockResolvedValueOnce({ id: 'p-2' });
+
+    const id = await createPost({ content: 'hola', type: 'doy' } as any);
+
+    expect(id).toBe('p-2');
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', expect.objectContaining({
+      createdByName: 'Usuario EcoWarrior',
+    }));
+  });
+
+  it('createPost propaga error de Firestore', async () => {
+    firestoreMocks.addDoc.mockRejectedValueOnce(new Error('create post error'));
+    await expect(createPost({ content: 'c' } as any)).rejects.toThrow('create post error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
+
+  it('updatePostStatus falla sin usuario autenticado', async () => {
+    firebaseMocks.auth.currentUser = null;
+    await expect(updatePostStatus('p-1', 'reservado' as any)).rejects.toThrow('User must be authenticated');
+  });
+
+  it('updatePostStatus propaga error de Firestore', async () => {
+    firestoreMocks.getDoc.mockRejectedValueOnce(new Error('getDoc error'));
+    await expect(updatePostStatus('p-1', 'reservado' as any)).rejects.toThrow('getDoc error');
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
+  });
 });

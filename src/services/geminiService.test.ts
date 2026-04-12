@@ -90,6 +90,26 @@ describe('geminiService', () => {
     });
   });
 
+  it('analyzeReport mapea respuesta no válida con campos faltantes', async () => {
+    geminiMocks.responseText.mockReturnValueOnce(
+      JSON.stringify({
+        isEnvironmental: false,
+        descriptionValid: true,
+        descriptionMatches: false,
+        rejectionReason: 'La imagen no muestra un problema ambiental.',
+        // wasteType, urgency, description omitted → fallback values
+      }),
+    );
+
+    const result = await analyzeReport('imageb64', 'Descripción', 'CABA');
+
+    expect(result.isValid).toBe(false);
+    expect(result.validationError).toBe('La imagen no muestra un problema ambiental.');
+    expect(result.categoria).toBe('Otro');
+    expect(result.nivelUrgencia).toBe(3);
+    expect(result.analisis).toBe('');
+  });
+
   it('analyzeReport devuelve fallback si falla Gemini', async () => {
     geminiMocks.generateContent.mockRejectedValueOnce(new Error('network'));
 
@@ -129,6 +149,12 @@ describe('geminiService', () => {
     await expect(generateMissions('contexto')).resolves.toEqual([]);
   });
 
+  it('generateMissions parsea respuesta JSON', async () => {
+    const missions = [{ id: 'm1', title: 'Limpiar', description: 'desc', points: 50, type: 'cleanup' }];
+    geminiMocks.responseText.mockReturnValueOnce(JSON.stringify(missions));
+    await expect(generateMissions('usuario activo')).resolves.toEqual(missions);
+  });
+
   it('getRoccoFeedback usa texto generado o fallback de contenido', async () => {
     geminiMocks.responseText.mockReturnValueOnce(JSON.stringify({ text: 'Buen trabajo' }));
     await expect(getRoccoFeedback('ayudó en limpieza')).resolves.toBe('Buen trabajo');
@@ -139,9 +165,36 @@ describe('geminiService', () => {
     );
   });
 
+  it('getRoccoFeedback devuelve fallback si falla Gemini', async () => {
+    geminiMocks.generateContent.mockRejectedValueOnce(new Error('fail'));
+    await expect(getRoccoFeedback('una acción')).resolves.toBe(
+      '¡Seguí así, EcoWarrior! Tu acción cuenta.',
+    );
+  });
+
   it('summarizeEnvironmentalNews devuelve [] si falla', async () => {
     geminiMocks.generateContent.mockRejectedValueOnce(new Error('fail'));
     await expect(summarizeEnvironmentalNews(false)).resolves.toEqual([]);
+  });
+
+  it('summarizeEnvironmentalNews parsea respuesta en modo crisis', async () => {
+    const news = [{ title: 'Crisis', summary: 'Inundación', source: 'fuente', isCrisis: true }];
+    geminiMocks.responseText.mockReturnValueOnce(JSON.stringify(news));
+    await expect(summarizeEnvironmentalNews(true)).resolves.toEqual(news);
+  });
+
+  it('summarizeEnvironmentalNews parsea respuesta en modo normal', async () => {
+    const news = [{ title: 'Avance', summary: 'Positivo', source: 'fuente', isCrisis: false }];
+    geminiMocks.responseText.mockReturnValueOnce(JSON.stringify(news));
+    await expect(summarizeEnvironmentalNews(false)).resolves.toEqual(news);
+  });
+
+  it('validateRequest parsea respuesta JSON', async () => {
+    geminiMocks.responseText.mockReturnValueOnce(JSON.stringify({ valid: true, reason: 'ok' }));
+    await expect(validateRequest('Título', 'Contenido', 'ropa')).resolves.toEqual({
+      valid: true,
+      reason: 'ok',
+    });
   });
 
   it('chatWithRocco envía último mensaje y recorta historial inválido', async () => {

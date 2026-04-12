@@ -53,6 +53,14 @@ describe('aiService', () => {
     expect(aiMocks.generateContent).toHaveBeenCalledTimes(1);
   });
 
+  it('summarizeFile devuelve fallback cuando response.text() es vacío', async () => {
+    aiMocks.responseText.mockReturnValue('');
+
+    const result = await summarizeFile('base64data', 'image/jpeg');
+
+    expect(result).toBe('No se pudo generar un resumen.');
+  });
+
   it('summarizeFile devuelve fallback de error si falla Gemini', async () => {
     aiMocks.generateContent.mockRejectedValueOnce(new Error('network'));
 
