@@ -113,6 +113,7 @@ import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, delete
 import { getUserSettings, updateUserSettings, getUserProfile } from './services/userService';
 import { calculateMissions } from './services/missionService';
 import { calculateLevel } from './lib/levelUtils';
+import { getValidationErrorKey } from './lib/validation';
 import { 
   notifyReportStatusChanged, 
   notifySquadConfirmed, 
@@ -324,25 +325,8 @@ function AppContent() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
 
   const validateField = (name: string, value: string) => {
-    let error: string | null = null;
-
-    if (name === 'vContact' || name === 'contact') {
-      const phoneRegex = /^[0-9+\s-]+$/;
-      const digitsOnly = value.replace(/[^0-9]/g, '');
-      if (!phoneRegex.test(value) || digitsOnly.length < 7 || digitsOnly.length > 15) {
-        error = t('validation.phone_invalid');
-      }
-    } else if (name === 'vName' || name === 'sTitle' || name === 'title' || name === 'vZone') {
-      const trimmed = value.trim();
-      if (trimmed.length < 2 || trimmed.length > 40) {
-        error = t('validation.name_invalid');
-      }
-    } else if (name === 'sDescription' || name === 'description' || name === 'vHelpType') {
-      const trimmed = value.trim();
-      if (trimmed.length < 10 || trimmed.length > 500) {
-        error = t('validation.description_min');
-      }
-    }
+    const errorKey = getValidationErrorKey(name, value);
+    const error = errorKey ? t(errorKey) : null;
 
     setFieldErrors(prev => ({ ...prev, [name]: error }));
     return error;

@@ -20,40 +20,17 @@ import {
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { db, storage, auth, handleFirestoreError, OperationType, cleanFirestoreData } from '../firebase';
 import { Report, ReportUpdate, ReportStatus, ReportType, ReportLocation } from '../types';
+import {
+  normalizeReportLocation,
+  normalizeReportStatus,
+  isValidReportStatus,
+  isActiveReportStatus,
+} from '../lib/reportNormalization';
 import { sanitizeText } from '../lib/utils';
 
 const REPORTS_COLLECTION = 'reports';
 const EMERGENCY_REPORTS_COLLECTION = 'emergency_reports';
 const UPDATES_SUBCOLLECTION = 'updates';
-
-/**
- * Normalizes location data from various possible formats into a consistent structure.
- */
-function normalizeLocation(data: any): ReportLocation {
-  const loc = data.location || {};
-  const coords = data.coords || {};
-  
-  // Priority 1: location.lat/lng
-  let lat = typeof loc.lat === 'number' ? loc.lat : null;
-  let lng = typeof loc.lng === 'number' ? loc.lng : null;
-
-  // Priority 2: coords.lat/lng
-  if (lat === null || lng === null) {
-    lat = typeof coords.lat === 'number' ? coords.lat : null;
-    lng = typeof coords.lng === 'number' ? coords.lng : null;
-  }
-
-  // Priority 3: lat/lng at root
-  if (lat === null || lng === null) {
-    lat = typeof data.lat === 'number' ? data.lat : null;
-    lng = typeof data.lng === 'number' ? data.lng : null;
-  }
-
-  return {
-    lat: lat || 0,
-    lng: lng || 0
-  };
-}
 
 /**
  * Normalizes all existing reports to ensure they have valid coordinates and status.
@@ -96,32 +73,16 @@ export async function normalizeAllReports(): Promise<void> {
       }
 
       // 2. Normalize Status (Abierto / Resuelto)
-      const validStatuses = ['Abierto (nuevo)', 'Abierto (en seguimiento)', 'Abierto (agravado)', 'Resuelto', 'Cancelado', 'Cargado por error'];
       const currentStatus = data.currentStatus;
       
-      if (!currentStatus || typeof currentStatus !== 'string' || !validStatuses.includes(currentStatus)) {
-        const statusStr = String(currentStatus || '').toLowerCase();
-        if (!currentStatus || statusStr.includes('abierto')) {
-          updateData.currentStatus = 'Abierto (nuevo)';
-          updateData.isActive = true;
-          needsUpdate = true;
-        } else if (statusStr.includes('resuelto')) {
-          updateData.currentStatus = 'Resuelto';
-          updateData.isActive = false;
-          needsUpdate = true;
-        } else if (statusStr.includes('cancelado') || statusStr.includes('error')) {
-          updateData.currentStatus = statusStr.includes('cancelado') ? 'Cancelado' : 'Cargado por error';
-          updateData.isActive = false;
-          needsUpdate = true;
-        } else {
-          // Default to open if unknown
-          updateData.currentStatus = 'Abierto (nuevo)';
-          updateData.isActive = true;
-          needsUpdate = true;
-        }
+      if (!isValidReportStatus(currentStatus)) {
+        const normalizedStatus = normalizeReportStatus(currentStatus);
+        updateData.currentStatus = normalizedStatus;
+        updateData.isActive = isActiveReportStatus(normalizedStatus);
+        needsUpdate = true;
       } else {
         // Ensure isActive matches currentStatus
-        const shouldBeActive = !['Resuelto', 'Cancelado', 'Cargado por error'].includes(currentStatus);
+        const shouldBeActive = isActiveReportStatus(currentStatus);
         if (data.isActive !== shouldBeActive) {
           updateData.isActive = shouldBeActive;
           needsUpdate = true;
@@ -352,9 +313,9 @@ export function subscribeToAllReports(callback: (reports: Report[]) => void) {
       return {
         id: doc.id,
         ...data,
-        location: normalizeLocation(data),
-        currentStatus: data.currentStatus || 'Abierto (nuevo)',
-        isActive: data.isActive !== undefined ? data.isActive : true
+        location: normalizeReportLocation(data),
+        currentStatus: normalizeReportStatus(data.currentStatus),
+        isActive: data.isActive !== undefined ? data.isActive : isActiveReportStatus(normalizeReportStatus(data.currentStatus)),
       } as Report;
     });
     updateAndNotify();
@@ -369,9 +330,9 @@ export function subscribeToAllReports(callback: (reports: Report[]) => void) {
         id: doc.id,
         ...data,
         type: 'crisis', // Force crisis type for emergency reports
-        location: normalizeLocation(data),
-        currentStatus: data.currentStatus || 'Abierto (nuevo)',
-        isActive: data.isActive !== undefined ? data.isActive : true
+        location: normalizeReportLocation(data),
+        currentStatus: normalizeReportStatus(data.currentStatus),
+        isActive: data.isActive !== undefined ? data.isActive : isActiveReportStatus(normalizeReportStatus(data.currentStatus)),
       } as Report;
     });
     updateAndNotify();
@@ -409,7 +370,7 @@ export function subscribeToActiveReports(callback: (reports: Report[]) => void) 
       return {
         id: doc.id,
         ...data,
-        location: normalizeLocation(data)
+        location: normalizeReportLocation(data),
       } as Report;
     });
     updateAndNotify();
@@ -425,7 +386,7 @@ export function subscribeToActiveReports(callback: (reports: Report[]) => void) 
         id: doc.id,
         ...data,
         type: 'crisis',
-        location: normalizeLocation(data)
+        location: normalizeReportLocation(data),
       } as Report;
     });
     updateAndNotify();

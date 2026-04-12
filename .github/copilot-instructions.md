@@ -1,0 +1,53 @@
+# Copilot Instructions for EcoWarriors
+
+## Build, test, and lint commands
+
+### Root app (`/`)
+- Install deps: `npm install`
+- Run dev server: `npm run dev`
+- Type/lint check: `npm run lint`
+- Run unit + integration tests: `npm run test`
+- Run tests with coverage thresholds: `npm run test:coverage`
+- Run a single test file: `npm run test -- src/lib/utils.test.ts`
+- Production build: `npm run build`
+- Preview production build: `npm run preview`
+
+The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEMINI_API_KEY`).
+
+### Firebase Functions (`/functions`)
+- Install deps: `cd functions && npm install`
+- Lint: `cd functions && npm run lint`
+- Build: `cd functions && npm run build`
+- Run local emulator for functions: `cd functions && npm run serve`
+- Deploy functions: `cd functions && npm run deploy`
+
+### Tests
+- Root app uses Vitest.
+- Test files follow `src/**/*.test.ts` and include both **unit** and **integration** tests.
+- Coverage is enforced via `npm run test:coverage` (configured in `vitest.config.ts`).
+- `functions/` still has no dedicated test runner configured.
+
+## High-level architecture
+
+- `src/main.tsx` bootstraps a single-page React app and wraps `<App />` with `ErrorBoundary`.
+- `src/App.tsx` is the main orchestration layer: auth lifecycle, Firestore subscriptions, tab navigation (`DASHBOARD`, `REPORTES`, `COMUNIDAD`, `MAPA`, `CHATBOT`, `PERFIL`), and feature actions (report creation, marketplace, squads, crisis mode).
+- `src/contexts/SettingsContext.tsx` provides i18n (`es`/`en` dictionaries), UI preferences (language/notifications/privacy/dark mode), and global alert/confirm modals.
+- Firebase client setup is centralized in `src/firebase.ts` (Auth, Firestore, Storage) plus shared write/error helpers.
+- Domain/service logic is mostly in `src/services/*`:
+  - `reportService.ts` handles reports in both `reports` and `emergency_reports`, uploads report images to Storage, manages `updates` subcollections, and normalizes legacy report data.
+  - `marketplaceService.ts`, `squadService.ts`, `userService.ts`, and `missionService.ts` implement feature-specific Firestore behavior.
+  - `geminiService.ts` runs client-side Gemini validation/analysis used by report and marketplace flows.
+- `functions/src/index.ts` exposes Firebase HTTPS functions for AI-related operations (analysis, chat, validation, summaries, mission generation); this is a separate backend surface from client-side `geminiService`.
+- Access/security constraints are defined in `firestore.rules` and `storage.rules` and must stay aligned with client data shapes.
+
+## Key conventions in this repository
+
+- **Sanitize before persisting**: user-provided text should pass through `sanitizeText` (`src/lib/utils.ts`), and objects written to Firestore should go through `cleanFirestoreData` (`src/firebase.ts`) to remove unsupported `undefined` values.
+- **Firestore error pattern**: service-layer operations use `handleFirestoreError(error, OperationType.<...>, path)` and then rethrow, so callers can surface failures.
+- **Report model consistency is strict**:
+  - Status values are Spanish string unions (for example `Abierto (nuevo)`, `Resuelto`, `Cargado por error`) shared across `src/types.ts`, services, and `firestore.rules`.
+  - Report location canonical shape is `{ lat: number, lng: number }`; normalization helpers are centralized in `src/lib/reportNormalization.ts`.
+  - Report history is stored as subcollection docs under `updates`.
+- **Settings/i18n workflow**: new UI strings should use translation keys and be added for both languages in `SettingsContext` (not hardcoded inline text).
+- **Theme/settings persistence**: settings are persisted in `localStorage` keys (`app_lang`, `app_notifications`, `app_privacy`, `app_dark_mode`), and dark mode is controlled by toggling the `dark` class on `document.documentElement`.
+- **Deployment path awareness**: Vite uses `base: '/ecowarriors/'` (`vite.config.ts`), so links/assets should not assume root `/`.
