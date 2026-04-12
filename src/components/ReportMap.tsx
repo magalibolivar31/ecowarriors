@@ -312,8 +312,13 @@ export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, f
           <div className="text-center space-y-2">
             <MapPin className="w-10 h-10 text-zinc-300 mx-auto" />
             <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">
-              {t('map.no_reports_found') || 'No se encontraron reportes'}
+              {filter === 'mios' ? t('map.no_my_reports_found') : t('map.no_reports_found')}
             </p>
+            {filter === 'mios' && (
+              <p className="text-xs font-semibold text-zinc-500">
+                {t('map.no_my_reports_cta')}
+              </p>
+            )}
           </div>
         </div>
       )}
