@@ -75,6 +75,11 @@ function saveRateLimitState(state: ChatRateLimitState) {
 function consumeChatQuota(now = Date.now()): { allowed: true } | { allowed: false; waitMs: number } {
   const state = loadRateLimitState();
   const recentMessages = state.timestamps.filter((timestamp) => now - timestamp < ROCCO_CHAT_WINDOW_MS);
+  saveRateLimitState({
+    timestamps: recentMessages,
+    lastSentAt: state.lastSentAt,
+  });
+
   const minIntervalRemaining = ROCCO_CHAT_MIN_INTERVAL_MS - (now - state.lastSentAt);
   if (minIntervalRemaining > 0) {
     return { allowed: false, waitMs: minIntervalRemaining };
