@@ -1649,13 +1649,12 @@ function AppContent() {
                 
                 <div className="relative z-10 shrink-0">
                   <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[2.5rem] sm:rounded-[3rem] bg-stormy-teal flex items-center justify-center text-white shadow-2xl shadow-stormy-teal/10 relative border-4 sm:border-8 border-white rotate-3 group-hover:rotate-0 transition-transform duration-500 overflow-hidden">
-                    {userProfile?.photoURL ? (
-                      <img src={userProfile.photoURL} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-zinc-100 text-stormy-teal font-black text-2xl">
-                        {userProfile?.alias?.charAt(0) || t('dashboard.default_alias').charAt(0)}
-                      </div>
-                    )}
+                    <img
+                      src={userProfile?.photoURL || user?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.uid || userProfile?.uid || 'ecowarrior'}`}
+                      alt={userProfile?.alias || t('dashboard.default_alias')}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
                   <div className="absolute -bottom-2 -right-2 w-10 h-10 sm:w-12 sm:h-12 bg-emerald-action rounded-2xl border-4 border-white flex items-center justify-center text-white shadow-lg">
                     <ShieldCheck className="w-6 h-6" />
