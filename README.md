@@ -154,12 +154,13 @@ Workflow: `.github/workflows/deploy.yml`
 
 Pipeline actual:
 
-1. Instala dependencias de raíz y de `functions/`
-2. Ejecuta lint frontend
-3. Ejecuta tests con cobertura frontend
-4. Ejecuta build + tests con cobertura de functions
-5. Ejecuta build frontend
-6. Publica `dist/` en GitHub Pages
+1. Instala dependencias de raíz y de `functions/` (`npm ci` y `npm --prefix functions ci`)
+2. Ejecuta lint/typecheck frontend (`npm run lint`)
+3. Ejecuta tests frontend con cobertura (`npm run test:coverage`)
+4. Ejecuta build de `functions/` (`npm --prefix functions run build`)
+5. Ejecuta tests de `functions/` con cobertura (`npm --prefix functions run test:coverage`)
+6. Ejecuta build frontend (`npm run build`)
+7. Publica `dist/` en GitHub Pages
 
 ---
 
