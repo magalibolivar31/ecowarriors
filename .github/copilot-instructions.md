@@ -16,7 +16,6 @@ The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEM
 
 ### Firebase Functions (`/functions`)
 - Install deps: `cd functions && npm install`
-- Lint: `cd functions && npm run lint`
 - Build: `cd functions && npm run build`
 - Run unit + integration tests: `cd functions && npm run test`
 - Run tests with coverage: `cd functions && npm run test:coverage`
@@ -24,11 +23,16 @@ The app depends on env vars from `.env.example` (`VITE_FIREBASE_*` and `VITE_GEM
 - Run local emulator for functions: `cd functions && npm run serve`
 - Deploy functions: `cd functions && npm run deploy`
 
+Note: a `lint` script exists in `functions/package.json`, but the current CI workflow does not run it.
+
 ### Tests
 - Root app uses Vitest.
 - Test files follow `src/**/*.test.ts` and include both **unit** and **integration** tests.
 - Coverage is enforced via `npm run test:coverage` (configured in `vitest.config.ts`).
 - `functions/` also uses Vitest, with coverage configured in `functions/vitest.config.ts`.
+- Deploy CI (`.github/workflows/deploy.yml`) validates both layers with coverage:
+  - Root app: `npm run test:coverage`
+  - Functions: `npm --prefix functions run test:coverage`
 
 ## High-level architecture
 
