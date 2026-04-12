@@ -241,12 +241,12 @@ describe('reportService', () => {
     firestoreMocks.setDoc.mockResolvedValue(undefined);
     firestoreMocks.doc.mockReturnValue('doc-ref');
 
-    await addReportUpdate('r1', 'nueva actualización', 'En proceso');
+    await addReportUpdate('r1', 'nueva actualización', 'Abierto (en seguimiento)');
 
     expect(batch.set).toHaveBeenCalledTimes(1);
     expect(batch.update).toHaveBeenCalledWith(
       'doc-ref',
-      expect.objectContaining({ currentStatus: 'En proceso', isActive: true }),
+      expect.objectContaining({ currentStatus: 'Abierto (en seguimiento)', isActive: true }),
     );
     expect(batch.commit).toHaveBeenCalledTimes(1);
   });
@@ -261,7 +261,7 @@ describe('reportService', () => {
     firestoreMocks.setDoc.mockResolvedValue(undefined);
     firestoreMocks.doc.mockReturnValue('doc-ref');
 
-    await addReportUpdate('r1', 'descripción', 'En proceso');
+    await addReportUpdate('r1', 'descripción', 'Abierto (en seguimiento)');
 
     expect(batch.set).toHaveBeenCalledWith(
       'doc-ref',
@@ -303,7 +303,7 @@ describe('reportService', () => {
     storageMocks.uploadString.mockResolvedValue(undefined);
     storageMocks.getDownloadURL.mockResolvedValue('https://cdn/update.jpg');
 
-    await addReportUpdate('r1', 'Con foto', 'En proceso', 'data:image/jpeg;base64,xyz');
+    await addReportUpdate('r1', 'Con foto', 'Abierto (en seguimiento)', 'data:image/jpeg;base64,xyz');
 
     expect(storageMocks.uploadString).toHaveBeenCalledTimes(1);
     expect(storageMocks.getDownloadURL).toHaveBeenCalledTimes(1);
@@ -330,7 +330,7 @@ describe('reportService', () => {
       .mockResolvedValueOnce({ exists: () => false });
     firestoreMocks.doc.mockReturnValue('doc-ref');
 
-    await expect(addReportUpdate('r1', 'desc', 'En proceso')).rejects.toThrow(
+    await expect(addReportUpdate('r1', 'desc', 'Abierto (en seguimiento)')).rejects.toThrow(
       'Reporte r1 no encontrado en ninguna colección.',
     );
     expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
