@@ -547,6 +547,12 @@ function AppContent() {
   }, [reports, reportFilter, searchQuery, user, isAdmin]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const contentScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollToTop = () => {
+    contentScrollRef.current?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  };
 
   useEffect(() => {
     const handleUnhandledRejection = async (event: PromiseRejectionEvent) => {
@@ -564,6 +570,10 @@ function AppContent() {
     window.addEventListener('unhandledrejection', handleUnhandledRejection);
     return () => window.removeEventListener('unhandledrejection', handleUnhandledRejection);
   }, []);
+
+  useEffect(() => {
+    scrollToTop();
+  }, [activeTab]);
 
   useEffect(() => {
     let unsubPosts: (() => void) | null = null;
@@ -1210,6 +1220,7 @@ function AppContent() {
 
   const handleLogout = async () => {
     try {
+      scrollToTop();
       await signOut(auth);
     } catch (err) {
       console.error("Error during logout", err);
@@ -1357,7 +1368,7 @@ function AppContent() {
         </nav>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar bg-brand-bg pb-24 sm:pb-0">
+        <div ref={contentScrollRef} className="flex-1 overflow-y-auto custom-scrollbar bg-brand-bg pb-24 sm:pb-0">
           <div className="app-container py-8">
             <AnimatePresence mode="wait">
           {activeTab === 'DASHBOARD' && (
