@@ -4,7 +4,6 @@ import {
   updateDoc, 
   setDoc,
   doc, 
-  deleteDoc,
   serverTimestamp, 
   query, 
   where, 
@@ -461,16 +460,27 @@ export function subscribeToAllUpdates(callback: (updates: ReportUpdate[]) => voi
  * Deletes a report (Admin only).
  */
 export async function deleteReport(reportId: string, type: ReportType): Promise<void> {
+  const deleteReportCollectionData = async (collectionName: string): Promise<void> => {
+    const updatesRef = collection(db, collectionName, reportId, UPDATES_SUBCOLLECTION);
+    const updatesSnapshot = await getDocs(updatesRef);
+    const batch = writeBatch(db);
+
+    updatesSnapshot.docs.forEach((updateDocSnapshot) => {
+      batch.delete(updateDocSnapshot.ref);
+    });
+
+    batch.delete(doc(db, collectionName, reportId));
+    await batch.commit();
+  };
+
   try {
-    // Intentar borrar de ambas colecciones si el tipo es ambiguo
     const collectionName = (type === 'crisis') ? EMERGENCY_REPORTS_COLLECTION : REPORTS_COLLECTION;
-    await deleteDoc(doc(db, collectionName, reportId));
+    await deleteReportCollectionData(collectionName);
     console.log(`Reporte ${reportId} eliminado de ${collectionName}`);
   } catch (error) {
-    // Si falla, intentar la otra colección
     try {
       const fallbackCollection = (type === 'crisis') ? REPORTS_COLLECTION : EMERGENCY_REPORTS_COLLECTION;
-      await deleteDoc(doc(db, fallbackCollection, reportId));
+      await deleteReportCollectionData(fallbackCollection);
       console.log(`Reporte ${reportId} eliminado de ${fallbackCollection} (fallback)`);
     } catch (fallbackError) {
       console.error('Error eliminando reporte en ambas colecciones:', fallbackError);
