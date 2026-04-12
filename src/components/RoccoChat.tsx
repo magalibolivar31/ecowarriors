@@ -41,6 +41,7 @@ const ROCCO_CHAT_RATE_LIMIT_KEY = 'rocco_chat_rate_limit';
 const ROCCO_CHAT_WINDOW_MS = 60_000;
 const ROCCO_CHAT_MAX_MESSAGES = 8;
 const ROCCO_CHAT_MIN_INTERVAL_MS = 3_000;
+const ROCCO_CHAT_MIN_WAIT_MS = 1_000;
 
 interface ChatRateLimitState {
   timestamps: number[];
@@ -81,7 +82,7 @@ function consumeChatQuota(now = Date.now()): { allowed: true } | { allowed: fals
 
   if (recentMessages.length >= ROCCO_CHAT_MAX_MESSAGES) {
     const windowRemaining = ROCCO_CHAT_WINDOW_MS - (now - recentMessages[0]);
-    return { allowed: false, waitMs: Math.max(windowRemaining, 1_000) };
+    return { allowed: false, waitMs: Math.max(windowRemaining, ROCCO_CHAT_MIN_WAIT_MS) };
   }
 
   saveRateLimitState({
@@ -90,6 +91,10 @@ function consumeChatQuota(now = Date.now()): { allowed: true } | { allowed: fals
   });
 
   return { allowed: true };
+}
+
+function toWholeSeconds(milliseconds: number): number {
+  return Math.ceil(milliseconds / 1000);
 }
 
 // --- Main Component ---
@@ -128,7 +133,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
     if (!text.trim() || isLoading) return;
     const quotaCheck = consumeChatQuota();
     if (quotaCheck.allowed === false) {
-      const waitSeconds = Math.ceil(quotaCheck.waitMs / 1000);
+      const waitSeconds = toWholeSeconds(quotaCheck.waitMs);
       showAlert(
         t('common.info'),
         t('rocco.rate_limit_message').replace('{seconds}', String(waitSeconds))
