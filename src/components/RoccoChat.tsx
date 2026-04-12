@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import Markdown from 'react-markdown';
 import { cn } from '../lib/utils';
+import { ceilToSeconds, consumeRoccoChatQuota } from '../lib/roccoRateLimit';
 
 import { useSettings } from '../contexts/SettingsContext';
 import { chatWithRocco } from '../services/geminiService';
@@ -72,6 +73,15 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
 
   const handleSend = async (text: string = input) => {
     if (!text.trim() || isLoading) return;
+    const quotaCheck = consumeRoccoChatQuota();
+    if (quotaCheck.allowed === false) {
+      const waitSeconds = ceilToSeconds(quotaCheck.waitMs);
+      showAlert(
+        t('common.info'),
+        t('rocco.rate_limit_message').replace('{seconds}', String(waitSeconds))
+      );
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
