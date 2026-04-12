@@ -158,7 +158,7 @@ export const OnboardingLanding: React.FC = () => {
             </div>
             <button 
               onClick={() => handleOpenAuth('login')}
-              className="px-5 py-2.5 text-sm font-bold text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-2xl transition-all focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 text-sm font-bold text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 dark:text-white dark:bg-stormy-teal dark:hover:bg-emerald-action dark:shadow-lg dark:shadow-stormy-teal/20 rounded-2xl transition-all focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t('landing.login')}
             </button>
