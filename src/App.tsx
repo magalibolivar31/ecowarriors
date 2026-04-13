@@ -1530,7 +1530,7 @@ function AppContent() {
                         {/* Hero Type */}
                         {card.type === 'hero' && (
                           <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-soft-maya-blue/35 via-white/80 to-transparent z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-soft-maya-blue/25 via-white/92 to-transparent z-10" />
                             
                             <div className="relative z-20 h-full p-5 sm:p-16 flex flex-col justify-center max-w-3xl space-y-4 sm:space-y-6">
                               {card.tag && (
