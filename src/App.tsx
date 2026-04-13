@@ -1420,7 +1420,7 @@ function AppContent() {
               aria-label={t('feedback.button')}
             >
               <MessageSquare className="w-5 h-5" />
-              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">{t('feedback.button')}</span>
+              <span className="hidden sm:inline text-[10px] font-black uppercase tracking-widest">{t('feedback.button')}</span>
             </button>
 
             <button 
@@ -1429,7 +1429,7 @@ function AppContent() {
               title={t('nav.crisis_mode')}
             >
               <ShieldAlert className="w-5 h-5" />
-              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">{t('nav.crisis_mode')}</span>
+              <span className="hidden sm:inline text-[10px] font-black uppercase tracking-widest">{t('nav.crisis_mode')}</span>
             </button>
             
             <div className="h-8 w-px bg-zinc-100 mx-2 hidden sm:block" />
@@ -1493,8 +1493,8 @@ function AppContent() {
         </nav>
 
         {/* Content Area */}
-        <div ref={contentScrollRef} className="flex-1 overflow-y-auto custom-scrollbar bg-brand-bg pb-24 sm:pb-0">
-          <div className="app-container py-8">
+        <div ref={contentScrollRef} className="flex-1 overflow-y-auto custom-scrollbar bg-brand-bg pb-32 sm:pb-0">
+          <div className="app-container py-5 sm:py-8">
             <AnimatePresence mode="wait">
           {activeTab === 'DASHBOARD' && (
             <motion.div 
@@ -1502,10 +1502,10 @@ function AppContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-8 sm:space-y-12"
+              className="space-y-5 sm:space-y-12"
             >
               {/* 1. Carrusel de Novedades (Rediseñado) */}
-              <div className="relative group overflow-hidden rounded-[2.5rem] sm:rounded-[4rem] bg-gradient-to-br from-stormy-teal to-emerald-900 shadow-2xl h-[450px] sm:h-[550px]">
+              <div className="relative group overflow-hidden rounded-[2rem] sm:rounded-[4rem] bg-gradient-to-br from-stormy-teal to-emerald-900 shadow-2xl h-[340px] sm:h-[550px]">
                 <AnimatePresence mode='wait'>
                   {carouselCards.map((card, idx) => (
                     idx === currentSlide && (
@@ -1522,30 +1522,30 @@ function AppContent() {
                           <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-r from-stormy-teal/80 via-stormy-teal/30 to-transparent z-10" />
                             
-                            <div className="relative z-20 h-full p-8 sm:p-16 flex flex-col justify-center max-w-3xl space-y-6">
+                            <div className="relative z-20 h-full p-5 sm:p-16 flex flex-col justify-center max-w-3xl space-y-4 sm:space-y-6">
                               {card.tag && (
-                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-action/20 backdrop-blur-md border border-emerald-action/30 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-action w-fit">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-action/20 backdrop-blur-md border border-emerald-action/30 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-emerald-action w-fit">
                                   <Sparkles className="w-3 h-3" />
                                   {t(card.tag)}
                                 </div>
                               )}
-                              <h2 className="text-4xl sm:text-7xl font-display font-black text-white tracking-tighter leading-[0.9] uppercase drop-shadow-lg">
+                              <h2 className="text-2xl sm:text-7xl font-display font-black text-white tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase drop-shadow-lg">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-white font-medium text-lg sm:text-xl leading-relaxed max-w-xl drop-shadow-md">
+                              <p className="text-white font-medium text-sm sm:text-xl leading-relaxed max-w-sm sm:max-w-xl drop-shadow-md">
                                 {t(card.description)}
                               </p>
                               <button 
                                 onClick={() => setActiveTab('REPORTES')}
-                                className="w-fit px-8 py-4 bg-emerald-action text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                                className="w-fit px-5 py-2.5 sm:px-8 sm:py-4 bg-emerald-action text-white rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-sm uppercase tracking-widest shadow-xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 sm:gap-3"
                               >
                                 {t('dashboard.start_now')}
-                                <ArrowRight className="w-5 h-5" />
+                                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                               </button>
                             </div>
 
                             {card.imageUrl && (
-                              <div className="absolute right-0 bottom-0 h-[80%] sm:h-[90%] w-full sm:w-1/2 flex items-end justify-end pointer-events-none">
+                              <div className="absolute right-0 bottom-0 h-[56%] sm:h-[90%] w-full sm:w-1/2 flex items-end justify-end pointer-events-none">
                                 <img 
                                   src={card.imageUrl} 
                                   className="h-full w-auto object-contain object-right-bottom transition-transform duration-700 group-hover:scale-105" 
@@ -1560,30 +1560,30 @@ function AppContent() {
 
                         {/* Info Type (Ciclo) */}
                         {card.type === 'info' && (
-                          <div className="h-full bg-gradient-to-br from-stormy-teal to-zinc-900 p-8 sm:p-16 flex flex-col justify-center space-y-10">
-                            <div className="space-y-4">
-                              <h2 className="text-3xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase drop-shadow-lg">
+                          <div className="h-full bg-gradient-to-br from-stormy-teal to-zinc-900 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-10">
+                            <div className="space-y-2 sm:space-y-4">
+                              <h2 className="text-2xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase drop-shadow-lg">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-white/90 text-base sm:text-lg font-medium max-w-xl drop-shadow-sm">
+                              <p className="text-white/90 text-xs sm:text-lg font-medium max-w-xl drop-shadow-sm">
                                 {t(card.description)}
                               </p>
                             </div>
                             
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                            <div className="grid grid-cols-2 gap-3 sm:gap-8">
                               {[
                                 { title: t('dashboard.prevention'), desc: t('dashboard.prevention_desc'), icon: <ShieldCheck className="w-6 h-6" />, color: 'text-maya-blue bg-maya-blue/10' },
                                 { title: t('dashboard.alert'), desc: t('dashboard.alert_desc'), icon: <AlertTriangle className="w-6 h-6" />, color: 'text-amber-400 bg-amber-400/10' },
                                 { title: t('dashboard.action'), desc: t('dashboard.action_desc'), icon: <Zap className="w-6 h-6" />, color: 'text-emerald-action bg-emerald-action/10' },
                                 { title: t('dashboard.recovery'), desc: t('dashboard.recovery_desc'), icon: <HeartHandshake className="w-6 h-6" />, color: 'text-pink-400 bg-pink-400/10' }
                               ].map((step, i) => (
-                                <div key={i} className="flex items-center gap-5 group/item">
-                                  <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/item:scale-110", step.color)}>
+                                <div key={i} className="flex items-start gap-2 sm:gap-5 group/item bg-white/5 sm:bg-transparent rounded-2xl p-2.5 sm:p-0">
+                                  <div className={cn("w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/item:scale-110", step.color)}>
                                     {step.icon}
                                   </div>
-                                  <div>
-                                    <h4 className="font-black text-white uppercase tracking-tight text-lg">{step.title}</h4>
-                                    <p className="text-white/60 text-xs font-medium">{step.desc}</p>
+                                  <div className="space-y-0.5 sm:space-y-1">
+                                    <h4 className="font-black text-white uppercase tracking-tight text-xs sm:text-lg">{step.title}</h4>
+                                    <p className="text-white/70 sm:text-white/60 text-[10px] sm:text-xs font-medium leading-tight">{step.desc}</p>
                                   </div>
                                 </div>
                               ))}
@@ -1663,23 +1663,23 @@ function AppContent() {
                 </AnimatePresence>
                 
                 {/* Controles del Carrusel */}
-                <div className="absolute bottom-8 right-8 flex gap-3 z-20">
+                <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex gap-2 sm:gap-3 z-20">
                   <button 
                     onClick={() => setCurrentSlide(prev => (prev - 1 + carouselCards.length) % carouselCards.length)} 
-                    className="p-4 bg-white/10 backdrop-blur-md rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
+                    className="p-2.5 sm:p-4 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button 
                     onClick={() => setCurrentSlide(prev => (prev + 1) % carouselCards.length)} 
-                    className="p-4 bg-white/10 backdrop-blur-md rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
+                    className="p-2.5 sm:p-4 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
 
                 {/* Dots */}
-                <div className="absolute bottom-8 left-8 flex gap-2 z-20">
+                <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 flex gap-1.5 sm:gap-2 z-20">
                   {carouselCards.map((_, i) => (
                     <button
                       key={i}
@@ -1698,7 +1698,7 @@ function AppContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-gradient-to-br from-red-500 to-red-700 
-                           rounded-[2.5rem] sm:rounded-[3rem] p-8 sm:p-10 
+                           rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 
                            text-white overflow-hidden relative shadow-xl 
                            shadow-red-500/20 cursor-pointer group
                            hover:shadow-2xl hover:shadow-red-500/30 
@@ -1738,7 +1738,7 @@ function AppContent() {
               {/* 3. Clima e Instagram */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Clima Real */}
-                <div className="bg-white p-8 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100 shadow-sm flex items-center justify-between group hover:shadow-xl transition-all">
+                <div className="bg-white p-5 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] border border-zinc-100 shadow-sm flex items-center justify-between group hover:shadow-xl transition-all">
                   <div className="space-y-1">
                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('dashboard.weather_in')} {userProfile?.zone || t('dashboard.default_zone')}</p>
                     <h4 className="text-3xl sm:text-5xl font-black text-stormy-teal tracking-tighter">{weather?.temp || '--'}°C</h4>
@@ -1754,7 +1754,7 @@ function AppContent() {
                   href="https://www.instagram.com/equipoecowarriors?igsh=aXd0aGNra3JtNmY1&utm_source=qr" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-br from-stormy-teal to-emerald-900 p-8 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] text-white flex items-center justify-between group cursor-pointer overflow-hidden relative shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:brightness-110 transition-all duration-500 border border-white/5"
+                  className="bg-gradient-to-br from-stormy-teal to-emerald-900 p-5 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] text-white flex items-center justify-between group cursor-pointer overflow-hidden relative shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:brightness-110 transition-all duration-500 border border-white/5"
                 >
                   <div className="absolute inset-0 opacity-10 group-hover:scale-110 transition-transform duration-700 bg-gradient-to-br from-pink-500 to-purple-600" />
                   <div className="relative z-10 space-y-2">
@@ -2850,16 +2850,16 @@ function AppContent() {
     </div>
 
       {/* Global Floating Action Button: Sensor Activo */}
-      <div className="fixed bottom-24 sm:bottom-8 right-6 sm:right-8 z-[55]">
+      <div className="fixed bottom-[5.25rem] sm:bottom-8 right-4 sm:right-8 z-[55]">
         <button 
           onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-          className="flex items-center gap-3 bg-emerald-600 text-white p-4 sm:px-6 sm:py-4 rounded-full sm:rounded-3xl font-black shadow-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all group border-4 border-white dark:border-slate-800 relative overflow-hidden"
+          className="flex items-center gap-2 sm:gap-3 bg-emerald-600 text-white p-3 sm:px-6 sm:py-4 rounded-2xl sm:rounded-3xl font-black shadow-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all group border-2 sm:border-4 border-white dark:border-slate-800 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative z-10 flex items-center gap-3">
             <div className="relative">
-              <Camera className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-emerald-600 animate-pulse" />
+              <Camera className="w-5 h-5 sm:w-7 sm:h-7 relative z-10" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-emerald-600 animate-pulse" />
             </div>
             <div className="text-left leading-none hidden sm:block">
               <span className="block text-sm tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
@@ -3386,7 +3386,7 @@ function AppContent() {
         </AnimatePresence>
 
     {/* Bottom Navigation - Mobile */}
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-100 px-2 py-3 flex items-center justify-around z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-zinc-100 px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] flex items-center justify-around z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       {[
         { id: 'DASHBOARD', icon: LayoutDashboard },
         { id: 'REPORTES', icon: MapPin },
@@ -3398,11 +3398,11 @@ function AppContent() {
           key={item.id}
           onClick={() => setActiveTab(item.id as Tab)}
           className={cn(
-            "p-3 rounded-2xl transition-all",
-            activeTab === item.id ? "bg-stormy-teal text-white shadow-lg" : "text-zinc-400"
+            "p-2.5 rounded-xl transition-all",
+            activeTab === item.id ? "bg-stormy-teal text-white shadow-md" : "text-zinc-400"
           )}
         >
-          <item.icon className="w-6 h-6" />
+          <item.icon className="w-5 h-5" />
         </button>
       ))}
     </nav>
