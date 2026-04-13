@@ -335,7 +335,11 @@ function AppContent() {
 
   // Handlers para reportes
   const handleDeleteReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
-    setDeletingReportIds((prev) => new Set(prev).add(reportId));
+    setDeletingReportIds((prev) => {
+      const next = new Set(prev);
+      next.add(reportId);
+      return next;
+    });
     try {
       await deleteReport(reportId, reportType);
     } catch (e) {
@@ -350,7 +354,11 @@ function AppContent() {
   };
 
   const handleOwnerDeleteReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
-    setDeletingReportIds((prev) => new Set(prev).add(reportId));
+    setDeletingReportIds((prev) => {
+      const next = new Set(prev);
+      next.add(reportId);
+      return next;
+    });
     try {
       await deleteReport(reportId, reportType);
     } catch (e) {
@@ -366,7 +374,11 @@ function AppContent() {
 
   // Handlers para marketplace
   const handleDeletePost = async (postId: string) => {
-    setDeletingPostIds((prev) => new Set(prev).add(postId));
+    setDeletingPostIds((prev) => {
+      const next = new Set(prev);
+      next.add(postId);
+      return next;
+    });
     try {
       await deleteMarketplacePost(postId);
     } catch (e) {
@@ -380,7 +392,11 @@ function AppContent() {
   };
 
   const handleOwnerDeletePost = async (postId: string) => {
-    setDeletingPostIds((prev) => new Set(prev).add(postId));
+    setDeletingPostIds((prev) => {
+      const next = new Set(prev);
+      next.add(postId);
+      return next;
+    });
     try {
       await deleteMarketplacePost(postId);
     } catch (e) {
