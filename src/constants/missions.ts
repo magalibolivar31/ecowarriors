@@ -29,7 +29,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Documentar visualmente un problema ambiental para facilitar su identificación.',
     reward: 50,
     icon: FileText,
-    color: 'bg-blue-500',
+    color: 'bg-stormy-teal',
     suggestedAction: 'Buscá un problema en tu zona, tomá una foto y reportalo.'
   },
   {
@@ -39,7 +39,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Expandir la cobertura del mapa de EcoWarriors a nuevas áreas.',
     reward: 100,
     icon: Eye,
-    color: 'bg-amber-500',
+    color: 'bg-soft-maya-blue',
     suggestedAction: 'Explorá una zona del mapa que no tenga reportes activos y creá uno.'
   },
   {
@@ -49,7 +49,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Mantener la información actualizada para un mejor seguimiento.',
     reward: 30,
     icon: MessageSquare,
-    color: 'bg-purple-500',
+    color: 'bg-maya-blue',
     suggestedAction: 'Buscá un reporte cercano y agregá un comentario o foto sobre su estado actual.'
   },
   {
@@ -59,7 +59,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Confirmar la resolución de problemas con pruebas visuales.',
     reward: 150,
     icon: CheckCircle2,
-    color: 'bg-emerald-500',
+    color: 'bg-emerald-action',
     suggestedAction: 'Cuando veas que un problema se solucionó, actualizalo a "Resuelto" subiendo una foto.'
   },
   {
@@ -69,7 +69,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Fomentar la participación en actividades grupales de impacto.',
     reward: 80,
     icon: Users,
-    color: 'bg-indigo-500',
+    color: 'bg-soft-teal',
     suggestedAction: 'Unite a una de las cuadrillas activas en la pestaña de Comunidad.'
   },
   {
@@ -79,7 +79,7 @@ export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
     objective: 'Estar preparado para situaciones de emergencia.',
     reward: 120,
     icon: ShieldCheck,
-    color: 'bg-rose-500',
+    color: 'bg-stormy-teal',
     suggestedAction: 'Completá el onboarding del Modo Crisis y configurá tus contactos de confianza.'
   }
 ];

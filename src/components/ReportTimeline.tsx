@@ -109,7 +109,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
 
   const statusConfig = (status: ReportStatus) => {
     switch (status) {
-      case 'Abierto (nuevo)': return { color: 'bg-blue-100 text-stormy-teal', label: t('reports.status_new') };
+      case 'Abierto (nuevo)': return { color: 'bg-soft-maya-blue/30 text-stormy-teal', label: t('reports.status_new') };
       case 'Abierto (en seguimiento)': return { color: 'bg-orange-100 text-orange-700', label: t('reports.status_followup') };
       case 'Abierto (agravado)': return { color: 'bg-red-100 text-red-700', label: t('reports.status_aggravated') };
       case 'Resuelto': return { color: 'bg-emerald-100 text-emerald-700', label: t('reports.status_resolved') };

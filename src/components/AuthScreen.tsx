@@ -278,7 +278,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
   };
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto sm:dark:bg-slate-950/80">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -361,7 +361,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setAlias(e.target.value)}
                         onBlur={(e) => validateField('alias', e.target.value)}
                         className={cn(
-                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                           fieldErrors.alias && "border-red-500 focus:border-red-500"
                         )}
                       />
@@ -383,7 +383,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setZone(e.target.value)}
                           onBlur={(e) => validateField('zone', e.target.value)}
                           className={cn(
-                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                             fieldErrors.zone && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -403,7 +403,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setCommitment(e.target.value)}
                           onBlur={(e) => validateField('commitment', e.target.value)}
                           className={cn(
-                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                             fieldErrors.commitment && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -428,7 +428,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={(e) => validateField('email', e.target.value)}
                   className={cn(
-                    "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                    "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                     fieldErrors.email && "border-red-500 focus:border-red-500"
                   )}
                   suppressHydrationWarning
@@ -452,7 +452,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                       onChange={(e) => setPassword(e.target.value)}
                       onBlur={(e) => validateField('password', e.target.value)}
                       className={cn(
-                        "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                        "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                         fieldErrors.password && "border-red-500 focus:border-red-500"
                       )}
                       suppressHydrationWarning
@@ -475,7 +475,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={(e) => validateField('confirmPassword', e.target.value)}
                         className={cn(
-                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                           fieldErrors.confirmPassword && "border-red-500 focus:border-red-500"
                         )}
                         suppressHydrationWarning

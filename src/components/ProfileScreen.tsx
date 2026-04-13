@@ -825,7 +825,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white transition-colors text-amber-500">
                 {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
               </div>
               <div className="text-left">
@@ -845,7 +845,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className={cn("p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors", notificationsEnabled ? "text-emerald-action" : "text-rose-500")}>
+              <div className={cn("p-3 rounded-2xl bg-zinc-50 group-hover:bg-white transition-colors", notificationsEnabled ? "text-emerald-action" : "text-rose-500")}>
                 <Bell className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -865,7 +865,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-maya-blue">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white transition-colors text-maya-blue">
                 <Globe className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -883,7 +883,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white transition-colors text-amber-500">
                 <Lock className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -901,7 +901,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:border-rose-100 dark:hover:border-rose-900/30 transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-rose-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white transition-colors text-rose-500">
                 <LogOut className="w-5 h-5" />
               </div>
               <span className="font-bold text-zinc-700 dark:text-slate-200 text-sm sm:text-base">{t('profile.logout')}</span>
