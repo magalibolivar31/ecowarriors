@@ -49,19 +49,19 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const SERVICE_GUIDES = [
     { 
       title: t('crisis.electricity_guide'), 
-      icon: <Zap className="w-6 h-6 text-yellow-500" />, 
+      icon: <Zap className="w-6 h-6 text-yellow-400" />, 
       steps: [t('crisis.elec_step1'), t('crisis.elec_step2'), t('crisis.elec_step3')],
       warning: t('crisis.elec_warning')
     },
     { 
       title: t('crisis.gas_guide'), 
-      icon: <Flame className="w-6 h-6 text-orange-500" />, 
+      icon: <Flame className="w-6 h-6 text-yellow-400" />, 
       steps: [t('crisis.gas_step1'), t('crisis.gas_step2'), t('crisis.gas_step3')],
       warning: t('crisis.gas_warning')
     },
     { 
       title: t('crisis.water_guide'), 
-      icon: <Droplets className="w-6 h-6 text-stormy-teal" />, 
+      icon: <Droplets className="w-6 h-6 text-yellow-400" />, 
       steps: [t('crisis.water_step1'), t('crisis.water_step2'), t('crisis.water_step3')],
       warning: t('crisis.water_warning')
     }
@@ -434,7 +434,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const reminderToggleThumbPositionClasses = remindersEnabled ? "left-7" : "left-1";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-800 via-red-700 to-red-900 text-white flex flex-col font-sans select-none [&_svg]:text-white">
+    <div className="min-h-screen bg-gradient-to-b from-red-800 via-red-700 to-red-900 text-white flex flex-col font-sans select-none [&_svg]:text-yellow-400">
       {/* Header */}
       <header className="p-4 bg-red-900/85 backdrop-blur-sm flex items-center justify-between border-b border-red-600/50 sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="flex items-center gap-3">
@@ -567,15 +567,15 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             className="space-y-4"
           >
             {/* Main Action: Estoy a Salvo */}
-            <div className="bg-white text-red-700 p-6 rounded-[2.5rem] shadow-2xl shadow-black/20 border border-red-200/80">
+            <div className="bg-red-900/70 text-white p-6 rounded-[2.5rem] shadow-2xl shadow-black/20 border border-red-700/60">
               <h2 className="text-2xl font-display font-black mb-1 text-center uppercase">{t('crisis.im_safe_title')}</h2>
-              <p className="text-red-600 mb-6 font-bold text-center text-sm">{t('crisis.im_safe_desc')}</p>
+              <p className="text-white/80 mb-6 font-bold text-center text-sm">{t('crisis.im_safe_desc')}</p>
               <div className="space-y-3">
                 <button 
                   onClick={handleSafeStatus}
                   disabled={signalSent}
                     className={`w-full py-8 rounded-3xl font-black text-2xl shadow-xl shadow-black/20 active:scale-95 transition-all flex flex-col items-center justify-center gap-2 ${
-                    signalSent ? 'bg-white text-red-700 border border-red-200' : 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 border border-red-500/50'
+                    signalSent ? 'bg-red-950 text-white border border-yellow-400/50' : 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 border border-red-500/50'
                    }`}
                 >
                   {signalSent ? (
@@ -592,7 +592,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 </button>
                 <button 
                   onClick={() => setActiveSection('meeting')}
-                  className="w-full py-3 bg-red-900/5 text-red-700 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 border border-red-200"
+                  className="w-full py-3 bg-red-900/70 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 border border-red-700/60"
                 >
                   <Edit2 className="w-4 h-4" />
                   {t('crisis.edit_contact')}
@@ -650,12 +650,12 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             </div>
 
             {/* Emergency Numbers */}
-            <div className="bg-yellow-400 text-red-950 p-5 rounded-3xl flex items-center justify-between shadow-xl shadow-black/25 border border-yellow-300 relative overflow-hidden">
+            <div className="bg-red-900/70 text-white p-5 rounded-3xl flex items-center justify-between shadow-xl shadow-black/25 border border-yellow-400/50 relative overflow-hidden">
               {emergencyDialing && (
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="absolute inset-0 bg-red-600 text-white flex items-center justify-center gap-3 z-10"
+                  className="absolute inset-0 bg-red-950 text-white flex items-center justify-center gap-3 z-10"
                 >
                   <Phone className="w-6 h-6 animate-bounce" />
                   <span className="font-black uppercase tracking-widest text-sm">{t('crisis.calling_911')}</span>
@@ -668,10 +668,10 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <p className="text-3xl font-display font-black leading-none">911</p>
                 </div>
               </div>
-              <button 
-                onClick={handleEmergencyCall}
-                  className="bg-red-700 text-white px-6 py-3 rounded-2xl font-black text-sm active:scale-95 transition-all hover:bg-red-800 shadow-lg shadow-red-900/30"
-              >
+                <button 
+                  onClick={handleEmergencyCall}
+                  className="bg-red-950 text-white px-6 py-3 rounded-2xl font-black text-sm active:scale-95 transition-all hover:bg-red-900 shadow-lg shadow-red-900/30 border border-yellow-400/40"
+               >
                 {emergencyDialing ? t('common.loading') : t('crisis.emergency_call')}
               </button>
             </div>
@@ -725,14 +725,14 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             <button onClick={() => setActiveSection('main')} className="flex items-center gap-2 font-bold text-yellow-400">
               <X className="w-5 h-5" /> {t('crisis.back')}
             </button>
-            <div className="bg-yellow-400 text-red-900 p-4 rounded-2xl flex items-start gap-3">
+            <div className="bg-red-900/70 text-white p-4 rounded-2xl flex items-start gap-3 border border-yellow-400/50">
               <Info className="w-6 h-6 shrink-0 mt-1" />
               <p className="text-xs font-bold">{t('crisis.report_help_text')}</p>
             </div>
             <h2 className="text-3xl font-display font-black uppercase">{t('crisis.report_damage')}</h2>
             <form onSubmit={handleSubmitDamageReport} className="space-y-6">
               {locationError && (
-                <div className="p-4 bg-white text-red-600 rounded-2xl font-bold text-sm flex items-center gap-3 border-l-8 border-yellow-400">
+                <div className="p-4 bg-red-900/70 text-white rounded-2xl font-bold text-sm flex items-center gap-3 border-l-8 border-yellow-400">
                   <AlertTriangle className="w-6 h-6 flex-shrink-0" />
                   <p>{locationError}</p>
                 </div>
@@ -779,13 +779,13 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   required
                   value={damageType}
                   onChange={(e) => setDamageType(e.target.value)}
-                  className="w-full p-4 bg-white text-zinc-900 rounded-2xl border border-white/20 font-bold outline-none focus:border-yellow-400"
+                  className="w-full p-4 bg-red-900/70 text-white rounded-2xl border border-red-700/60 font-bold outline-none focus:border-yellow-400"
                 >
-                  <option value="" className="bg-white text-zinc-900">{t('crisis.select_damage')}</option>
-                  <option value="voladura_techo" className="bg-white text-zinc-900">{t('crisis.roof_damage')}</option>
-                  <option value="colapso_vivienda" className="bg-white text-zinc-900">{t('crisis.house_collapse')}</option>
-                  <option value="inundacion_grave" className="bg-white text-zinc-900">{t('crisis.severe_flood')}</option>
-                  <option value="otro" className="bg-white text-zinc-900">{t('crisis.other_damage')}</option>
+                  <option value="" className="bg-red-900 text-white">{t('crisis.select_damage')}</option>
+                  <option value="voladura_techo" className="bg-red-900 text-white">{t('crisis.roof_damage')}</option>
+                  <option value="colapso_vivienda" className="bg-red-900 text-white">{t('crisis.house_collapse')}</option>
+                  <option value="inundacion_grave" className="bg-red-900 text-white">{t('crisis.severe_flood')}</option>
+                  <option value="otro" className="bg-red-900 text-white">{t('crisis.other_damage')}</option>
                 </select>
               </div>
               <div className="space-y-2">
@@ -881,7 +881,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <button 
                     type="button"
                     onClick={() => setUrgency('critica')}
-                    className={`p-4 rounded-2xl font-black border-2 transition-all ${urgency === 'critica' ? 'bg-white text-red-600 border-white' : 'bg-white/5 border-white/10'}`}
+                    className={`p-4 rounded-2xl font-black border-2 transition-all ${urgency === 'critica' ? 'bg-red-950 text-white border-yellow-400/50' : 'bg-white/5 border-white/10'}`}
                   >
                     {t('crisis.urgency_critical')}
                   </button>
@@ -1108,43 +1108,43 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <button 
                     key={i} 
                     onClick={() => { setActiveGuideIndex(i); setGuideStep(0); }}
-                    className="w-full bg-white p-6 rounded-[2.5rem] text-zinc-900 shadow-xl border-l-[12px] border-red-600 flex items-center justify-between group active:scale-95 transition-all"
+                    className="w-full bg-red-900/70 p-6 rounded-[2.5rem] text-white shadow-xl border-l-[12px] border-yellow-400 flex items-center justify-between group active:scale-95 transition-all border border-red-700/60"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-zinc-100 rounded-2xl group-hover:bg-red-50 transition-colors">
+                      <div className="p-3 bg-red-950 rounded-2xl transition-colors border border-yellow-400/30">
                         {guide.icon}
                       </div>
                       <h3 className="text-xl font-display font-black uppercase tracking-tighter">{guide.title}</h3>
                     </div>
-                    <ChevronRight className="w-6 h-6 text-zinc-300 group-hover:text-red-600 transition-colors" />
+                    <ChevronRight className="w-6 h-6 text-yellow-400 transition-colors" />
                   </button>
                 ))
               ) : (
-                <div className="bg-white p-8 rounded-[3rem] text-zinc-900 shadow-2xl space-y-8">
+                <div className="bg-red-900/70 p-8 rounded-[3rem] text-white shadow-2xl space-y-8 border border-red-700/60">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="p-4 bg-red-50 rounded-2xl text-red-600">
+                      <div className="p-4 bg-red-950 rounded-2xl">
                         {SERVICE_GUIDES[activeGuideIndex].icon}
                       </div>
                       <h3 className="text-2xl font-display font-black uppercase tracking-tighter">
                         {SERVICE_GUIDES[activeGuideIndex].title}
                       </h3>
                     </div>
-                    <button onClick={() => setActiveGuideIndex(null)} className="p-2 bg-zinc-100 rounded-full">
+                    <button onClick={() => setActiveGuideIndex(null)} className="p-2 bg-red-950 rounded-full border border-yellow-400/30">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
 
-                  <div className="relative h-2 bg-zinc-100 rounded-full overflow-hidden">
+                  <div className="relative h-2 bg-red-950 rounded-full overflow-hidden">
                     <motion.div 
-                      className="absolute top-0 left-0 h-full bg-red-600"
+                      className="absolute top-0 left-0 h-full bg-yellow-400"
                       initial={{ width: 0 }}
                       animate={{ width: `${((guideStep + 1) / SERVICE_GUIDES[activeGuideIndex].steps.length) * 100}%` }}
                     />
                   </div>
 
                   <div className="min-h-[120px] flex flex-col justify-center text-center space-y-4">
-                    <span className="text-[10px] font-black text-red-600 uppercase tracking-[0.3em]">
+                    <span className="text-[10px] font-black text-yellow-400 uppercase tracking-[0.3em]">
                       {t('crisis.step_x_of_y').replace('{step}', (guideStep + 1).toString()).replace('{total}', SERVICE_GUIDES[activeGuideIndex].steps.length.toString())}
                     </span>
                     <p className="text-xl font-bold leading-tight">
@@ -1152,9 +1152,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     </p>
                   </div>
 
-                  <div className="bg-red-50 p-6 rounded-3xl border border-red-100 flex items-start gap-4">
-                    <AlertTriangle className="w-6 h-6 text-red-600 shrink-0" />
-                    <p className="text-xs font-black text-red-600 uppercase tracking-tight leading-relaxed">
+                  <div className="bg-red-950 p-6 rounded-3xl border border-yellow-400/30 flex items-start gap-4">
+                    <AlertTriangle className="w-6 h-6 text-yellow-400 shrink-0" />
+                    <p className="text-xs font-black text-white uppercase tracking-tight leading-relaxed">
                       {SERVICE_GUIDES[activeGuideIndex].warning}
                     </p>
                   </div>
@@ -1163,7 +1163,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     <button 
                       disabled={guideStep === 0}
                       onClick={() => setGuideStep(prev => prev - 1)}
-                      className="flex-1 py-5 bg-zinc-100 text-zinc-600 rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30"
+                      className="flex-1 py-5 bg-red-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-30 border border-red-700/60"
                     >
                       {t('crisis.previous')}
                     </button>
