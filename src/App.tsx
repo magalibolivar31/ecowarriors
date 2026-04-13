@@ -500,6 +500,29 @@ function AppContent() {
       .slice(0, 10);
   }, [crewEvents]);
 
+  const chartTheme = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return {
+        tickColor: '#334155',
+        tooltipBackground: '#FFFFFF',
+        tooltipBorder: '#D4E8E6',
+        tooltipText: '#024153',
+        tooltipShadow: '0 12px 30px -12px rgba(2,65,83,0.18)',
+      };
+    }
+
+    const styles = getComputedStyle(document.documentElement);
+    const getCssVar = (name: string, fallback: string) => styles.getPropertyValue(name).trim() || fallback;
+
+    return {
+      tickColor: getCssVar('--text-secondary', '#334155'),
+      tooltipBackground: getCssVar('--surface-elevated', '#FFFFFF'),
+      tooltipBorder: getCssVar('--border', '#D4E8E6'),
+      tooltipText: getCssVar('--text-primary', '#024153'),
+      tooltipShadow: getCssVar('--card-shadow', '0 12px 30px -12px rgba(2,65,83,0.18)'),
+    };
+  }, [darkMode]);
+
   useEffect(() => {
     const updatedCarousel = [
       {
@@ -2182,18 +2205,18 @@ function AppContent() {
                           dataKey="name" 
                           axisLine={false} 
                           tickLine={false} 
-                          tick={{ fill: 'var(--text-secondary)', fontSize: 10, fontWeight: '900' }} 
+                          tick={{ fill: chartTheme.tickColor, fontSize: 10, fontWeight: '900' }} 
                           dy={10}
                         />
                         <YAxis hide />
                         <Tooltip 
                           contentStyle={{
-                            backgroundColor: 'var(--surface-elevated)',
-                            border: '1px solid var(--border)',
+                            backgroundColor: chartTheme.tooltipBackground,
+                            border: `1px solid ${chartTheme.tooltipBorder}`,
                             borderRadius: '24px',
-                            color: 'var(--text-primary)',
+                            color: chartTheme.tooltipText,
                             padding: '16px',
-                            boxShadow: 'var(--card-shadow)'
+                            boxShadow: chartTheme.tooltipShadow
                           }}
                           itemStyle={{ color: 'var(--color-primary)', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
                         />
@@ -2203,7 +2226,7 @@ function AppContent() {
                           stroke="var(--color-primary-light)" 
                           strokeWidth={6} 
                           dot={{ r: 6, fill: 'var(--color-primary-light)', strokeWidth: 3, stroke: 'var(--color-primary)' }}
-                          activeDot={{ r: 10, fill: 'var(--surface-elevated)', strokeWidth: 0 }}
+                          activeDot={{ r: 10, fill: chartTheme.tooltipBackground, strokeWidth: 0 }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -2234,10 +2257,10 @@ function AppContent() {
                             </Pie>
                             <Tooltip 
                               contentStyle={{
-                                backgroundColor: 'var(--surface-elevated)',
-                                border: '1px solid var(--border)',
+                                backgroundColor: chartTheme.tooltipBackground,
+                                border: `1px solid ${chartTheme.tooltipBorder}`,
                                 borderRadius: '20px',
-                                color: 'var(--text-primary)'
+                                color: chartTheme.tooltipText
                               }}
                             />
                           </PieChart>
