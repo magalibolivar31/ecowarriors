@@ -46,6 +46,20 @@ import {
 } from './marketplaceService';
 
 describe('marketplaceService', () => {
+  const withThrowingSpreadField = (
+    message: string,
+    baseData: Record<string, unknown> = {},
+  ): Record<string, unknown> => {
+    const data = { ...baseData };
+    Object.defineProperty(data, 'brokenField', {
+      enumerable: true,
+      get() {
+        throw new Error(message);
+      },
+    });
+    return data;
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     firebaseMocks.auth.currentUser = { uid: 'user-1' };
@@ -334,20 +348,10 @@ describe('marketplaceService', () => {
       }))
       .mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
 
-    const staleData = new Proxy(
-      {
-        title: 'Snapshot viejo',
-        images: ['marketplace/slow.jpg'],
-      } as Record<string, unknown>,
-      {
-        ownKeys() {
-          throw new Error('Snapshot data enumeration failed');
-        },
-        getOwnPropertyDescriptor() {
-          return { enumerable: true, configurable: true };
-        },
-      },
-    );
+    const staleData = withThrowingSpreadField('Snapshot data read failed', {
+      title: 'Snapshot viejo',
+      images: ['marketplace/slow.jpg'],
+    });
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
       void onNext({
@@ -387,20 +391,9 @@ describe('marketplaceService', () => {
 
   it('subscribeToMarketplace usa fallback cuando falla el procesamiento del snapshot', async () => {
     const callback = vi.fn();
-    const brokenData = new Proxy(
-      { title: 'Broken' } as Record<string, unknown>,
-      {
-        ownKeys() {
-          throw new Error('Snapshot data enumeration failed');
-        },
-        getOwnPropertyDescriptor() {
-          return { enumerable: true, configurable: true };
-        },
-      },
-    );
     const snapshotData = vi
       .fn()
-      .mockReturnValueOnce(brokenData)
+      .mockReturnValueOnce(withThrowingSpreadField('Snapshot data read failed'))
       .mockReturnValueOnce({ title: 'Fallback post' });
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
