@@ -95,6 +95,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editName, setEditName] = useState('');
+  const [editZone, setEditZone] = useState('');
+  const [editCommitment, setEditCommitment] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
 
   const validateField = (name: string, value: string) => {
@@ -104,6 +106,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       const trimmed = value.trim();
       if (trimmed.length < 2 || trimmed.length > 40) {
         error = t('validation.name_invalid');
+      }
+    } else if (name === 'editZone') {
+      const trimmed = value.trim();
+      if (trimmed.length < 2 || trimmed.length > 40) {
+        error = t('validation.name_invalid');
+      }
+    } else if (name === 'editCommitment') {
+      const trimmed = value.trim();
+      if (trimmed.length > 0 && (trimmed.length < 10 || trimmed.length > 500)) {
+        error = t('validation.description_min');
       }
     }
     
@@ -128,6 +140,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
         const data = docSnap.data() as UserProfile;
         setProfile(data);
         setEditName(data.alias);
+        setEditZone(data.zone || '');
+        setEditCommitment(data.commitment || '');
       } else {
         setError(t('common.profile_not_found'));
       }
@@ -204,14 +218,20 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
   };
 
   const handleUpdateProfile = async () => {
-    if (!currentUser || !editName.trim()) return;
+    if (!currentUser || !editName.trim() || !editZone.trim()) return;
     const nameError = validateField('editName', editName);
-    if (nameError) return;
+    const zoneError = validateField('editZone', editZone);
+    const commitmentError = validateField('editCommitment', editCommitment);
+    if (nameError || zoneError || commitmentError) return;
 
     try {
       const sanitizedAlias = sanitizeText(editName);
+      const sanitizedZone = sanitizeText(editZone);
+      const sanitizedCommitment = sanitizeText(editCommitment);
       await updateUserProfile(currentUser.uid, {
-        alias: sanitizedAlias
+        alias: sanitizedAlias,
+        zone: sanitizedZone,
+        commitment: sanitizedCommitment
       });
       setIsEditModalOpen(false);
     } catch (err) {
@@ -266,6 +286,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
   const { progress, nextLevelXP, xpRemaining } = getLevelProgress(profile.xp, profile.level);
   const dateLocale = language === 'es' ? es : enUS;
+  const hasProfileChanges =
+    editName.trim() !== (profile.alias || '').trim() ||
+    editZone.trim() !== (profile.zone || '').trim() ||
+    editCommitment.trim() !== (profile.commitment || '').trim();
   
   const getRoleFriendlyName = (role: string) => {
     switch(role) {
@@ -561,11 +585,44 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       <p className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.editName}</p>
                     )}
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest ml-2">{t('profile.zone')}</label>
+                    <input
+                      type="text"
+                      value={editZone}
+                      onChange={(e) => setEditZone(e.target.value)}
+                      onBlur={(e) => validateField('editZone', e.target.value)}
+                      className={cn(
+                        "w-full p-5 bg-zinc-50 border-2 border-zinc-100 dark:border-slate-700 rounded-3xl focus:border-emerald-500 outline-none font-bold text-zinc-900 dark:text-white",
+                        fieldErrors.editZone && "border-red-500 focus:border-red-500"
+                      )}
+                      placeholder={t('auth.zone_placeholder')}
+                    />
+                    {fieldErrors.editZone && (
+                      <p className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.editZone}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest ml-2">{t('profile.commitment')}</label>
+                    <textarea
+                      value={editCommitment}
+                      onChange={(e) => setEditCommitment(e.target.value)}
+                      onBlur={(e) => validateField('editCommitment', e.target.value)}
+                      className={cn(
+                        "w-full p-5 bg-zinc-50 border-2 border-zinc-100 dark:border-slate-700 rounded-3xl focus:border-emerald-500 outline-none font-bold text-zinc-900 dark:text-white resize-none min-h-28",
+                        fieldErrors.editCommitment && "border-red-500 focus:border-red-500"
+                      )}
+                      placeholder={t('auth.commitment_placeholder')}
+                    />
+                    {fieldErrors.editCommitment && (
+                      <p className="text-red-500 text-[10px] font-bold mt-1 ml-4">{fieldErrors.editCommitment}</p>
+                    )}
+                  </div>
                 </div>
 
                 <button 
                   onClick={handleUpdateProfile}
-                  disabled={!editName.trim() || editName === profile?.alias || !!fieldErrors.editName}
+                  disabled={!editName.trim() || !editZone.trim() || !hasProfileChanges || !!fieldErrors.editName || !!fieldErrors.editZone || !!fieldErrors.editCommitment}
                   className="w-full py-5 bg-emerald-600 text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-emerald-700 disabled:opacity-50 transition-all"
                 >
                   {t('common.save_changes')}
