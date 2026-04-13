@@ -353,10 +353,10 @@ export const ReportMap: React.FC<ReportMapProps> = ({
       )}
 
       {showMineEmptyState && onCreateReport && (
-        <div className="absolute top-16 right-4 z-[1001]">
+        <div className="absolute top-16 right-4 z-[50]">
           <button
             onClick={onCreateReport}
-            className="px-4 py-2.5 rounded-xl bg-emerald-action text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-action/40 border border-white/40 hover:bg-stormy-teal transition-colors"
+            className="px-4 py-2.5 rounded-xl bg-emerald-action text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-emerald-action/40 border border-white/40 hover:bg-stormy-teal transition-colors"
           >
             {t('map.no_my_reports_action')}
           </button>
