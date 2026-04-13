@@ -94,7 +94,7 @@ export async function createMarketplacePost(
   try {
     const normalizedType = normalizeMarketplaceType(type);
     if (!normalizedType) {
-      throw new Error('Invalid marketplace post type');
+      throw new Error(`Invalid marketplace post type: "${String(type)}". Expected "doy" or "recibo".`);
     }
 
     const normalizedImages = normalizeMarketplaceImagePayload(images);
