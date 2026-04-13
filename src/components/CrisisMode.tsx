@@ -429,6 +429,10 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     }
   };
 
+  const reminderToggleSizeClasses = "w-12 h-6";
+  const reminderToggleThumbSizeClasses = "top-1 w-4 h-4";
+  const reminderToggleThumbPositionClasses = remindersEnabled ? "left-7" : "left-1";
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-800 via-red-700 to-red-900 text-white flex flex-col font-sans select-none">
       {/* Header */}
@@ -630,8 +634,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
             {/* Reminders Toggle */}
             <div className="bg-red-900/60 p-5 rounded-3xl border border-white/15 shadow-lg shadow-black/20 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Clock className="w-6 h-6 text-yellow-400" />
+                <div className="flex items-center gap-3">
+                  <Clock className="w-6 h-6 text-yellow-400" />
                 <div>
                   <p className="font-bold text-sm">{t('crisis.preventive_reminders')}</p>
                   <p className="text-[10px] opacity-70">{t('crisis.reminders_desc')}</p>
@@ -639,9 +643,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </div>
               <button 
                 onClick={() => setRemindersEnabled(!remindersEnabled)}
-                className={`w-12 h-6 rounded-full relative transition-colors border ${remindersEnabled ? 'bg-yellow-400 border-yellow-300' : 'bg-red-950 border-red-800'}`}
+                className={`${reminderToggleSizeClasses} rounded-full relative transition-colors border ${remindersEnabled ? 'bg-yellow-400 border-yellow-300' : 'bg-red-950 border-red-800'}`}
               >
-                 <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${remindersEnabled ? 'left-7' : 'left-1'}`} />
+                 <div className={`absolute ${reminderToggleThumbSizeClasses} rounded-full bg-white transition-all ${reminderToggleThumbPositionClasses}`} />
               </button>
             </div>
 
@@ -985,7 +989,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 </div>
                 <div className="space-y-2">
                   {contacts.map((contact: any, i: number) => {
-                    const phoneForDial = String(contact.phone ?? '').replace(/[^\d+]/g, '');
+                    const sanitizedPhoneNumber = String(contact.phone ?? '').replace(/[^\d+]/g, '');
                     return (
                     <div key={i} className="flex items-center justify-between p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
                       <div>
@@ -1006,7 +1010,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                         >
                           <X className="w-4 h-4" />
                         </button>
-                        <a href={phoneForDial ? `tel:${encodeURIComponent(phoneForDial)}` : '#'} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20" aria-disabled={!phoneForDial} onClick={(e) => { if (!phoneForDial) e.preventDefault(); }}>
+                        <a href={sanitizedPhoneNumber ? `tel:${encodeURIComponent(sanitizedPhoneNumber)}` : '#'} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20" aria-disabled={!sanitizedPhoneNumber} onClick={(e) => { if (!sanitizedPhoneNumber) e.preventDefault(); }}>
                           <Phone className="w-4 h-4" />
                         </a>
                       </div>
