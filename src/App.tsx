@@ -2086,7 +2086,7 @@ function AppContent() {
                               "bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] border shadow-sm flex flex-col sm:flex-row items-start gap-8 sm:gap-10 cursor-pointer group transition-all border-zinc-100 hover:shadow-md"
                             )}
                           >
-                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white text-white", mission.color)}>
+                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white", mission.color, getMissionIconTextClass(mission.color))}>
                               <mission.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                             </div>
                             <div className="flex-1 space-y-4 sm:space-y-6">

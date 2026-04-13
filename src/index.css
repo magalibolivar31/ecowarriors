@@ -40,8 +40,10 @@
   --surface: var(--color-white);
   --surface-muted: var(--color-surface-muted);
   --text-primary: var(--color-contrast);
-  --text-secondary: var(--color-primary);
-  --text-muted: #126B69CC;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --text-accent-success: #166534;
+  --text-accent-info: #0F4C81;
   --border: var(--color-border);
   --input-bg: var(--color-white);
   --modal-bg: var(--color-white);
@@ -82,8 +84,10 @@
   --surface: #126B69;
   --surface-muted: #0A555F;
   --text-primary: #FFFFFF;
-  --text-secondary: #9DCAE9;
-  --text-muted: #7CBCE8;
+  --text-secondary: #F3F4F6;
+  --text-muted: #CBD5E1;
+  --text-accent-success: #BBF7D0;
+  --text-accent-info: #BFDBFE;
   --border: #75B9B3;
   --input-bg: #126B69;
   --modal-bg: #126B69;
@@ -319,6 +323,21 @@ body {
 
 .theme-text-muted {
   color: var(--text-muted) !important;
+}
+
+.text-emerald-action {
+  color: var(--text-accent-success) !important;
+}
+
+.text-maya-blue,
+.text-soft-maya-blue {
+  color: var(--text-accent-info) !important;
+}
+
+.bg-soft-maya-blue.text-white,
+.bg-maya-blue.text-white,
+.bg-soft-teal.text-white {
+  color: var(--text-primary) !important;
 }
 
 .bg-gradient-primary {
