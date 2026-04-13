@@ -1572,10 +1572,10 @@ function AppContent() {
                         {card.type === 'info' && (
                           <div className="h-full bg-zinc-50 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-10">
                             <div className="space-y-2 sm:space-y-4">
-                              <h2 className="text-2xl sm:text-5xl font-display font-black text-zinc-900 tracking-tighter uppercase">
+                              <h2 className="theme-text-primary text-2xl sm:text-5xl font-display font-black tracking-tighter uppercase">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-zinc-600 text-xs sm:text-lg font-medium max-w-xl">
+                              <p className="theme-text-secondary text-xs sm:text-lg font-medium max-w-xl">
                                 {t(card.description)}
                               </p>
                             </div>
@@ -2234,7 +2234,7 @@ function AppContent() {
                           {pieData.map((entry, i) => (
                             <div key={i} className="flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                              <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500">{entry.name}</span>
+                              <span className="theme-text-secondary text-[8px] font-black uppercase tracking-widest">{entry.name}</span>
                             </div>
                           ))}
                         </div>

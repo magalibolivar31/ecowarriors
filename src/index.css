@@ -278,7 +278,7 @@ body {
 
 .theme-input {
   background-color: var(--input-bg) !important;
-  border-color: var(--border) !important;
+  border-color: var(--border);
   color: var(--text-primary) !important;
 }
 
@@ -307,6 +307,18 @@ body {
 
 .theme-soft-card-text {
   color: var(--soft-card-text) !important;
+}
+
+.theme-text-primary {
+  color: var(--text-primary) !important;
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.theme-text-muted {
+  color: var(--text-muted) !important;
 }
 
 .bg-gradient-primary {

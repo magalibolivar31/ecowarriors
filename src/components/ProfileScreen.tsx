@@ -389,7 +389,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             <div className={cn("p-4 rounded-2xl mb-2", stat.bg)}>
               <stat.icon className={cn("w-6 h-6", stat.color)} />
             </div>
-            <span className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-100">{stat.value}</span>
+            <span className="theme-text-primary text-3xl sm:text-4xl font-black">{stat.value}</span>
             <span className="text-[10px] font-black text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{stat.label}</span>
           </motion.div>
         ))}
