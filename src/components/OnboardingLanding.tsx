@@ -285,7 +285,7 @@ export const OnboardingLanding: React.FC = () => {
       {/* Hero Section */}
       <section className="landing-brand-hero relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-white/20 to-transparent rounded-full blur-3xl opacity-50" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-emerald-500/10 to-transparent dark:from-white/20 rounded-full blur-3xl opacity-50" />
         </div>
 
         <motion.div 
@@ -299,7 +299,7 @@ export const OnboardingLanding: React.FC = () => {
             {t('landing.hero_badge')}
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-display font-black text-white tracking-tighter leading-[0.9] uppercase">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] uppercase">
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
@@ -307,12 +307,12 @@ export const OnboardingLanding: React.FC = () => {
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ delay: 1, duration: 1 }}
-                className="absolute -bottom-2 left-0 h-3 bg-white/20 -z-10"
+                className="absolute -bottom-2 left-0 h-3 bg-slate-300/80 dark:bg-white/20 -z-10"
               />
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/85 font-medium max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-600 dark:text-white/85 font-medium max-w-2xl mx-auto">
             {t('landing.hero_subtitle')}
           </p>
 
@@ -325,7 +325,7 @@ export const OnboardingLanding: React.FC = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.2 + idx * 0.1 }}
                 className={cn(
-                  "relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl border-2 border-white/30",
+                  "relative aspect-[4/5] rounded-3xl overflow-hidden shadow-lg border border-zinc-200/80 dark:border-white/30 dark:shadow-xl",
                   idx % 2 === 0 ? "md:translate-y-4" : "md:-translate-y-4"
                 )}
               >
@@ -353,7 +353,7 @@ export const OnboardingLanding: React.FC = () => {
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/65"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 dark:text-white/65"
         >
           <ChevronRight className="w-8 h-8 rotate-90" />
         </motion.div>
