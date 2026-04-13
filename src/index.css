@@ -606,9 +606,9 @@ html:not(.dark) .text-lime-300 {
 }
 
 .landing-brand-badge {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border: 1px solid #dbe3eb;
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
 .dark .landing-brand-badge {

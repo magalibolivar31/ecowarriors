@@ -285,7 +285,7 @@ export const OnboardingLanding: React.FC = () => {
       {/* Hero Section */}
       <section className="landing-brand-hero relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-emerald-action/10 to-transparent dark:from-white/20 rounded-full blur-3xl opacity-50" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-emerald-500/10 to-transparent dark:from-white/20 rounded-full blur-3xl opacity-50" />
         </div>
 
         <motion.div 
@@ -299,7 +299,7 @@ export const OnboardingLanding: React.FC = () => {
             {t('landing.hero_badge')}
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-display font-black text-[#0f172a] dark:text-white tracking-tighter leading-[0.9] uppercase">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] uppercase">
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
@@ -312,7 +312,7 @@ export const OnboardingLanding: React.FC = () => {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-[#475569] dark:text-white/85 font-medium max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-600 dark:text-white/85 font-medium max-w-2xl mx-auto">
             {t('landing.hero_subtitle')}
           </p>
 
