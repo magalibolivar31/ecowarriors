@@ -2006,7 +2006,7 @@ function AppContent() {
                             </div>
                             <div className="flex-1">
                               <p className="uppercase tracking-widest text-xs sm:text-sm">{item.label}</p>
-                              <p className={cn("text-[10px] uppercase tracking-widest opacity-60", item.status === 'Revisar' ? "text-white" : "text-emerald-100")}>{item.status}</p>
+                              <p className={cn("text-[10px] uppercase tracking-widest opacity-80", item.status === 'Revisar' ? "text-white" : "text-white")}>{item.status}</p>
                             </div>
                           </div>
                         ))}
@@ -2504,12 +2504,12 @@ function AppContent() {
                         </p>
                         <div className="flex flex-wrap gap-2 pt-1">
                           <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/40 
-                                           text-emerald-700 dark:text-emerald-300 
+                                           text-emerald-700 dark:text-slate-100 
                                            rounded-full text-[10px] font-black uppercase tracking-widest">
                             {t('community.marketplace_offer_desc')}
                           </span>
                           <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/40 
-                                           text-teal-700 dark:text-teal-300 
+                                           text-teal-700 dark:text-slate-100 
                                            rounded-full text-[10px] font-black uppercase tracking-widest">
                             {t('community.marketplace_need_desc')}
                           </span>
@@ -2734,13 +2734,13 @@ function AppContent() {
                             <div className="p-6 space-y-5">
                               <div className="space-y-2">
                                 <div className="flex justify-between items-start gap-4">
-                                  <h4 className="text-lg font-black text-stormy-teal dark:text-white tracking-tight leading-tight group-hover:text-emerald-action transition-colors uppercase">{event.title}</h4>
+                                  <h4 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight leading-tight group-hover:text-stormy-teal transition-colors uppercase">{event.title}</h4>
                                   <div className="flex items-center gap-1">
                                     {auth.currentUser?.uid === event.createdBy && (
                                       <div className="flex gap-1">
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleEditSquad(event); }}
-                                          className="p-1.5 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-maya-blue transition-all"
+                                          className="p-1.5 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-slate-100 transition-all"
                                         >
                                           <Edit2 className="w-3.5 h-3.5" />
                                         </button>
@@ -2754,25 +2754,25 @@ function AppContent() {
                                     )}
                                     <button 
                                       onClick={(e) => { e.stopPropagation(); handleViewAttendees(event); }}
-                                      className="bg-stormy-teal/5 dark:bg-stormy-teal/20 px-2.5 py-1 rounded-full text-[8px] font-black text-stormy-teal dark:text-maya-blue uppercase tracking-widest shrink-0 hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/30 transition-all"
+                                      className="bg-stormy-teal/5 dark:bg-stormy-teal/20 px-2.5 py-1 rounded-full text-[8px] font-black text-stormy-teal dark:text-slate-100 uppercase tracking-widest shrink-0 hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/30 transition-all"
                                     >
                                       {event.attendees.length}/{event.maxParticipants}
                                     </button>
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-50 dark:border-slate-700">
-                                  <div className="flex items-center gap-2 text-zinc-400 dark:text-slate-400">
-                                    <Calendar className="w-3.5 h-3.5 text-stormy-teal dark:text-maya-blue" />
+                                  <div className="flex items-center gap-2 text-zinc-600 dark:text-slate-300">
+                                    <Calendar className="w-3.5 h-3.5 text-stormy-teal dark:text-slate-100" />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">{format(new Date(event.date), "d MMM", { locale: language === 'es' ? es : enUS })}</span>
                                   </div>
-                                  <div className="flex items-center gap-2 text-zinc-400 dark:text-slate-400">
-                                    <Clock className="w-3.5 h-3.5 text-stormy-teal dark:text-maya-blue" />
+                                  <div className="flex items-center gap-2 text-zinc-600 dark:text-slate-300">
+                                    <Clock className="w-3.5 h-3.5 text-stormy-teal dark:text-slate-100" />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">{event.time}</span>
                                   </div>
                                 </div>
                               </div>
                               
-                              <p className="text-zinc-500 dark:text-slate-300 text-xs line-clamp-2 font-medium leading-relaxed">{event.description}</p>
+                              <p className="text-zinc-700 dark:text-slate-200 text-xs line-clamp-2 font-medium leading-relaxed">{event.description}</p>
                               
                               <button 
                                 onClick={() => toggleAttendance(event.id, !!isAttending, event.title)}
@@ -3024,7 +3024,7 @@ function AppContent() {
       <Modal isOpen={isVolunteerModalOpen} onClose={() => setIsVolunteerModalOpen(false)} title={t('community.volunteer_signup')}>
         <form onSubmit={handleRegisterVolunteer} className="space-y-8 p-4">
           <div className="bg-emerald-50 dark:bg-emerald-900/20 p-6 rounded-3xl border border-emerald-100 dark:border-emerald-900/30 mb-6">
-            <p className="text-emerald-800 dark:text-emerald-400 text-sm font-medium leading-relaxed">
+            <p className="text-emerald-800 dark:text-slate-100 text-sm font-medium leading-relaxed">
               {t('community.volunteer_signup_desc')}
             </p>
           </div>
@@ -3365,7 +3365,7 @@ function AppContent() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <h2 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{isDetailOpen.title}</h2>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.tag}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-slate-100 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.tag}</span>
                         <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type}</span>
                       </div>
                     </div>
@@ -3474,7 +3474,7 @@ function AppContent() {
             ) : (
               squadAttendeesProfiles.map((profile, i) => (
                 <div key={i} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 overflow-hidden flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-lg">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 overflow-hidden flex items-center justify-center text-emerald-700 dark:text-slate-100 font-black text-lg">
                     {profile.photoURL ? (
                       <img src={profile.photoURL} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                     ) : (
@@ -3516,23 +3516,23 @@ function AppContent() {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.date_label')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.date}</span>
+                <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.date}</span>
               </div>
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.squad_time_label')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.time}</span>
+                <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.time}</span>
               </div>
             </div>
 
             <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.location_label')}</span>
-              <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.location}</span>
+              <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.location}</span>
             </div>
 
             <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-900/30">
               <div className="flex items-center gap-3">
-                <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span className="font-bold text-emerald-700 dark:text-emerald-300">
+                <Users className="w-5 h-5 text-emerald-700 dark:text-slate-100" />
+                <span className="font-bold text-emerald-700 dark:text-slate-100">
                   {selectedSquadForDetail.attendees.length} {selectedSquadForDetail.maxParticipants ? `/ ${selectedSquadForDetail.maxParticipants}` : ''} {t('community.squad_attendees')}
                 </span>
               </div>

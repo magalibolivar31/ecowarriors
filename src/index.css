@@ -550,6 +550,46 @@ html:not(.dark) .bg-blue-900 {
   color: var(--text-secondary) !important;
 }
 
+/* Accessibility guardrail: avoid pastel/light blue-green text as readable foreground. */
+html:not(.dark) .text-maya-blue,
+html:not(.dark) .text-soft-maya-blue,
+html:not(.dark) .text-soft-teal,
+html:not(.dark) .text-emerald-300,
+html:not(.dark) .text-emerald-400,
+html:not(.dark) .text-teal-300,
+html:not(.dark) .text-blue-300,
+html:not(.dark) .text-cyan-300,
+html:not(.dark) .text-sky-300,
+html:not(.dark) .text-green-300,
+html:not(.dark) .text-lime-300 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-maya-blue,
+.dark .text-soft-maya-blue,
+.dark .text-soft-teal,
+.dark .text-emerald-300,
+.dark .text-emerald-400,
+.dark .text-teal-300,
+.dark .text-blue-300,
+.dark .text-cyan-300,
+.dark .text-sky-300,
+.dark .text-green-300,
+.dark .text-lime-300,
+.dark .dark\:text-maya-blue,
+.dark .dark\:text-soft-maya-blue,
+.dark .dark\:text-soft-teal,
+.dark .dark\:text-emerald-300,
+.dark .dark\:text-emerald-400,
+.dark .dark\:text-teal-300,
+.dark .dark\:text-blue-300,
+.dark .dark\:text-cyan-300,
+.dark .dark\:text-sky-300,
+.dark .dark\:text-green-300,
+.dark .dark\:text-lime-300 {
+  color: var(--text-primary) !important;
+}
+
 /* Mascots */
 .mascot-guide {
   @apply flex items-start gap-4 p-6 bg-maya-blue/10 rounded-3xl border border-maya-blue/20;
