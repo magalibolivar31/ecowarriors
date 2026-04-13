@@ -634,8 +634,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
             {/* Reminders Toggle */}
             <div className="bg-red-900/60 p-5 rounded-3xl border border-white/15 shadow-lg shadow-black/20 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Clock className="w-6 h-6 text-yellow-400" />
+              <div className="flex items-center gap-3">
+                <Clock className="w-6 h-6 text-yellow-400" />
                 <div>
                   <p className="font-bold text-sm">{t('crisis.preventive_reminders')}</p>
                   <p className="text-[10px] opacity-70">{t('crisis.reminders_desc')}</p>
@@ -645,7 +645,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 onClick={() => setRemindersEnabled(!remindersEnabled)}
                 className={`${reminderToggleSizeClasses} rounded-full relative transition-colors border ${remindersEnabled ? 'bg-yellow-400 border-yellow-300' : 'bg-red-950 border-red-800'}`}
               >
-                 <div className={`absolute ${reminderToggleThumbSizeClasses} rounded-full bg-white transition-all ${reminderToggleThumbPositionClasses}`} />
+                <div className={`absolute ${reminderToggleThumbSizeClasses} rounded-full bg-white transition-all ${reminderToggleThumbPositionClasses}`} />
               </button>
             </div>
 
