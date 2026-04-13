@@ -1458,7 +1458,7 @@ function AppContent() {
 
             <button 
               onClick={() => setIsCrisisMode(true)}
-              className="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all flex items-center gap-2"
+              className="p-2.5 bg-red-700 text-white rounded-xl hover:bg-red-800 transition-all flex items-center gap-2 border border-red-500/50 shadow-sm shadow-red-900/20"
               title={t('nav.crisis_mode')}
             >
               <ShieldAlert className="w-5 h-5" />
@@ -1729,23 +1729,23 @@ function AppContent() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white border border-zinc-100
+                className="bg-gradient-to-br from-red-700 to-red-900 border border-red-500/40
                            rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 
-                           text-stormy-teal overflow-hidden relative shadow-sm 
+                           text-white overflow-hidden relative shadow-lg shadow-red-950/20
                            cursor-pointer group
-                           hover:shadow-md 
+                           hover:shadow-xl 
                            hover:-translate-y-1 transition-all duration-300"
                 onClick={() => handleCrisisModeToggle(true)}
               >
                 <div className="absolute -top-6 -right-6 w-32 h-32 
-                                bg-soft-maya-blue/20 rounded-full blur-2xl" />
+                                bg-yellow-400/20 rounded-full blur-2xl" />
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-center justify-between">
-                      <div className="p-3 bg-soft-maya-blue/20 rounded-2xl">
-                        <AlertTriangle className="w-7 h-7 text-stormy-teal" />
+                      <div className="p-3 bg-red-950/35 rounded-2xl border border-white/15">
+                        <AlertTriangle className="w-7 h-7 text-yellow-400" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest 
-                                     bg-emerald-action/10 text-emerald-action px-3 py-1.5 rounded-full">
+                                     bg-yellow-400 text-red-900 px-3 py-1.5 rounded-full">
                       {t('dashboard.preparation')}
                     </span>
                   </div>
@@ -1754,11 +1754,11 @@ function AppContent() {
                                    uppercase tracking-tighter leading-none">
                       {t('dashboard.crisis_mode')}
                     </h3>
-                    <p className="text-sm font-medium text-zinc-600 leading-relaxed">
+                    <p className="text-sm font-medium text-white/85 leading-relaxed">
                       {t('dashboard.crisis_desc')}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 text-stormy-teal font-black 
+                  <div className="flex items-center gap-2 text-yellow-300 font-black 
                                   text-xs uppercase tracking-widest 
                                   group-hover:gap-3 transition-all">
                     <span>{t('dashboard.activate_now')}</span>
