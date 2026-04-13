@@ -665,7 +665,6 @@ function AppContent() {
     () => reports.some((report) => report.createdBy === user?.uid),
     [reports, user?.uid],
   );
-  const shouldHighlightSensorFab = activeTab === 'MAPA' && reportFilter === 'mios' && reportsReady && !hasMineReports;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentScrollRef = useRef<HTMLDivElement>(null);
@@ -2021,29 +2020,28 @@ function AppContent() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                   {[
-                    { id: 'MAPA', label: t('community.map_label'), desc: t('community.map_desc'), icon: MapIcon, color: 'text-maya-blue', bg: 'bg-maya-blue/10' },
+                    { id: 'MAPA', label: t('community.map_label'), desc: t('community.map_desc'), icon: MapIcon, color: 'text-maya-blue', bg: 'bg-soft-maya-blue/30' },
                     { id: 'REPORTES', label: t('community.report_label'), desc: t('community.report_desc'), icon: Camera, color: 'text-emerald-action', bg: 'bg-emerald-action/10' },
-                    { id: 'COMUNIDAD', label: t('community.community_label'), desc: t('community.community_desc'), icon: MessageSquare, color: 'text-purple-600', bg: 'bg-purple-50' },
-                    { id: 'PERFIL', label: t('community.profile_label'), desc: t('community.profile_desc'), icon: User, color: 'text-amber-600', bg: 'bg-amber-50' },
+                    { id: 'COMUNIDAD', label: t('community.community_label'), desc: t('community.community_desc'), icon: MessageSquare, color: 'text-soft-teal', bg: 'bg-soft-teal/20' },
+                    { id: 'PERFIL', label: t('community.profile_label'), desc: t('community.profile_desc'), icon: User, color: 'text-stormy-teal', bg: 'bg-stormy-teal/10' },
                   ].map((item) => (
                     <motion.button 
                       key={item.id}
-                      whileHover={{ y: -8 }}
+                      whileHover={{ y: -4 }}
                       onClick={() => setActiveTab(item.id as Tab)}
-                      className="bg-white dark:bg-slate-800/90 rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100 dark:border-slate-600 shadow-sm hover:shadow-2xl transition-all text-left overflow-hidden group flex flex-col h-full"
+                      className="bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-200 shadow-sm hover:shadow-md transition-all text-left overflow-hidden group flex flex-col h-full"
                     >
                       <div className={cn(
                         "w-full aspect-video flex items-center justify-center rounded-2xl mb-4",
-                        item.bg,
-                        "dark:bg-opacity-20"
+                        item.bg
                       )}>
                         <item.icon className={cn("w-16 h-16", item.color)} />
                       </div>
                       <div className="p-6 sm:p-8 space-y-3 flex-1">
-                        <p className="font-black text-xl sm:text-2xl uppercase tracking-tighter text-zinc-900 dark:text-white leading-none">{item.label}</p>
-                        <p className="text-xs sm:text-sm text-zinc-500 dark:text-slate-300 font-medium leading-relaxed">{item.desc}</p>
+                        <p className="font-black text-xl sm:text-2xl uppercase tracking-tighter text-zinc-900 leading-none">{item.label}</p>
+                        <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed">{item.desc}</p>
                       </div>
-                      <div className="px-6 sm:px-8 pb-6 sm:pb-8 flex items-center gap-2 sm:gap-3 text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                      <div className="px-6 sm:px-8 pb-6 sm:pb-8 flex items-center gap-2 sm:gap-3 text-[10px] font-black text-stormy-teal uppercase tracking-widest">
                         {t('community.go_now')} <ArrowRight className="w-4 h-4" />
                       </div>
                     </motion.button>
@@ -2863,25 +2861,13 @@ function AppContent() {
 
       {/* Global Floating Action Button: Sensor Activo */}
       <div className="fixed bottom-[5.25rem] sm:bottom-8 right-4 sm:right-8 z-[55]">
-        {shouldHighlightSensorFab && (
-          <div className="mb-3 sm:mb-4 mr-1 max-w-[220px] sm:max-w-[260px] ml-auto rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-emerald-500/30 dark:border-emerald-400/40 px-3 py-2 shadow-xl backdrop-blur-md animate-pulse">
-            <p className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 text-right">
-              {t('map.no_my_reports_action')}
-            </p>
-          </div>
-        )}
         <button 
           onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-          className={cn(
-            "flex items-center gap-2 sm:gap-3 bg-emerald-600 text-white p-3 sm:px-6 sm:py-4 rounded-2xl sm:rounded-3xl font-black shadow-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all group border-2 sm:border-4 border-white dark:border-slate-800 relative overflow-hidden",
-            shouldHighlightSensorFab && "ring-4 ring-emerald-300/70 dark:ring-emerald-400/40 animate-pulse"
-          )}
+          className="flex items-center gap-2 sm:gap-3 bg-emerald-action text-white p-3 sm:px-5 sm:py-3.5 rounded-2xl font-black shadow-lg hover:bg-stormy-teal active:scale-95 transition-colors border-2 border-white"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="relative z-10 flex items-center gap-3">
-            <div className="relative">
-              <Camera className="w-5 h-5 sm:w-7 sm:h-7 relative z-10" />
-              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-emerald-600 animate-pulse" />
+          <div className="flex items-center gap-3">
+            <div>
+              <Camera className="w-5 h-5 sm:w-7 sm:h-7" />
             </div>
             <div className="text-left leading-none hidden sm:block">
               <span className="block text-sm tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
