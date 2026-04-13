@@ -84,7 +84,7 @@ const SearchControl = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t('map.search_placeholder')}
-            className="w-full pl-11 pr-10 py-3 bg-white/90 backdrop-blur-md border border-zinc-200 rounded-2xl shadow-xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium"
+            className="w-full pl-11 pr-10 py-3 bg-white/90 text-zinc-900 placeholder-zinc-500 backdrop-blur-md border border-zinc-200 rounded-2xl shadow-xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium"
           />
           {query && (
             <button 
