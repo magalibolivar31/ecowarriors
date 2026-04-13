@@ -99,25 +99,37 @@ export async function updatePostStatus(
 
 export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => void) {
   const q = query(collection(db, MARKETPLACE_COLLECTION), orderBy('createdAt', 'desc'));
+  let latestSnapshotRequest = 0;
 
-  return onSnapshot(q, async (snapshot) => {
-    try {
-      const posts = await Promise.all(snapshot.docs.map(async (snapshotDoc) => {
-        const rawData = snapshotDoc.data() as Record<string, unknown>;
-        const rawImages = normalizeMarketplaceImages(rawData);
-        const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
-          .filter((value): value is string => Boolean(value));
+  return onSnapshot(q, (snapshot) => {
+    const requestId = ++latestSnapshotRequest;
+    void (async () => {
+      try {
+        const posts = await Promise.all(snapshot.docs.map(async (snapshotDoc) => {
+          const rawData = snapshotDoc.data() as Record<string, unknown>;
+          const rawImages = normalizeMarketplaceImages(rawData);
+          const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
+            .filter((value): value is string => Boolean(value));
 
-        return {
+          return {
+            id: snapshotDoc.id,
+            ...rawData,
+            ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+          } as MarketplacePost;
+        }));
+
+        if (requestId !== latestSnapshotRequest) return;
+        callback(posts);
+      } catch (error) {
+        if (requestId !== latestSnapshotRequest) return;
+        handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+        const fallbackPosts = snapshot.docs.map((snapshotDoc) => ({
           id: snapshotDoc.id,
-          ...rawData,
-          ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
-        } as MarketplacePost;
-      }));
-      callback(posts);
-    } catch (error) {
-      handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
-    }
+          ...(snapshotDoc.data() as Record<string, unknown>),
+        } as MarketplacePost));
+        callback(fallbackPosts);
+      }
+    })();
   }, (error) => {
     handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
   });
