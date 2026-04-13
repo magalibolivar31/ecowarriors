@@ -223,7 +223,12 @@ export const OnboardingLanding: React.FC = () => {
       </AnimatePresence>
 
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-6 py-4">
+      <header className={cn(
+        "fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl border-b px-6 py-4",
+        darkMode
+          ? "bg-[#0B1F2A]/95 border-slate-700/60"
+          : "bg-white/80 border-zinc-100"
+      )}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
@@ -235,7 +240,10 @@ export const OnboardingLanding: React.FC = () => {
                 decoding="async"
               />
             </div>
-            <span className="font-display font-black tracking-tighter text-2xl hidden sm:block text-zinc-900">ECOWARRIORS</span>
+            <span className={cn(
+              "font-display font-black tracking-tighter text-2xl hidden sm:block",
+              darkMode ? "text-white" : "text-zinc-900"
+            )}>ECOWARRIORS</span>
           </div>
           
           <div className="flex items-center gap-3">
@@ -299,7 +307,10 @@ export const OnboardingLanding: React.FC = () => {
             {t('landing.hero_badge')}
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-display font-black text-slate-900 dark:text-white tracking-tighter leading-[0.9] uppercase">
+          <h1 className={cn(
+            "text-5xl md:text-7xl font-display font-black tracking-tighter leading-[0.9] uppercase",
+            darkMode ? "text-white" : "text-slate-900"
+          )}>
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
@@ -312,7 +323,10 @@ export const OnboardingLanding: React.FC = () => {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-white/85 font-medium max-w-2xl mx-auto">
+          <p className={cn(
+            "text-xl md:text-2xl font-medium max-w-2xl mx-auto",
+            darkMode ? "text-white/85" : "text-slate-600"
+          )}>
             {t('landing.hero_subtitle')}
           </p>
 
