@@ -2006,7 +2006,7 @@ function AppContent() {
                             </div>
                             <div className="flex-1">
                               <p className="uppercase tracking-widest text-xs sm:text-sm">{item.label}</p>
-                              <p className={cn("text-[10px] uppercase tracking-widest opacity-80", item.status === 'Revisar' ? "text-white" : "text-white")}>{item.status}</p>
+                              <p className="text-[10px] uppercase tracking-widest opacity-80 text-white">{item.status}</p>
                             </div>
                           </div>
                         ))}
@@ -2740,7 +2740,7 @@ function AppContent() {
                                       <div className="flex gap-1">
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleEditSquad(event); }}
-                                          className="p-1.5 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-slate-100 transition-all"
+                                          className="p-1.5 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-white transition-all"
                                         >
                                           <Edit2 className="w-3.5 h-3.5" />
                                         </button>
