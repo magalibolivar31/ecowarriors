@@ -501,11 +501,11 @@ export const OnboardingLanding: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
             {LANDING_SUPPORT_LOGOS.map((logo) => {
               const logoContent = (
-                <div className="h-28 bg-white rounded-3xl border border-zinc-100 shadow-sm p-5 flex items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                <div className="h-28 bg-white rounded-2xl p-3 md:p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center hover:-translate-y-1 transition-transform duration-300">
                   <img
                     src={logo.imageUrl}
                     alt={logo.name}
-                    className="max-h-full max-w-full object-contain"
+                    className="max-h-12 md:max-h-14 max-w-full object-contain"
                     loading="lazy"
                     referrerPolicy="no-referrer"
                   />
@@ -518,7 +518,7 @@ export const OnboardingLanding: React.FC = () => {
                   href={logo.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-stormy-teal/40 rounded-3xl"
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-stormy-teal/40 rounded-2xl"
                   aria-label={logo.name}
                 >
                   {logoContent}
