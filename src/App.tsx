@@ -1530,7 +1530,7 @@ function AppContent() {
                         {/* Hero Type */}
                         {card.type === 'hero' && (
                           <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/75 to-transparent z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-soft-maya-blue/35 via-white/80 to-transparent z-10" />
                             
                             <div className="relative z-20 h-full p-5 sm:p-16 flex flex-col justify-center max-w-3xl space-y-4 sm:space-y-6">
                               {card.tag && (
@@ -2860,7 +2860,7 @@ function AppContent() {
 
       {/* Global Floating Action Button: Sensor Activo */}
       {TABS_WITH_SENSOR.includes(activeTab) && (
-        <div className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
+        <div className="fixed bottom-[calc(var(--mobile-tab-bar-height)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
           <button 
             onClick={() => { resetForm(); setIsReportModalOpen(true); }}
             aria-label={`${t('common.active_sensor')} - ${t('common.report')}`}

@@ -412,7 +412,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             <span>{profile.xp} XP</span>
             <span>{nextLevelXP} XP</span>
           </div>
-          <div className="h-6 bg-zinc-100 rounded-full overflow-hidden p-1">
+          <div className="h-6 bg-zinc-50 rounded-full overflow-hidden p-1 border border-zinc-100">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
