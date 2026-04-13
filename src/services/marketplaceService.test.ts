@@ -104,6 +104,31 @@ describe('marketplaceService', () => {
     });
   });
 
+  it('createMarketplacePost normaliza type e imágenes antes de guardar', async () => {
+    firestoreMocks.addDoc.mockResolvedValueOnce({ id: 'post-2' });
+
+    await createMarketplacePost(
+      '  DOY  ' as unknown as 'doy',
+      'Título',
+      'Contenido',
+      'otros',
+      [' img1 ', '', '   ', 'img2'],
+      'contacto',
+    );
+
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', {
+      uid: 'user-1',
+      type: 'doy',
+      title: 'Título',
+      content: 'Contenido',
+      tag: 'otros',
+      images: ['img1', 'img2'],
+      contact: 'contacto',
+      status: 'disponible',
+      createdAt: 'ts',
+    });
+  });
+
   it('updatePostStatus actualiza estado', async () => {
     await updatePostStatus('post-1', 'reservado');
     expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', { status: 'reservado' });
@@ -200,6 +225,41 @@ describe('marketplaceService', () => {
         title: 'Con image',
         image: { url: 'marketplace/c.jpg' },
         images: ['https://cdn.test/ref:marketplace/c.jpg'],
+      },
+    ]);
+  });
+
+  it('subscribeToMarketplace normaliza type y status legacy', async () => {
+    const callback = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'p1',
+            data: () => ({
+              type: 'DOY',
+              status: 'Disponible',
+              title: 'Normalizado',
+            }),
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'p1',
+        type: 'doy',
+        status: 'disponible',
+        title: 'Normalizado',
       },
     ]);
   });

@@ -17,6 +17,36 @@ import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
 
+function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'doy' || normalized === 'recibo') return normalized;
+  return null;
+}
+
+function normalizeMarketplaceStatus(
+  value: unknown
+): 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido' | null {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (
+    normalized === 'disponible'
+    || normalized === 'reservado'
+    || normalized === 'entregado/resuelto'
+    || normalized === 'vencido'
+  ) {
+    return normalized;
+  }
+  return null;
+}
+
+function normalizeMarketplaceImagePayload(images: string[]): string[] {
+  return images
+    .filter((image): image is string => typeof image === 'string')
+    .map((image) => image.trim())
+    .filter(Boolean);
+}
+
 function normalizeMarketplaceImages(data: Record<string, unknown>): string[] {
   const directImages = Array.isArray(data.images) ? data.images : [];
   const fallbackImages = [data.imageUrl, data.image];
@@ -62,13 +92,19 @@ export async function createMarketplacePost(
   const uid = auth.currentUser.uid;
   
   try {
+    const normalizedType = normalizeMarketplaceType(type);
+    if (!normalizedType) {
+      throw new Error('Invalid marketplace post type');
+    }
+
+    const normalizedImages = normalizeMarketplaceImagePayload(images);
     const postData = {
       uid,
-      type,
+      type: normalizedType,
       title: sanitizeText(title),
       content: sanitizeText(content),
       tag,
-      images,
+      images: normalizedImages,
       contact: sanitizeText(contact),
       status: 'disponible',
       createdAt: serverTimestamp()
@@ -110,10 +146,13 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
           const rawImages = normalizeMarketplaceImages(rawData);
           const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
             .filter((value): value is string => Boolean(value));
+          const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
 
           return {
             id: snapshotDoc.id,
             ...rawData,
+            type: normalizeMarketplaceType(rawData.type) ?? 'recibo',
+            ...(normalizedStatus ? { status: normalizedStatus } : {}),
             ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
           } as MarketplacePost;
         }));
