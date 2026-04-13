@@ -811,7 +811,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                           <span>{t('crisis.getting_gps')}</span>
                         </div>
                       ) : currentCoords ? (
-                        <div className="flex items-center gap-2 text-yellow-300">
+                        <div className="flex items-center gap-2 text-white">
                           <CheckCircle2 className="w-4 h-4" />
                           <span>{currentCoords.lat.toFixed(6)}, {currentCoords.lng.toFixed(6)}</span>
                         </div>

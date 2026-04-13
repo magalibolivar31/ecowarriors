@@ -241,7 +241,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
                   </div>
                   <div className="bg-dark-teal p-6 rounded-[2.5rem] text-white space-y-4 shadow-xl">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{t('reports.initial_report')}</span>
+                      <span className="text-[10px] font-black text-white uppercase tracking-widest">{t('reports.initial_report')}</span>
                       <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                         {report.createdAt?.seconds ? format(new Date(report.createdAt.seconds * 1000), "d MMM, HH:mm", { locale: dateLocale }) : t('reports.start_node')}
                       </span>

@@ -31,7 +31,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
       case 'Abierto (nuevo)': return { color: 'bg-soft-maya-blue/30 text-stormy-teal', icon: <Activity className="w-3 h-3" />, label: t('reports.status_new') };
       case 'Abierto (en seguimiento)': return { color: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300', icon: <Clock className="w-3 h-3" />, label: t('reports.status_followup') };
       case 'Abierto (agravado)': return { color: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300', icon: <AlertTriangle className="w-3 h-3" />, label: t('reports.status_aggravated') };
-      case 'Resuelto': return { color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300', icon: <CheckCircle2 className="w-3 h-3" />, label: t('reports.status_resolved') };
+      case 'Resuelto': return { color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-slate-100', icon: <CheckCircle2 className="w-3 h-3" />, label: t('reports.status_resolved') };
       case 'Cancelado': return { color: 'bg-zinc-100 text-zinc-700', icon: <X className="w-3 h-3" />, label: t('reports.status_cancelled') };
       default: return { color: 'bg-zinc-100 text-zinc-700', icon: <Info className="w-3 h-3" />, label: status };
     }
