@@ -242,7 +242,7 @@ export const OnboardingLanding: React.FC = () => {
             </div>
             <span className={cn(
               "font-display font-black tracking-tighter text-2xl hidden sm:block",
-              darkMode ? "text-white" : "text-zinc-900"
+              "text-white"
             )}>ECOWARRIORS</span>
           </div>
           
@@ -309,7 +309,7 @@ export const OnboardingLanding: React.FC = () => {
           
           <h1 className={cn(
             "text-5xl md:text-7xl font-display font-black tracking-tighter leading-[0.9] uppercase",
-            darkMode ? "text-white" : "text-slate-900"
+            "text-slate-900"
           )}>
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
