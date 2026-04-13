@@ -146,12 +146,13 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
           const rawImages = normalizeMarketplaceImages(rawData);
           const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
             .filter((value): value is string => Boolean(value));
+          const normalizedType = normalizeMarketplaceType(rawData.type);
           const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
 
           return {
             id: snapshotDoc.id,
             ...rawData,
-            type: normalizeMarketplaceType(rawData.type) ?? 'recibo',
+            ...(normalizedType ? { type: normalizedType } : {}),
             ...(normalizedStatus ? { status: normalizedStatus } : {}),
             ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
           } as MarketplacePost;
