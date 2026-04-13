@@ -10,11 +10,44 @@ import {
   onSnapshot,
   Timestamp
 } from 'firebase/firestore';
-import { db, auth, handleFirestoreError, OperationType, cleanFirestoreData } from '../firebase';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { db, auth, handleFirestoreError, OperationType, cleanFirestoreData, storage } from '../firebase';
 import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
+
+function normalizeMarketplaceImages(data: Record<string, unknown>): string[] {
+  const directImages = Array.isArray(data.images) ? data.images : [];
+  const fallbackImages = [data.imageUrl, data.image];
+  const normalized = [...directImages, ...fallbackImages]
+    .map((image) => {
+      if (typeof image === 'string') return image.trim();
+      if (image && typeof image === 'object') {
+        const obj = image as Record<string, unknown>;
+        if (typeof obj.url === 'string') return obj.url.trim();
+        if (typeof obj.imageUrl === 'string') return obj.imageUrl.trim();
+      }
+      return '';
+    })
+    .filter(Boolean);
+
+  return Array.from(new Set(normalized));
+}
+
+async function resolveMarketplaceImageUrl(image: string): Promise<string | null> {
+  if (!image) return null;
+  if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:image/')) {
+    return image;
+  }
+
+  try {
+    const normalizedPath = image.startsWith('/') ? image.slice(1) : image;
+    return await getDownloadURL(ref(storage, normalizedPath));
+  } catch {
+    return null;
+  }
+}
 
 export async function createMarketplacePost(
   type: 'doy' | 'recibo',
@@ -67,12 +100,24 @@ export async function updatePostStatus(
 export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => void) {
   const q = query(collection(db, MARKETPLACE_COLLECTION), orderBy('createdAt', 'desc'));
 
-  return onSnapshot(q, (snapshot) => {
-    const posts = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as MarketplacePost));
-    callback(posts);
+  return onSnapshot(q, async (snapshot) => {
+    try {
+      const posts = await Promise.all(snapshot.docs.map(async (snapshotDoc) => {
+        const rawData = snapshotDoc.data() as Record<string, unknown>;
+        const rawImages = normalizeMarketplaceImages(rawData);
+        const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
+          .filter((value): value is string => Boolean(value));
+
+        return {
+          id: snapshotDoc.id,
+          ...rawData,
+          ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+        } as MarketplacePost;
+      }));
+      callback(posts);
+    } catch (error) {
+      handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+    }
   }, (error) => {
     handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
   });

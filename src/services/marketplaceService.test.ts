@@ -12,8 +12,14 @@ const firestoreMocks = vi.hoisted(() => ({
   onSnapshot: vi.fn(),
 }));
 
+const storageMocks = vi.hoisted(() => ({
+  ref: vi.fn(),
+  getDownloadURL: vi.fn(),
+}));
+
 const firebaseMocks = vi.hoisted(() => ({
   db: {},
+  storage: {},
   auth: {
     currentUser: { uid: 'user-1' } as { uid: string } | null,
   },
@@ -28,6 +34,7 @@ const firebaseMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('firebase/firestore', () => firestoreMocks);
+vi.mock('firebase/storage', () => storageMocks);
 vi.mock('../firebase', () => firebaseMocks);
 
 import {
@@ -46,6 +53,8 @@ describe('marketplaceService', () => {
     firestoreMocks.doc.mockReturnValue('doc-ref');
     firestoreMocks.query.mockReturnValue('query-ref');
     firestoreMocks.orderBy.mockReturnValue('order-by-ref');
+    storageMocks.ref.mockImplementation((_storage, path) => `ref:${path}`);
+    storageMocks.getDownloadURL.mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
   });
 
   it('createMarketplacePost requiere usuario', async () => {
@@ -96,12 +105,12 @@ describe('marketplaceService', () => {
     expect(firestoreMocks.deleteDoc).toHaveBeenCalledWith('doc-ref');
   });
 
-  it('subscribeToMarketplace transforma docs', () => {
+  it('subscribeToMarketplace transforma docs', async () => {
     const callback = vi.fn();
     const unsubscribe = vi.fn();
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
-      onNext({
+      void onNext({
         docs: [
           {
             id: 'p1',
@@ -114,8 +123,71 @@ describe('marketplaceService', () => {
 
     const unSub = subscribeToMarketplace(callback);
 
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
     expect(callback).toHaveBeenCalledWith([{ id: 'p1', title: 'Publicación' }]);
     expect(unSub).toBe(unsubscribe);
+  });
+
+  it('subscribeToMarketplace normaliza y resuelve imágenes legacy', async () => {
+    const callback = vi.fn();
+    const unsubscribe = vi.fn();
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'p1',
+            data: () => ({
+              title: 'Con imagen',
+              images: [{ imageUrl: 'marketplace/a.jpg' }, 'https://img.test/x.jpg', ''],
+            }),
+          },
+          {
+            id: 'p2',
+            data: () => ({
+              title: 'Con imageUrl',
+              imageUrl: 'marketplace/b.jpg',
+            }),
+          },
+          {
+            id: 'p3',
+            data: () => ({
+              title: 'Con image',
+              image: { url: 'marketplace/c.jpg' },
+            }),
+          },
+        ],
+      });
+      return unsubscribe;
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'p1',
+        title: 'Con imagen',
+        images: ['https://cdn.test/ref:marketplace/a.jpg', 'https://img.test/x.jpg'],
+      },
+      {
+        id: 'p2',
+        title: 'Con imageUrl',
+        imageUrl: 'marketplace/b.jpg',
+        images: ['https://cdn.test/ref:marketplace/b.jpg'],
+      },
+      {
+        id: 'p3',
+        title: 'Con image',
+        image: { url: 'marketplace/c.jpg' },
+        images: ['https://cdn.test/ref:marketplace/c.jpg'],
+      },
+    ]);
   });
 
   it('subscribeToMarketplace llama handleFirestoreError en error', () => {
