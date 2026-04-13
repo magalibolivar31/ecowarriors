@@ -321,15 +321,15 @@ export const ReportMap: React.FC<ReportMapProps> = ({
       </MapContainer>
       
       {showLoadingOverlay && (
-        <div className="absolute inset-0 z-[999] flex flex-col items-center justify-center gap-3 bg-white/75 dark:bg-zinc-900/80 rounded-[2rem] sm:rounded-[3rem]">
+        <div className="absolute inset-0 z-[999] flex flex-col items-center justify-center gap-3 bg-white/75 dark:bg-dark-teal/80 rounded-[2rem] sm:rounded-[3rem]">
           <Activity className="w-10 h-10 text-emerald-600 animate-pulse" />
           <p className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-300">{t('map.loading')}</p>
         </div>
       )}
 
       {showMineEmptyState && (
-        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-white/85 dark:bg-zinc-900/85 rounded-[2rem] sm:rounded-[3rem]">
-          <div className="w-full max-w-md text-center rounded-3xl border border-stormy-teal/20 dark:border-stormy-teal/40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl px-6 py-8 sm:px-8 sm:py-10 space-y-4">
+        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-white/85 dark:bg-dark-teal/85 rounded-[2rem] sm:rounded-[3rem]">
+          <div className="w-full max-w-md text-center rounded-3xl border border-stormy-teal/20 dark:border-stormy-teal/40 bg-white/90 dark:bg-stormy-teal/90 backdrop-blur-md shadow-2xl px-6 py-8 sm:px-8 sm:py-10 space-y-4">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-emerald-400/20 flex items-center justify-center">
               <MapPin className="w-7 h-7 text-emerald-700 dark:text-emerald-300" />
             </div>
@@ -352,7 +352,7 @@ export const ReportMap: React.FC<ReportMapProps> = ({
 
       {showGeneralEmptyState && (
         <div className="absolute inset-0 flex items-center justify-center 
-                        bg-white/80 dark:bg-zinc-900/80 z-[999] rounded-[2rem]">
+                        bg-white/80 dark:bg-dark-teal/80 z-[999] rounded-[2rem]">
           <div className="text-center space-y-2">
             <MapPin className="w-10 h-10 text-zinc-300 mx-auto" />
             <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">

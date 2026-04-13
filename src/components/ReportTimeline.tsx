@@ -130,7 +130,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
         {/* Header */}
         <div className="flex items-center justify-between p-8 border-b border-zinc-100 shrink-0 bg-zinc-50">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-zinc-900 rounded-2xl flex items-center justify-center text-white shadow-lg">
+            <div className="w-12 h-12 bg-dark-teal rounded-2xl flex items-center justify-center text-white shadow-lg">
               <History className="w-6 h-6" />
             </div>
             <div>
@@ -236,10 +236,10 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
 
                 {/* Initial State Node */}
                 <div className="relative pl-12">
-                  <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-zinc-900 text-white border-4 border-white shadow-md flex items-center justify-center z-10">
+                  <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-dark-teal text-white border-4 border-white shadow-md flex items-center justify-center z-10">
                     <Plus className="w-5 h-5" />
                   </div>
-                  <div className="bg-zinc-900 p-6 rounded-[2.5rem] text-white space-y-4 shadow-xl">
+                  <div className="bg-dark-teal p-6 rounded-[2.5rem] text-white space-y-4 shadow-xl">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{t('reports.initial_report')}</span>
                       <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
