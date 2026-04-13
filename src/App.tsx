@@ -3518,23 +3518,23 @@ function AppContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.date_label')}</span>
-                <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.date}</span>
+                <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.date}</span>
               </div>
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.squad_time_label')}</span>
-                <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.time}</span>
+                <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.time}</span>
               </div>
             </div>
 
             <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.location_label')}</span>
-              <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.location}</span>
+              <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.location}</span>
             </div>
 
             <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-900/30">
               <div className="flex items-center gap-3">
-                <Users className="w-5 h-5 text-emerald-700 dark:text-slate-100" />
-                <span className="font-bold text-emerald-700 dark:text-slate-100">
+                <Users className="w-5 h-5 text-emerald-900 dark:text-emerald-200" />
+                <span className="font-bold text-emerald-900 dark:text-emerald-200">
                   {selectedSquadForDetail.attendees.length} {selectedSquadForDetail.maxParticipants ? `/ ${selectedSquadForDetail.maxParticipants}` : ''} {t('community.squad_attendees')}
                 </span>
               </div>
