@@ -233,10 +233,15 @@ describe('marketplaceService', () => {
       predicate: (value: unknown, index: number, array: unknown[]) => unknown,
       thisArg?: unknown,
     ) {
-      if (this.includes('https://img.test/ok.jpg') && this.includes('')) {
-        return [...this] as unknown[];
+      const filtered = nativeFilter.call(this, predicate, thisArg);
+      if (
+        this.includes('https://img.test/ok.jpg')
+        && this.includes('')
+        && !filtered.includes('')
+      ) {
+        return [...filtered, ''] as unknown[];
       }
-      return nativeFilter.call(this, predicate, thisArg);
+      return filtered;
     });
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
@@ -336,7 +341,7 @@ describe('marketplaceService', () => {
       } as Record<string, unknown>,
       {
         ownKeys() {
-          throw new Error('spread fail');
+          throw new Error('Snapshot data enumeration failed');
         },
         getOwnPropertyDescriptor() {
           return { enumerable: true, configurable: true };
@@ -381,18 +386,29 @@ describe('marketplaceService', () => {
   });
 
   it('subscribeToMarketplace usa fallback cuando falla el procesamiento del snapshot', async () => {
-    const callback = vi.fn()
-      .mockImplementationOnce(() => {
-        throw new Error('callback failure');
-      })
-      .mockImplementation(() => {});
+    const callback = vi.fn();
+    const brokenData = new Proxy(
+      { title: 'Broken' } as Record<string, unknown>,
+      {
+        ownKeys() {
+          throw new Error('Snapshot data enumeration failed');
+        },
+        getOwnPropertyDescriptor() {
+          return { enumerable: true, configurable: true };
+        },
+      },
+    );
+    const snapshotData = vi
+      .fn()
+      .mockReturnValueOnce(brokenData)
+      .mockReturnValueOnce({ title: 'Fallback post' });
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
       void onNext({
         docs: [
           {
             id: 'p1',
-            data: () => ({ title: 'Fallback post' }),
+            data: snapshotData,
           },
         ],
       });
@@ -402,7 +418,7 @@ describe('marketplaceService', () => {
     subscribeToMarketplace(callback);
 
     await vi.waitFor(() => {
-      expect(callback).toHaveBeenCalledTimes(2);
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
     expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledWith(
@@ -410,7 +426,7 @@ describe('marketplaceService', () => {
       firebaseMocks.OperationType.LIST,
       'marketplace',
     );
-    expect(callback).toHaveBeenNthCalledWith(2, [{ id: 'p1', title: 'Fallback post' }]);
+    expect(callback).toHaveBeenCalledWith([{ id: 'p1', title: 'Fallback post' }]);
   });
 
   it('subscribeToMarketplace llama handleFirestoreError en error', () => {
