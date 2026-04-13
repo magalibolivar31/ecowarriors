@@ -598,10 +598,20 @@ html:not(.dark) .text-lime-300 {
 /* ===== Landing Dark Mode Fixes ===== */
 
 .landing-brand-hero {
+  background: #ffffff;
+}
+
+.dark .landing-brand-hero {
   background: var(--landing-brand-hero-gradient);
 }
 
 .landing-brand-badge {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #dbe3eb;
+}
+
+.dark .landing-brand-badge {
   background-color: color-mix(in srgb, #ffffff 16%, transparent);
   color: #ffffff;
   border: 1px solid color-mix(in srgb, #ffffff 28%, transparent);
