@@ -29,6 +29,8 @@
   --color-teal-soft: #75B9B3;
   --color-contrast: #024153;
   --color-white: #FFFFFF;
+  --color-text-primary: #1F2937;
+  --color-border-soft: #CFE3D8;
   --color-surface-muted: #F5FBFA;
   --color-border: #D4E8E6;
   --color-soft-card-bg: #ECFDF5;
@@ -41,18 +43,21 @@
   --surface-elevated: #F7FBF8;
   --surface-muted: #EEF7F2;
   --surface-hover: #DCECE4;
-  --text-primary: #1F2937;
+  --text-primary: var(--color-text-primary);
   --text-secondary: #334155;
   --text-muted: #475569;
   --heading-color: var(--color-primary);
   --text-accent-success: #166534;
   --text-accent-info: #0F4C81;
-  --border: #CFE3D8;
+  --border: var(--color-border-soft);
   --input-bg: var(--color-white);
   --modal-bg: var(--color-white);
   --overlay-bg: color-mix(in srgb, var(--color-contrast) 28%, transparent);
   --button-bg: var(--color-primary);
   --button-hover: var(--color-primary-light);
+  --button-border-color: color-mix(in srgb, var(--color-primary) 82%, #000000 18%);
+  --button-shadow: 0 14px 24px -18px rgba(18, 107, 105, 0.8);
+  --button-hover-shadow: 0 16px 28px -16px rgba(110, 181, 125, 0.58);
   --chart-grid-stroke: #0241531A;
   --badge-accent-bg: color-mix(in srgb, var(--color-primary-light) 34%, transparent);
   --badge-accent-text: var(--text-primary);
@@ -242,27 +247,27 @@ html:not(.dark) body {
 .btn-primary {
   @apply px-6 py-3 text-white rounded-xl font-bold uppercase tracking-widest text-xs active:scale-95 transition-all;
   background-color: var(--button-bg);
-  border: 1px solid color-mix(in srgb, var(--color-primary) 82%, #000000 18%);
-  box-shadow: 0 14px 24px -18px rgba(18, 107, 105, 0.8);
+  border: 1px solid var(--button-border-color);
+  box-shadow: var(--button-shadow);
 }
 
 .btn-primary:hover {
   background-color: var(--button-hover);
   color: #ffffff;
-  box-shadow: 0 16px 28px -16px rgba(110, 181, 125, 0.58);
+  box-shadow: var(--button-hover-shadow);
 }
 
 .btn-secondary {
   @apply px-6 py-3 text-white rounded-xl font-bold uppercase tracking-widest text-xs active:scale-95 transition-all;
   background-color: var(--button-bg);
-  border: 1px solid color-mix(in srgb, var(--color-primary) 82%, #000000 18%);
-  box-shadow: 0 14px 24px -18px rgba(18, 107, 105, 0.8);
+  border: 1px solid var(--button-border-color);
+  box-shadow: var(--button-shadow);
 }
 
 .btn-secondary:hover {
   background-color: var(--button-hover);
   color: #ffffff;
-  box-shadow: 0 16px 28px -16px rgba(110, 181, 125, 0.58);
+  box-shadow: var(--button-hover-shadow);
 }
 
 /* Custom Scrollbar */
