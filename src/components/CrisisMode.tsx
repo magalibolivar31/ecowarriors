@@ -430,7 +430,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   };
 
   return (
-    <div className="app-theme min-h-screen bg-red-600 text-white flex flex-col font-sans select-none">
+    <div className="min-h-screen bg-red-600 text-white flex flex-col font-sans select-none">
       {/* Header */}
       <header className="p-4 bg-red-700 flex items-center justify-between border-b border-red-500/30 sticky top-0 z-50">
         <div className="flex items-center gap-3">
