@@ -604,6 +604,11 @@ function AppContent() {
   const [descriptionError, setDescriptionError] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
+  const handleOpenFeedbackForm = () => {
+    window.open('https://forms.gle/yTVGetUWAwyG7JbbA', '_blank', 'noopener,noreferrer');
+    setIsFeedbackModalOpen(false);
+  };
+
   // Search & Filter
   const [filterType, setFilterType] = useState<PostType | null>(null);
   const [filterTag, setFilterTag] = useState<Tag | null>(null);
@@ -3640,7 +3645,3 @@ function AppContent() {
     </div>
   );
 }
-  const handleOpenFeedbackForm = () => {
-    window.open('https://forms.gle/yTVGetUWAwyG7JbbA', '_blank', 'noopener,noreferrer');
-    setIsFeedbackModalOpen(false);
-  };
