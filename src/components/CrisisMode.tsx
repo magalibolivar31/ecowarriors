@@ -1010,9 +1010,15 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                         >
                           <X className="w-4 h-4" />
                         </button>
-                        <a href={sanitizedPhoneNumber ? `tel:${encodeURIComponent(sanitizedPhoneNumber)}` : '#'} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20" aria-disabled={!sanitizedPhoneNumber} onClick={(e) => { if (!sanitizedPhoneNumber) e.preventDefault(); }}>
-                          <Phone className="w-4 h-4" />
-                        </a>
+                        {sanitizedPhoneNumber ? (
+                          <a href={`tel:${encodeURIComponent(sanitizedPhoneNumber)}`} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20">
+                            <Phone className="w-4 h-4" />
+                          </a>
+                        ) : (
+                          <button type="button" disabled className="p-3 bg-yellow-400/40 text-red-900/60 rounded-xl cursor-not-allowed">
+                            <Phone className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   )})}
