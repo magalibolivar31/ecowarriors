@@ -290,7 +290,7 @@ export default function App() {
 }
 
 function AppContent() {
-  const { t, language, notificationsEnabled, showAlert, showConfirm } = useSettings();
+  const { t, language, darkMode, notificationsEnabled, showAlert, showConfirm } = useSettings();
   const [selectedReportForDetail, setSelectedReportForDetail] = useState<Report | null>(null);
   const [selectedReportForHistory, setSelectedReportForHistory] = useState<Report | null>(null);
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -1322,7 +1322,9 @@ function AppContent() {
   }
 
   return (
-    <div className="app-theme min-h-screen flex flex-col transition-colors duration-300 bg-brand-bg">
+    <div className={cn("min-h-screen flex flex-col transition-colors duration-300",
+      darkMode ? "bg-zinc-900 text-white" : "bg-brand-bg text-zinc-900"
+    )}>
       {/* Top Header */}
       <header className="bg-white border-b border-zinc-100 sticky top-0 z-50 shadow-sm">
         <div className="app-container py-3 flex items-center justify-between">
@@ -2678,7 +2680,7 @@ function AppContent() {
                     )}
                   </div>
 
-                  <div className="bg-stormy-teal rounded-[2.5rem] p-8 text-white relative overflow-hidden">
+                  <div className="bg-zinc-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl" />
                     <div className="relative z-10 space-y-4">
                       <div className="flex items-center gap-3">
@@ -3188,7 +3190,7 @@ function AppContent() {
                       <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-base sm:text-lg font-medium">{isDetailOpen.description}</p>
                     </div>
 
-                    <div className="bg-stormy-teal p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+                    <div className="bg-zinc-900 dark:bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
                       <div className="text-center sm:text-left">
                         <p className="text-[10px] font-bold opacity-60 uppercase tracking-widest mb-1">{t('community.participants_label')}</p>
                         <p className="text-2xl sm:text-3xl font-display font-black">{isDetailOpen.attendees.length} {t('community.neighbors_label')}</p>
@@ -3240,7 +3242,7 @@ function AppContent() {
                                   className={cn(
                                     "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
                                     isDetailOpen.status === status 
-                                      ? "bg-emerald-action dark:bg-emerald-600 text-white" 
+                                      ? "bg-zinc-900 dark:bg-emerald-600 text-white" 
                                       : "bg-zinc-100 dark:bg-slate-700 text-zinc-500 dark:text-slate-400 hover:bg-zinc-200 dark:hover:bg-slate-600"
                                   )}
                                 >
@@ -3341,7 +3343,7 @@ function AppContent() {
           
           <button 
             onClick={() => setIsAttendeesModalOpen(false)}
-            className="w-full py-5 bg-emerald-action text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-700 transition-all"
+            className="w-full py-5 bg-zinc-900 dark:bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-emerald-700 transition-all"
           >
             {t('common.close')}
           </button>
