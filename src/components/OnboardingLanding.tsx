@@ -66,7 +66,7 @@ const ODS_ITEMS = [
     id: 3, 
     title: 'landing.ods_3_title', 
     icon: Heart, 
-    color: 'text-stormy-teal', 
+    color: 'text-stormy-teal dark:text-emerald-300', 
     bg: 'bg-maya-blue/10',
     desc: 'landing.ods_3_desc'
   },
@@ -74,7 +74,7 @@ const ODS_ITEMS = [
     id: 6, 
     title: 'landing.ods_6_title', 
     icon: Droplets, 
-    color: 'text-dark-teal', 
+    color: 'text-dark-teal dark:text-emerald-300', 
     bg: 'bg-maya-blue/10',
     desc: 'landing.ods_6_desc'
   },
@@ -82,7 +82,7 @@ const ODS_ITEMS = [
     id: 11, 
     title: 'landing.ods_11_title', 
     icon: MapPin, 
-    color: 'text-emerald-action', 
+    color: 'text-emerald-action dark:text-emerald-300', 
     bg: 'bg-emerald-action/10',
     desc: 'landing.ods_11_desc'
   },
@@ -90,7 +90,7 @@ const ODS_ITEMS = [
     id: 13, 
     title: 'landing.ods_13_title', 
     icon: Wind, 
-    color: 'text-maya-blue', 
+    color: 'text-maya-blue dark:text-sky-300', 
     bg: 'bg-maya-blue/10',
     desc: 'landing.ods_13_desc'
   },
@@ -212,7 +212,7 @@ export const OnboardingLanding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-emerald-100 selection:text-emerald-900 dark:!bg-slate-950 dark:!text-slate-100">
       <AnimatePresence>
         {showAuth && (
           <AuthScreen 
@@ -223,7 +223,7 @@ export const OnboardingLanding: React.FC = () => {
       </AnimatePresence>
 
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-6 py-4">
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-6 py-4 dark:bg-slate-950/90 dark:border-slate-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
@@ -241,17 +241,17 @@ export const OnboardingLanding: React.FC = () => {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2.5 bg-zinc-100 rounded-xl text-zinc-500 hover:text-stormy-teal transition-all"
+              className="p-2.5 bg-zinc-100 rounded-xl text-zinc-500 hover:text-stormy-teal transition-all dark:!bg-slate-800 dark:text-slate-300 dark:hover:text-emerald-200"
               title={darkMode ? t('landing.light_mode') : t('landing.dark_mode')}
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <div className="flex items-center bg-zinc-100 rounded-xl p-1 mr-2">
+            <div className="flex items-center bg-zinc-100 rounded-xl p-1 mr-2 dark:!bg-slate-900">
               <button 
                 onClick={() => setLanguage('es')}
                 className={cn(
                   "px-3 py-1.5 text-[10px] font-black rounded-lg transition-all",
-                  language === 'es' ? "bg-white text-stormy-teal shadow-sm" : "text-zinc-400 hover:text-zinc-600"
+                  language === 'es' ? "bg-white text-stormy-teal shadow-sm dark:!bg-slate-800 dark:text-emerald-200" : "text-zinc-400 hover:text-zinc-600 dark:text-slate-400 dark:hover:text-slate-200"
                 )}
               >
                 ES
@@ -260,7 +260,7 @@ export const OnboardingLanding: React.FC = () => {
                 onClick={() => setLanguage('en')}
                 className={cn(
                   "px-3 py-1.5 text-[10px] font-black rounded-lg transition-all",
-                  language === 'en' ? "bg-white text-stormy-teal shadow-sm" : "text-zinc-400 hover:text-zinc-600"
+                  language === 'en' ? "bg-white text-stormy-teal shadow-sm dark:!bg-slate-800 dark:text-emerald-200" : "text-zinc-400 hover:text-zinc-600 dark:text-slate-400 dark:hover:text-slate-200"
                 )}
               >
                 EN
@@ -268,7 +268,7 @@ export const OnboardingLanding: React.FC = () => {
             </div>
             <button 
               onClick={() => handleOpenAuth('login')}
-              className="px-6 py-2.5 rounded-2xl border border-zinc-300 bg-white text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-500 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:text-white"
+              className="px-6 py-2.5 rounded-2xl border border-zinc-300 bg-white text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:!bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:text-white"
             >
               {t('landing.login')}
             </button>
@@ -294,13 +294,13 @@ export const OnboardingLanding: React.FC = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 text-center max-w-4xl mx-auto space-y-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-stormy-teal/10 text-stormy-teal text-xs font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-stormy-teal/10 text-stormy-teal text-xs font-bold uppercase tracking-widest mb-4 dark:bg-emerald-400/15 dark:text-emerald-200">
             <Activity className="w-4 h-4" />
             {t('landing.hero_badge')}
           </div>
           
           <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter text-zinc-900 leading-[0.9] uppercase">
-            {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
+            {t('landing.hero_title_1')} <span className="text-emerald-action dark:text-emerald-300">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
               <motion.div 
@@ -360,7 +360,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Quiénes Somos */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-zinc-50 dark:!bg-slate-900">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-display font-black tracking-tighter uppercase">{t('landing.about_title')}</h2>
@@ -374,7 +374,7 @@ export const OnboardingLanding: React.FC = () => {
               <motion.div 
                 key={member.name}
                 whileHover={{ y: -10 }}
-                className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-zinc-100 space-y-4"
+                className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-zinc-100 space-y-4 dark:!bg-slate-800 dark:border-slate-700"
               >
                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-stormy-teal/10">
                   {member.image ? (
@@ -388,7 +388,7 @@ export const OnboardingLanding: React.FC = () => {
                 <div>
                   <h3 className="font-black text-lg uppercase tracking-tight">{member.name}</h3>
                   <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mb-1">{member.age} {t('landing.years_old')}</p>
-                  <p className="text-stormy-teal text-xs font-bold uppercase tracking-widest mb-2">{t(member.role)}</p>
+                  <p className="text-stormy-teal text-xs font-bold uppercase tracking-widest mb-2 dark:text-emerald-300">{t(member.role)}</p>
                   <p className="text-zinc-500 text-sm leading-relaxed">{t(member.bio)}</p>
                 </div>
               </motion.div>
@@ -419,17 +419,17 @@ export const OnboardingLanding: React.FC = () => {
               <motion.div 
                 key={ods.id}
                 className={cn(
-                  "shrink-0 w-64 p-8 rounded-[3rem] space-y-6 transition-all duration-500 !bg-opacity-100",
+                  "shrink-0 w-64 p-8 rounded-[3rem] space-y-6 transition-all duration-500 !bg-opacity-100 dark:!bg-slate-800 dark:ring-1 dark:ring-slate-700/70",
                   ods.bg
                 )}
               >
-                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg bg-white", ods.color)}>
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg bg-white dark:!bg-slate-900 dark:ring-1 dark:ring-slate-700/60", ods.color)}>
                   <ods.icon className="w-8 h-8" />
                 </div>
-                <div className="space-y-2 !text-zinc-900">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">{t('landing.ods_label')} {ods.id}</p>
+                <div className="space-y-2 !text-zinc-900 dark:!text-slate-100">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 dark:text-slate-300 dark:opacity-100">{t('landing.ods_label')} {ods.id}</p>
                   <h3 className="text-xl font-black uppercase tracking-tight leading-tight">{t(ods.title)}</h3>
-                  <p className="text-xs font-medium opacity-70 leading-relaxed">{t(ods.desc)}</p>
+                  <p className="text-xs font-medium opacity-70 leading-relaxed dark:text-slate-300 dark:opacity-100">{t(ods.desc)}</p>
                 </div>
               </motion.div>
             ))}
@@ -438,20 +438,20 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Educación Hídrica */}
-      <section className="py-24 px-6 bg-stormy-teal text-white overflow-hidden relative">
+      <section className="py-24 px-6 bg-stormy-teal text-white overflow-hidden relative dark:!bg-slate-900 dark:text-slate-100">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-action/10 rounded-full -mr-48 -mt-48 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-maya-blue/10 rounded-full -ml-48 -mb-48 blur-3xl" />
 
         <div className="max-w-4xl mx-auto text-center space-y-12 relative z-10">
-          <div className="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-3xl flex items-center justify-center mx-auto border border-white/20">
-            <BookOpen className="w-10 h-10 text-emerald-action" />
+          <div className="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-3xl flex items-center justify-center mx-auto border border-white/20 dark:bg-slate-800/80 dark:border-slate-700">
+            <BookOpen className="w-10 h-10 text-emerald-action dark:text-emerald-300" />
           </div>
           
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-none">
               {t('landing.edu_title')}
             </h2>
-            <p className="text-xl text-emerald-action/80 font-medium leading-relaxed">
+            <p className="text-xl text-emerald-action/80 font-medium leading-relaxed dark:text-slate-300">
               {t('landing.edu_desc')}
             </p>
           </div>
@@ -462,10 +462,10 @@ export const OnboardingLanding: React.FC = () => {
               { label: t('landing.stat_prevention'), value: '24h', desc: t('landing.stat_prevention_desc') },
               { label: t('landing.stat_impact'), value: '10x', desc: t('landing.stat_impact_desc') },
             ].map((stat) => (
-              <div key={stat.label} className="p-6 bg-white/5 rounded-3xl border border-white/10">
-                <p className="text-3xl font-black text-emerald-action">{stat.value}</p>
-                <p className="text-xs font-bold uppercase tracking-widest mt-1">{stat.label}</p>
-                <p className="text-[10px] text-emerald-action/60 mt-2">{stat.desc}</p>
+              <div key={stat.label} className="p-6 bg-white/5 rounded-3xl border border-white/10 dark:!bg-slate-800/90 dark:border-slate-700">
+                <p className="text-3xl font-black text-emerald-action dark:text-slate-100">{stat.value}</p>
+                <p className="text-xs font-bold uppercase tracking-widest mt-1 dark:text-slate-300">{stat.label}</p>
+                <p className="text-[10px] text-emerald-action/60 mt-2 dark:text-slate-400">{stat.desc}</p>
               </div>
             ))}
           </div>
@@ -473,7 +473,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Agradecimientos y galería */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-zinc-50 dark:!bg-slate-900">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-6 text-center">
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-tight">
@@ -487,7 +487,7 @@ export const OnboardingLanding: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
             {LANDING_SUPPORT_LOGOS.map((logo) => {
               const logoContent = (
-                <div className="h-28 bg-white rounded-3xl border border-zinc-100 shadow-sm p-5 flex items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                <div className="h-28 bg-white rounded-3xl border border-zinc-100 shadow-sm p-5 flex items-center justify-center hover:-translate-y-1 transition-transform duration-300 dark:!bg-slate-800 dark:border-slate-700">
                   <img
                     src={logo.imageUrl}
                     alt={logo.name}
@@ -529,7 +529,7 @@ export const OnboardingLanding: React.FC = () => {
               {LANDING_PROJECT_GALLERY.map((photo) => (
                 <div
                   key={photo.id}
-                  className="rounded-3xl overflow-hidden border border-zinc-100 shadow-sm bg-white aspect-[4/3]"
+                  className="rounded-3xl overflow-hidden border border-zinc-100 shadow-sm bg-white aspect-[4/3] dark:!bg-slate-800 dark:border-slate-700"
                 >
                   <img
                     src={photo.imageUrl}
@@ -547,7 +547,7 @@ export const OnboardingLanding: React.FC = () => {
 
       {/* Seguridad */}
       <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto bg-zinc-50 p-10 md:p-16 rounded-[4rem] border border-zinc-200 space-y-10">
+        <div className="max-w-3xl mx-auto bg-zinc-50 p-10 md:p-16 rounded-[4rem] border border-zinc-200 space-y-10 dark:!bg-slate-900 dark:border-slate-700">
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 bg-stormy-teal rounded-3xl flex items-center justify-center text-white shadow-lg shadow-stormy-teal/10 shrink-0">
               <ShieldCheck className="w-8 h-8" />
@@ -584,14 +584,14 @@ export const OnboardingLanding: React.FC = () => {
             className={cn(
               "w-full p-6 rounded-3xl border-2 transition-all flex items-center justify-between group",
               securityChecked 
-                ? "bg-stormy-teal/5 border-stormy-teal" 
-                : "bg-white border-zinc-200 hover:border-zinc-300"
+                ? "bg-stormy-teal/5 border-stormy-teal dark:bg-slate-800 dark:border-emerald-400" 
+                : "bg-white border-zinc-200 hover:border-zinc-300 dark:!bg-slate-800 dark:border-slate-600 dark:hover:border-slate-500"
             )}
           >
             <div className="flex items-center gap-4">
               <div className={cn(
                 "w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all",
-                securityChecked ? "bg-stormy-teal border-stormy-teal" : "border-zinc-300"
+                securityChecked ? "bg-stormy-teal border-stormy-teal dark:bg-emerald-400 dark:border-emerald-400" : "border-zinc-300 dark:border-slate-500"
               )}>
                 {securityChecked && <CheckCircle2 className="w-4 h-4 text-white" />}
               </div>
@@ -602,7 +602,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Directorio Útil */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-24 px-6 bg-zinc-50 dark:!bg-slate-900">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
@@ -618,24 +618,24 @@ export const OnboardingLanding: React.FC = () => {
                 { label: t('landing.directory_civil_defense'), number: '103', icon: ShieldAlert },
                 { label: t('landing.directory_firefighters'), number: '100', icon: Activity },
               ].map((item) => (
-                <div key={item.label} className="bg-white p-4 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm">
+                <div key={item.label} className="bg-white p-4 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm dark:!bg-slate-800 dark:border-slate-700">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-400">
+                    <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-400 dark:!bg-slate-900 dark:text-slate-300">
                       <item.icon className="w-5 h-5" />
                     </div>
                     <span className="font-bold text-zinc-700">{item.label}</span>
                   </div>
-                  <span className="text-xl font-black text-stormy-teal">{item.number}</span>
+                  <span className="text-xl font-black text-stormy-teal dark:text-emerald-300">{item.number}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-stormy-teal p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
+          <div className="bg-stormy-teal p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10 dark:!bg-slate-800 dark:text-slate-100 dark:shadow-slate-900/40">
             <h3 className="text-3xl font-display font-black tracking-tighter uppercase leading-tight">
               {t('landing.ready_title')}
             </h3>
-            <p className="text-emerald-action/80 font-medium">
+            <p className="text-emerald-action/80 font-medium dark:text-slate-300">
               {t('landing.ready_desc')}
             </p>
             <button 
@@ -644,15 +644,15 @@ export const OnboardingLanding: React.FC = () => {
               className={cn(
                 "w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 transition-all shadow-xl",
                 securityChecked 
-                  ? "bg-white text-stormy-teal hover:scale-105 active:scale-95" 
-                  : "bg-stormy-teal/50 text-white/40 cursor-not-allowed opacity-50"
+                  ? "bg-white text-stormy-teal hover:scale-105 active:scale-95 dark:!bg-emerald-400 dark:text-slate-900 dark:hover:!bg-emerald-300" 
+                  : "bg-stormy-teal/50 text-white/40 cursor-not-allowed opacity-50 dark:!bg-slate-700 dark:text-slate-500"
               )}
             >
               {t('landing.start_now')}
               <ArrowRight className="w-6 h-6" />
             </button>
             {!securityChecked && (
-              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-emerald-action/60">
+              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-emerald-action/60 dark:text-slate-400">
                 {t('landing.security_warning')}
               </p>
             )}
