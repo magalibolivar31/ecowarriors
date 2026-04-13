@@ -126,6 +126,7 @@ import { Report, ReportUpdate, Squad, MarketplacePost, UserSettings, ReportType 
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, User as FirebaseUser } from 'firebase/auth';
+import { getMissionIconTextColor } from './lib/theme';
 
 import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 
@@ -135,10 +136,6 @@ type Tab = 'DASHBOARD' | 'REPORTES' | 'COMUNIDAD' | 'MAPA' | 'CHATBOT' | 'PERFIL
 const TABS_WITH_SENSOR: Tab[] = ['REPORTES', 'MAPA', 'COMUNIDAD'];
 type Tag = 'ropa' | 'comida' | 'otros';
 type PostType = 'doy' | 'recibo';
-const getMissionIconTextColor = (missionColor: string) =>
-  missionColor.includes('soft') || missionColor.includes('maya')
-    ? 'text-dark-teal'
-    : 'text-white';
 
 interface Post {
   id: string;

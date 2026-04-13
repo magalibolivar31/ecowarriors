@@ -46,6 +46,7 @@ import { es, enUS } from 'date-fns/locale';
 import { useSettings } from '../contexts/SettingsContext';
 import { calculateMissions } from '../services/missionService';
 import { getLevelProgress } from '../lib/levelUtils';
+import { getMissionIconTextColor } from '../lib/theme';
 import { Mission } from '../constants/missions';
 import { calculateAchievements, Achievement } from '../services/achievementService';
 import { Report, Squad } from '../types';
@@ -77,11 +78,6 @@ const formatDisplayValue = (value: string | undefined, fallback: string) => {
   if (INVALID_DISPLAY_VALUES.has(normalized)) return fallback;
   return value;
 };
-
-const getMissionIconTextColor = (missionColor: string) =>
-  missionColor.includes('soft') || missionColor.includes('maya')
-    ? 'text-dark-teal'
-    : 'text-white';
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMyReports, missions }) => {
   const { t, language, setLanguage, notificationsEnabled, setNotificationsEnabled, privacyMode, setPrivacyMode, darkMode, setDarkMode, showAlert } = useSettings();
