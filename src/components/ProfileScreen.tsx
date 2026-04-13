@@ -557,14 +557,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
       <AnimatePresence>
         {isEditModalOpen && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-md overflow-hidden border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-none sm:rounded-[3rem] shadow-2xl w-full max-w-md overflow-y-auto max-h-[100svh] sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
             >
-              <div className="p-8 space-y-6">
+              <div className="p-4 sm:p-8 space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{t('common.edit_profile')}</h3>
                   <button onClick={() => setIsEditModalOpen(false)} className="p-2 hover:bg-zinc-100 rounded-full">
@@ -652,14 +652,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
       <AnimatePresence>
         {selectedMission && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-none sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[100svh] sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
             >
-              <div className="p-8 space-y-6">
+              <div className="p-4 sm:p-8 space-y-6 overflow-y-auto">
                 <div className="flex items-center justify-between">
                   <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextClass(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
@@ -725,14 +725,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       {/* Privacy Modal */}
       <AnimatePresence>
         {isPrivacyModalOpen && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-none sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[100svh] sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
             >
-              <div className="p-8 space-y-6">
+              <div className="p-4 sm:p-8 space-y-6 overflow-y-auto">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/30 text-amber-500 shadow-lg">

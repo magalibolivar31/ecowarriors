@@ -310,13 +310,13 @@ const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose:
         aria-label={title || 'Modal'}
         tabIndex={-1}
       >
-        <div className="flex items-center justify-between p-6 border-b border-zinc-100 bg-brand-bg/50">
-          <h3 className="text-xl font-display font-black text-stormy-teal uppercase tracking-tighter">{title}</h3>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-100 bg-brand-bg/50">
+          <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal uppercase tracking-tighter">{title}</h3>
           <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
             <X className="w-5 h-5 text-zinc-500" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
           {children}
         </div>
       </motion.div>
@@ -1569,7 +1569,7 @@ function AppContent() {
                               </p>
                               <button 
                                 onClick={() => setActiveTab('REPORTES')}
-                                className="w-fit px-5 py-2.5 sm:px-8 sm:py-4 bg-emerald-action text-white rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-sm uppercase tracking-widest shadow-xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 sm:gap-3"
+                                className="w-full sm:w-fit px-4 py-2.5 sm:px-8 sm:py-4 bg-emerald-action text-white rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-sm uppercase tracking-widest shadow-xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-3"
                               >
                                 {t('dashboard.start_now')}
                                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -1602,7 +1602,7 @@ function AppContent() {
                               </p>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-3 sm:gap-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-8">
                               {[
                                 { title: t('dashboard.prevention'), desc: t('dashboard.prevention_desc'), icon: <ShieldCheck className="w-6 h-6" />, color: 'text-maya-blue bg-maya-blue/10' },
                                 { title: t('dashboard.alert'), desc: t('dashboard.alert_desc'), icon: <AlertTriangle className="w-6 h-6" />, color: 'text-soft-teal bg-soft-teal/20' },
@@ -1625,7 +1625,7 @@ function AppContent() {
 
                         {/* Video Type */}
                         {card.type === 'video' && (
-                            <div className="h-full bg-zinc-50 p-8 sm:p-16 flex flex-col justify-center space-y-8">
+                            <div className="h-full bg-zinc-50 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-8">
                             <div className="space-y-4">
                               <div className="w-16 h-16 bg-stormy-teal rounded-3xl flex items-center justify-center text-white shadow-xl">
                                 <Bot className="w-8 h-8" />
@@ -1645,7 +1645,7 @@ function AppContent() {
                                   href={link.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="px-8 py-4 bg-white border-2 border-zinc-100 rounded-2xl font-black text-xs uppercase tracking-widest text-stormy-teal hover:border-stormy-teal transition-all flex items-center gap-3 shadow-sm"
+                                  className="w-full sm:w-auto px-5 sm:px-8 py-3 sm:py-4 bg-white border-2 border-zinc-100 rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest text-stormy-teal hover:border-stormy-teal transition-all flex items-center justify-center gap-3 shadow-sm"
                                 >
                                   <Zap className="w-4 h-4" />
                                   {t(link.label)}
@@ -1657,7 +1657,7 @@ function AppContent() {
 
                         {/* Contact Type */}
                         {card.type === 'contact' && (
-                          <div className="h-full relative overflow-hidden flex flex-col items-center justify-center text-center p-8 sm:p-16 bg-gradient-to-br from-[#053447] via-[#0A4F61] to-[#0B6B62]">
+                          <div className="h-full relative overflow-hidden flex flex-col items-center justify-center text-center p-5 sm:p-16 bg-gradient-to-br from-[#053447] via-[#0A4F61] to-[#0B6B62]">
                             {card.imageUrl && (
                               <div 
                                 className="absolute inset-0 bg-cover bg-right-center z-0"
@@ -1681,7 +1681,7 @@ function AppContent() {
                               {card.contactLink && (
                                 <a 
                                   href={card.contactLink.url}
-                                  className="px-10 py-5 bg-emerald-action text-white rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-2xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all"
+                                  className="w-full sm:w-auto px-5 sm:px-10 py-3 sm:py-5 bg-emerald-action text-white rounded-[2rem] font-black text-[10px] sm:text-sm uppercase tracking-widest shadow-2xl shadow-emerald-action/20 hover:scale-105 active:scale-95 transition-all break-all sm:break-normal"
                                 >
                                   {card.contactLink.label}
                                 </a>
@@ -2760,7 +2760,7 @@ function AppContent() {
                                     </button>
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-50 dark:border-slate-700">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-4 border-t border-zinc-50 dark:border-slate-700">
                                   <div className="flex items-center gap-2 text-zinc-600 dark:text-slate-300">
                                     <Calendar className="w-3.5 h-3.5 text-stormy-teal dark:text-slate-100" />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">{format(new Date(event.date), "d MMM", { locale: language === 'es' ? es : enUS })}</span>
@@ -2825,7 +2825,7 @@ function AppContent() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full h-[600px] sm:h-[700px] flex flex-col"
+              className="w-full h-[calc(100svh-11rem)] min-h-[420px] sm:h-[700px] flex flex-col"
             >
               {(() => {
                 const reportsForMap = reports
@@ -2915,7 +2915,7 @@ function AppContent() {
       {/* Modals */}
       <AnimatePresence>
         {selectedMission && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -3126,12 +3126,12 @@ function AppContent() {
 
       <AnimatePresence>
         {isReportModalOpen && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl"
+              className="w-full max-w-2xl max-h-[100svh] sm:max-h-[90vh] overflow-y-auto custom-scrollbar bg-white rounded-none sm:rounded-[3rem] shadow-2xl"
             >
               <ReportForm 
                 onClose={() => setIsReportModalOpen(false)} 
@@ -3513,7 +3513,7 @@ function AppContent() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.date_label')}</span>
                 <span className="font-bold text-stormy-teal dark:text-slate-100">{selectedSquadForDetail.date}</span>
@@ -3574,7 +3574,7 @@ function AppContent() {
           <p className="text-zinc-600 dark:text-slate-300 font-medium text-center">
             {t('community.cancel_squad_confirm')}
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <button
               onClick={() => setSquadToCancel(null)}
               className="py-4 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-2xl font-bold uppercase tracking-widest text-xs"

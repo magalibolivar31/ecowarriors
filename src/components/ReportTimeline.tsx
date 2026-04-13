@@ -120,21 +120,21 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
   const dateLocale = language === 'es' ? es : enUS;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[80] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]"
+        className="bg-white rounded-none sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[100svh] sm:max-h-[85vh]"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-8 border-b border-zinc-100 shrink-0 bg-zinc-50">
+        <div className="flex items-center justify-between p-4 sm:p-8 border-b border-zinc-100 shrink-0 bg-zinc-50">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-dark-teal rounded-2xl flex items-center justify-center text-white shadow-lg">
               <History className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-2xl font-display font-black text-zinc-900 uppercase tracking-tighter leading-none">{t('reports.timeline_title')}</h3>
+              <h3 className="text-xl sm:text-2xl font-display font-black text-zinc-900 uppercase tracking-tighter leading-none">{t('reports.timeline_title')}</h3>
               <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">
                 {t('common.report')}: {report.title} • {Number.isFinite(report.location?.lat) && Number.isFinite(report.location?.lng) ? `${report.location.lat.toFixed(6)}, ${report.location.lng.toFixed(6)}` : t('reports.no_coords')}
               </p>
@@ -146,7 +146,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-10">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8 sm:space-y-10">
           {/* Actions */}
           {auth.currentUser && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

@@ -152,7 +152,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
   if (success) {
     return (
-      <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-12 flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.3s_ease-out]">
+      <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-6 sm:p-12 flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.3s_ease-out]">
         <div className="w-20 h-20 bg-emerald-action rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-action/20">
           <CheckCircle2 className="w-10 h-10" />
         </div>
@@ -170,7 +170,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
   return (
     <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh]">
-      <div className="flex items-center justify-between p-6 sm:p-8 border-b border-zinc-100 dark:border-slate-700 bg-emerald-action/10 dark:bg-emerald-900/20 shrink-0">
+      <div className="flex items-center justify-between p-4 sm:p-8 border-b border-zinc-100 dark:border-slate-700 bg-emerald-action/10 dark:bg-emerald-900/20 shrink-0">
         <div className="flex items-center gap-3">
           <div className="p-2.5 sm:p-3 bg-emerald-action rounded-2xl text-white">
             <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -187,7 +187,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
         </button>
       </div>
 
-      <div className="p-6 sm:p-8 overflow-y-auto space-y-6 sm:space-y-8 flex-1">
+      <div className="p-4 sm:p-8 overflow-y-auto space-y-6 sm:space-y-8 flex-1">
         {error && (
           <div className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600 text-sm font-bold animate-shake">
             <AlertTriangle className="w-5 h-5 shrink-0" />
@@ -197,7 +197,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
         {!isConfirming ? (
           <form onSubmit={handleAnalyze} className="space-y-8">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setType('ambiental')}
@@ -294,7 +294,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
             <div className="space-y-2">
               <label className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.location_label')}</label>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1 p-4 bg-zinc-50 rounded-2xl border border-zinc-200 dark:border-slate-700 font-bold text-xs flex items-center justify-between min-h-[56px]">
                   {isLocating ? (
                     <div className="flex items-center gap-2 text-emerald-action">
@@ -310,7 +310,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                 <button
                   type="button"
                   onClick={handleGetLocation}
-                  className="p-4 bg-emerald-action/10 text-emerald-action rounded-2xl hover:bg-emerald-action/20 transition-colors"
+                  className="w-full sm:w-auto p-4 bg-emerald-action/10 text-emerald-action rounded-2xl hover:bg-emerald-action/20 transition-colors flex items-center justify-center"
                 >
                   <MapPin className="w-6 h-6" />
                 </button>
@@ -319,7 +319,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
             <button
               disabled={loading}
-              className="w-full py-6 bg-emerald-action text-white rounded-3xl font-black text-lg uppercase tracking-tighter shadow-xl shadow-emerald-action/10 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full py-5 sm:py-6 bg-emerald-action text-white rounded-3xl font-black text-base sm:text-lg uppercase tracking-tighter shadow-xl shadow-emerald-action/10 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {loading ? (
                 <>
@@ -333,7 +333,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
           </form>
         ) : (
           <div className="space-y-8 opacity-0 animate-[fadeIn_0.3s_ease-in_forwards]">
-            <div className="bg-emerald-action/10 dark:bg-emerald-900/20 p-8 rounded-[2.5rem] border border-emerald-action/20">
+            <div className="bg-emerald-action/10 dark:bg-emerald-900/20 p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-emerald-action/20">
               <h4 className="text-emerald-action font-black uppercase tracking-widest text-[10px] mb-4">{t('reports.ai_analysis')}</h4>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -355,7 +355,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
               </div>
             </div>
 
-            <div className="flex gap-4">
+             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => setIsConfirming(false)}
                 className="flex-1 py-5 bg-zinc-100 text-zinc-500 dark:text-slate-400 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors"

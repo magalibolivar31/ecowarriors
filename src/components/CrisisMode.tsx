@@ -449,7 +449,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
         </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-4 space-y-4 max-w-xl mx-auto w-full pb-24">
+      <main className="flex-1 overflow-y-auto p-4 space-y-4 max-w-xl mx-auto w-full pb-[calc(6rem+env(safe-area-inset-bottom))]">
         
         {activeSection === 'onboarding' && (
           <motion.div 
@@ -601,7 +601,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             </div>
 
             {/* Grid of secondary actions */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button 
                 onClick={() => setActiveSection('backpack')}
                 className="bg-red-900/60 p-6 rounded-[2rem] flex flex-col items-center gap-3 border border-white/15 shadow-lg shadow-black/20 hover:bg-red-900/70 active:bg-red-950 transition-all"
@@ -828,7 +828,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div className="space-y-1">
                       <input 
                         type="number"
@@ -870,7 +870,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-widest opacity-70">{t('reports.urgency_level')}</label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button 
                     type="button"
                     onClick={() => setUrgency('alta')}
@@ -1189,7 +1189,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       </main>
 
       {/* Bottom Status Bar */}
-      <footer className="fixed bottom-0 left-0 right-0 p-4 bg-red-950/95 border-t border-red-700/60 flex items-center justify-between z-50 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
+      <footer className="fixed bottom-0 left-0 right-0 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] bg-red-950/95 border-t border-red-700/60 flex items-center justify-between z-50 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" />
           <span className="text-[10px] font-black uppercase tracking-widest">{t('crisis.signal_active')}</span>

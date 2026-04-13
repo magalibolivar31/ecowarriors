@@ -278,14 +278,14 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
   };
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto">
+    <div className="fixed inset-0 z-[110] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="bg-white w-full max-w-[min(100vw,42rem)] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative min-h-full sm:min-h-0 sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
+        className="bg-white w-full max-w-[min(100vw,42rem)] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative min-h-[100svh] sm:min-h-0 sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
       >
         {/* Header */}
-        <div className="p-8 border-b border-zinc-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white z-10">
+        <div className="p-4 sm:p-8 border-b border-zinc-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white z-10">
           <button 
             onClick={mode === 'forgot-password' ? () => setMode('login') : onClose}
             className="p-3 hover:bg-zinc-100 rounded-2xl transition-colors"
@@ -301,9 +301,9 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
           <div className="w-12" /> {/* Spacer */}
         </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-8 sm:p-12 space-y-10">
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl sm:text-5xl font-display font-black tracking-tighter uppercase leading-none text-zinc-900 dark:text-white">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-12 space-y-8 sm:space-y-10">
+          <div className="text-center space-y-3 sm:space-y-4">
+            <h2 className="text-3xl sm:text-5xl font-display font-black tracking-tighter uppercase leading-none text-zinc-900 dark:text-white">
               {mode === 'signup' ? t('auth.signup_title') : mode === 'forgot-password' ? t('auth.forgot_title') : t('auth.login_title')}
             </h2>
             <p className="text-zinc-500 dark:text-slate-400 font-medium">
@@ -361,7 +361,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setAlias(e.target.value)}
                         onBlur={(e) => validateField('alias', e.target.value)}
                         className={cn(
-                          "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                          "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                           fieldErrors.alias && "border-red-500 focus:border-red-500"
                         )}
                       />
@@ -383,7 +383,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setZone(e.target.value)}
                           onBlur={(e) => validateField('zone', e.target.value)}
                           className={cn(
-                            "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                            "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                             fieldErrors.zone && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -403,7 +403,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setCommitment(e.target.value)}
                           onBlur={(e) => validateField('commitment', e.target.value)}
                           className={cn(
-                            "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                            "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                             fieldErrors.commitment && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -428,7 +428,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={(e) => validateField('email', e.target.value)}
                   className={cn(
-                    "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                    "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                     fieldErrors.email && "border-red-500 focus:border-red-500"
                   )}
                   suppressHydrationWarning
@@ -452,7 +452,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                       onChange={(e) => setPassword(e.target.value)}
                       onBlur={(e) => validateField('password', e.target.value)}
                       className={cn(
-                        "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                        "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                         fieldErrors.password && "border-red-500 focus:border-red-500"
                       )}
                       suppressHydrationWarning
@@ -475,7 +475,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={(e) => validateField('confirmPassword', e.target.value)}
                         className={cn(
-                          "theme-input w-full pl-14 pr-6 py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
+                          "theme-input w-full pl-14 pr-5 sm:pr-6 py-4 sm:py-5 border-2 border-transparent focus:border-emerald-action rounded-3xl outline-none transition-all font-bold",
                           fieldErrors.confirmPassword && "border-red-500 focus:border-red-500"
                         )}
                         suppressHydrationWarning
@@ -529,7 +529,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
             <button 
               type="submit"
               disabled={loading || countdown > 0}
-              className="w-full py-6 bg-emerald-action text-white rounded-[2rem] font-black text-lg uppercase tracking-widest shadow-xl shadow-emerald-action/10 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 sm:py-6 bg-emerald-action text-white rounded-[2rem] font-black text-sm sm:text-lg uppercase tracking-widest shadow-xl shadow-emerald-action/10 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 sm:gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 className="w-6 h-6 animate-spin" />
