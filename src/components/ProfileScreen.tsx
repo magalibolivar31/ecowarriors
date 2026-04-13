@@ -70,6 +70,14 @@ interface UserProfile {
   role: string;
 }
 
+const INVALID_DISPLAY_VALUES = new Set(['undefined', 'null']);
+const formatDisplayValue = (value: string | undefined, fallback: string) => {
+  if (!value) return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (INVALID_DISPLAY_VALUES.has(normalized)) return fallback;
+  return value;
+};
+
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMyReports, missions }) => {
   const { t, language, setLanguage, notificationsEnabled, setNotificationsEnabled, privacyMode, setPrivacyMode, darkMode, setDarkMode, showAlert } = useSettings();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -108,7 +116,6 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
   const [showAllMissions, setShowAllMissions] = useState(false);
 
   const currentUser = auth.currentUser;
-
   useEffect(() => {
     if (!currentUser) return;
 
@@ -353,12 +360,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
                 <MapPin className="w-4 h-4 text-stormy-teal/40" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.zone')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{profile.zone}</span>
+                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{formatDisplayValue(profile.zone, t('reports.undefined'))}</span>
               </div>
               <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
                 <Heart className="w-4 h-4 text-rose-500" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.commitment')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{profile.commitment || t('reports.undefined')}</span>
+                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{formatDisplayValue(profile.commitment, t('reports.undefined'))}</span>
               </div>
             </div>
           </div>

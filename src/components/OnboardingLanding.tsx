@@ -66,32 +66,32 @@ const ODS_ITEMS = [
     id: 3, 
     title: 'landing.ods_3_title', 
     icon: Heart, 
-    color: 'text-red-500', 
-    bg: 'bg-red-50',
+    color: 'text-stormy-teal', 
+    bg: 'bg-maya-blue/10',
     desc: 'landing.ods_3_desc'
   },
   { 
     id: 6, 
     title: 'landing.ods_6_title', 
     icon: Droplets, 
-    color: 'text-blue-500', 
-    bg: 'bg-blue-50',
+    color: 'text-dark-teal', 
+    bg: 'bg-maya-blue/10',
     desc: 'landing.ods_6_desc'
   },
   { 
     id: 11, 
     title: 'landing.ods_11_title', 
     icon: MapPin, 
-    color: 'text-emerald-500', 
-    bg: 'bg-emerald-50',
+    color: 'text-emerald-action', 
+    bg: 'bg-emerald-action/10',
     desc: 'landing.ods_11_desc'
   },
   { 
     id: 13, 
     title: 'landing.ods_13_title', 
     icon: Wind, 
-    color: 'text-sky-500', 
-    bg: 'bg-sky-50',
+    color: 'text-maya-blue', 
+    bg: 'bg-maya-blue/10',
     desc: 'landing.ods_13_desc'
   },
 ];
@@ -380,9 +380,9 @@ export const OnboardingLanding: React.FC = () => {
                   {member.image ? (
                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-stormy-teal to-emerald-600 flex items-center justify-center text-white font-black text-lg">
-                      {member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                    </div>
+                      <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-black text-lg">
+                        {member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                      </div>
                   )}
                 </div>
                 <div>
@@ -422,7 +422,6 @@ export const OnboardingLanding: React.FC = () => {
                   "shrink-0 w-64 p-8 rounded-[3rem] space-y-6 transition-all duration-500 !bg-opacity-100",
                   ods.bg
                 )}
-                style={{ backgroundColor: ods.bg.includes('red') ? '#fef2f2' : ods.bg.includes('blue') ? '#eff6ff' : ods.bg.includes('emerald') ? '#ecfdf5' : '#f0f9ff' }}
               >
                 <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg bg-white", ods.color)}>
                   <ods.icon className="w-8 h-8" />

@@ -194,11 +194,11 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Abierto (nuevo)': return '#126B69'; // Stormy Teal
-      case 'Abierto (en seguimiento)': return '#3b82f6'; // Maya Blue
-      case 'Abierto (agravado)': return '#dc2626'; // Red
+      case 'Abierto (en seguimiento)': return '#7CBCE8'; // Maya Blue
+      case 'Abierto (agravado)': return '#75B9B3'; // Soft teal
       case 'Resuelto': return '#6EB57D'; // Emerald Green
-      case 'Cancelado' as any: return '#71717a'; // Zinc
-      default: return '#3b82f6'; // Azul
+      case 'Cancelado' as any: return '#9DCAE9'; // Soft Maya Blue
+      default: return '#7CBCE8';
     }
   };
 
@@ -206,9 +206,9 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
     switch (status) {
       case 'Abierto (nuevo)': return { className: 'bg-stormy-teal/10 text-stormy-teal', label: t('reports.status_new') };
       case 'Abierto (en seguimiento)': return { className: 'bg-maya-blue/10 text-maya-blue', label: t('reports.status_followup') };
-      case 'Abierto (agravado)': return { className: 'bg-red-100 text-red-700', label: t('reports.status_aggravated') };
+      case 'Abierto (agravado)': return { className: 'bg-maya-blue/10 text-stormy-teal', label: t('reports.status_aggravated') };
       case 'Resuelto': return { className: 'bg-emerald-action/10 text-emerald-action', label: t('reports.status_resolved') };
-      default: return { className: 'bg-zinc-100 text-zinc-700', label: status };
+      default: return { className: 'bg-maya-blue/10 text-stormy-teal', label: status };
     }
   };
 
@@ -267,10 +267,10 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
                     />
                     <Marker position={displayPos}>
                       <Popup className="custom-popup">
-                        <div className={cn("w-64 p-1 space-y-4", report.type === 'crisis' ? "border-t-4 border-red-500" : "")}>
+                        <div className={cn("w-64 p-1 space-y-4", report.type === 'crisis' ? "border-t-4 border-dark-teal" : "")}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              {report.type === 'crisis' && <AlertTriangle className="w-3 h-3 text-red-500" />}
+                              {report.type === 'crisis' && <AlertTriangle className="w-3 h-3 text-dark-teal" />}
                               <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest", badge.className)}>
                                 {badge.label}
                               </span>
@@ -291,17 +291,17 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
                           </div>
 
                           {report.type === 'crisis' && !report.initialImageUrl ? (
-                            <div className="aspect-video rounded-xl overflow-hidden bg-red-600 flex flex-col items-center justify-center gap-2 border-2 border-red-700 shadow-inner">
-                              <AlertTriangle className="w-10 h-10 text-yellow-400 animate-pulse" />
-                              <span className="text-[10px] font-black uppercase tracking-widest text-white">{t('map.alert_no_image')}</span>
-                            </div>
-                          ) : report.initialImageUrl && (
+                              <div className="aspect-video rounded-xl overflow-hidden bg-dark-teal flex flex-col items-center justify-center gap-2 border-2 border-stormy-teal shadow-inner">
+                                <AlertTriangle className="w-10 h-10 text-maya-blue animate-pulse" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white">{t('map.alert_no_image')}</span>
+                              </div>
+                            ) : report.initialImageUrl && (
                             <div className="aspect-video rounded-xl overflow-hidden border border-zinc-100 relative group">
                               <img src={report.initialImageUrl} alt={t('reports.visual_evidence')} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                               {report.type === 'crisis' && (
                                 <>
-                                  <div className="absolute inset-0 bg-red-600/20 pointer-events-none" />
-                                  <div className="absolute top-2 left-2 px-2 py-1 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1 shadow-lg border border-red-500">
+                                  <div className="absolute inset-0 bg-dark-teal/30 pointer-events-none" />
+                                  <div className="absolute top-2 left-2 px-2 py-1 bg-dark-teal text-white text-[8px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1 shadow-lg border border-stormy-teal">
                                     <AlertTriangle className="w-2 h-2" />
                                     {t('reports.mode_crisis')}
                                   </div>
@@ -333,7 +333,7 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
           <LayersControl.Overlay name={t('map.flood_layer')}>
             <LayerGroup>
               {/* Mock flood data */}
-              <Circle center={[-34.58, -58.42]} radius={500} pathOptions={{ color: '#4A90E2', fillColor: '#4A90E2', fillOpacity: 0.2 }}>
+              <Circle center={[-34.58, -58.42]} radius={500} pathOptions={{ color: '#7CBCE8', fillColor: '#7CBCE8', fillOpacity: 0.2 }}>
                 <Popup>{t('map.flood_risk')}</Popup>
               </Circle>
             </LayerGroup>
@@ -351,7 +351,7 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
           <LayersControl.Overlay name={t('map.road_layer')}>
             <LayerGroup>
               {/* Mock road risk */}
-              <Circle center={[-34.62, -58.45]} radius={300} pathOptions={{ color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 0.2 }}>
+              <Circle center={[-34.62, -58.45]} radius={300} pathOptions={{ color: '#75B9B3', fillColor: '#75B9B3', fillOpacity: 0.2 }}>
                 <Popup>{t('map.road_risk')}</Popup>
               </Circle>
             </LayerGroup>

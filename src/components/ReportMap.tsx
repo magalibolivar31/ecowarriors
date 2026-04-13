@@ -169,10 +169,10 @@ export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, f
   const getStatusColor = (status: ReportStatus) => {
     switch (status) {
       case 'Abierto (nuevo)': return '#126B69'; // Stormy Teal
-      case 'Abierto (en seguimiento)': return '#3b82f6'; // Maya Blue
-      case 'Abierto (agravado)': return '#dc2626'; // Red
+      case 'Abierto (en seguimiento)': return '#7CBCE8'; // Maya Blue
+      case 'Abierto (agravado)': return '#75B9B3'; // Soft teal
       case 'Resuelto': return '#6EB57D'; // Emerald Green
-      default: return '#71717a';
+      default: return '#9DCAE9';
     }
   };
 
@@ -254,7 +254,7 @@ export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, f
                     <div className="flex items-center justify-between">
                       <span className={cn(
                         "px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest",
-                        report.type === 'crisis' ? "bg-red-100 text-red-600" : "bg-emerald-action/10 text-emerald-action"
+                        report.type === 'crisis' ? "bg-maya-blue/10 text-dark-teal" : "bg-emerald-action/10 text-emerald-action"
                       )}>
                         {report.type === 'crisis' ? t('reports.crisis') : t('reports.environmental')}
                       </span>

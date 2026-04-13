@@ -808,13 +808,13 @@ function AppContent() {
         getDocs(collection(db, 'reports')).then((snap) => {
           const typeCounts: Record<string, number> = {};
           const colors: Record<string, string> = {
-            'Plástico': '#10b981',
-            'Orgánico': '#f59e0b',
-            'Escombros': '#6366f1',
-            'Tóxico': '#ef4444',
-            'Vidrio': '#3b82f6',
-            'Metal': '#8b5cf6',
-            'Otro': '#71717a'
+            'Plástico': '#126B69',
+            'Orgánico': '#6EB57D',
+            'Escombros': '#75B9B3',
+            'Tóxico': '#024153',
+            'Vidrio': '#7CBCE8',
+            'Metal': '#9DCAE9',
+            'Otro': '#75B9B3'
           };
           snap.docs.forEach(doc => {
             const type = doc.data().wasteType || 'Otro';
@@ -822,7 +822,7 @@ function AppContent() {
           });
           setPieData(
             Object.entries(typeCounts).map(([name, value]) => ({
-              name, value, color: colors[name] || '#71717a'
+              name, value, color: colors[name] || '#75B9B3'
             }))
           );
         });
@@ -2164,11 +2164,11 @@ function AppContent() {
                       <LineChart data={dashboardData}>
                         <defs>
                           <linearGradient id="colorReportes" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#6EB57D" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#6EB57D" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="var(--color-primary-light)" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="var(--color-primary-light)" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid-stroke)" vertical={false} />
                         <XAxis 
                           dataKey="name" 
                           axisLine={false} 
@@ -2178,15 +2178,15 @@ function AppContent() {
                         />
                         <YAxis hide />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#126B69', border: 'none', borderRadius: '24px', color: '#fff', padding: '16px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
-                          itemStyle={{ color: '#6EB57D', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
+                          contentStyle={{ backgroundColor: 'var(--color-primary)', border: 'none', borderRadius: '24px', color: '#fff', padding: '16px', boxShadow: '0 25px 50px -12px rgba(2,65,83,0.45)' }}
+                          itemStyle={{ color: 'var(--color-primary-light)', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
                         />
                         <Line 
                           type="monotone" 
                           dataKey="reportes" 
-                          stroke="#6EB57D" 
+                          stroke="var(--color-primary-light)" 
                           strokeWidth={6} 
-                          dot={{ r: 6, fill: '#6EB57D', strokeWidth: 3, stroke: '#126B69' }}
+                          dot={{ r: 6, fill: 'var(--color-primary-light)', strokeWidth: 3, stroke: 'var(--color-primary)' }}
                           activeDot={{ r: 10, fill: '#fff', strokeWidth: 0 }}
                         />
                       </LineChart>
@@ -2217,7 +2217,7 @@ function AppContent() {
                               ))}
                             </Pie>
                             <Tooltip 
-                              contentStyle={{ backgroundColor: '#126B69', border: 'none', borderRadius: '20px', color: '#fff' }}
+                              contentStyle={{ backgroundColor: 'var(--color-primary)', border: 'none', borderRadius: '20px', color: '#fff' }}
                             />
                           </PieChart>
                         </ResponsiveContainer>
