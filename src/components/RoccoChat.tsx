@@ -129,7 +129,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-zinc-100 dark:border-slate-800 shadow-sm">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-zinc-200 dark:border-slate-800 shadow-sm">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 p-4 sm:p-6 border-b border-zinc-100 dark:border-slate-700 flex items-center justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
@@ -270,7 +270,8 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
               {displayMissions.length > 0 ? (
                 displayMissions.slice(0, 3).map((m) => (
-                  <div
+                  <button
+                    type="button"
                     key={m.id}
                     onClick={() => onMissionClick ? onMissionClick(m) : handleSend(
                       t('rocco.mission_help')
@@ -290,7 +291,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                       <span className="text-[8px] font-black uppercase tracking-widest mr-1">{t('rocco.view_progress')}</span>
                       <ChevronRight className="w-3 h-3" />
                     </div>
-                  </div>
+                  </button>
                 ))
               ) : (
                 <div className="py-10 text-center space-y-3 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-zinc-200 dark:border-slate-700">
@@ -311,7 +312,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
             <Sparkles className="absolute -top-4 -right-4 w-24 h-24 text-stormy-teal/10 rotate-12" />
             <div className="relative z-10">
               <h4 className="text-sm font-black uppercase tracking-tight mb-2 text-stormy-teal">{t('rocco.tip_title')}</h4>
-              <p className="text-xs font-medium leading-relaxed text-zinc-600 dark:text-slate-300">
+              <p className="text-xs font-medium leading-relaxed text-zinc-700 dark:text-slate-300">
                 {t('rocco.tip_desc')}
               </p>
               {(() => {

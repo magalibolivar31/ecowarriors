@@ -806,7 +806,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             </div>
             <div className="text-left">
               <h3 className="text-xl sm:text-2xl font-display font-black uppercase tracking-tighter text-stormy-teal">{t('profile.manage_reports')}</h3>
-              <p className="text-zinc-500 text-[10px] sm:text-sm font-medium">{t('profile.manage_reports_desc')}</p>
+              <p className="text-zinc-600 text-[10px] sm:text-sm font-medium">{t('profile.manage_reports_desc')}</p>
             </div>
           </div>
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-stormy-teal rounded-full flex items-center justify-center group-hover:translate-x-2 transition-transform shrink-0">

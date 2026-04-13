@@ -132,6 +132,7 @@ import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 // --- Types ---
 
 type Tab = 'DASHBOARD' | 'REPORTES' | 'COMUNIDAD' | 'MAPA' | 'CHATBOT' | 'PERFIL';
+const TABS_WITH_SENSOR: Tab[] = ['REPORTES', 'MAPA', 'COMUNIDAD'];
 type Tag = 'ropa' | 'comida' | 'otros';
 type PostType = 'doy' | 'recibo';
 
@@ -2397,7 +2398,7 @@ function AppContent() {
                   </div>
                   <div className="flex-1 text-center md:text-left space-y-3 sm:space-y-4">
                     <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight uppercase leading-tight text-stormy-teal">{t('community.volunteer_reg')}</h2>
-                    <p className="text-zinc-600 text-base sm:text-xl font-medium max-w-2xl leading-relaxed">
+                    <p className="text-zinc-700 text-base sm:text-xl font-medium max-w-2xl leading-relaxed">
                       {t('community.volunteer_desc')}
                     </p>
                   </div>
@@ -2774,7 +2775,7 @@ function AppContent() {
                         <Info className="w-5 h-5 text-amber-400" />
                         <h5 className="font-black text-xs uppercase tracking-widest text-stormy-teal">{t('community.what_is_squad')}</h5>
                       </div>
-                      <p className="text-xs text-zinc-600 leading-relaxed font-medium">
+                      <p className="text-xs text-zinc-700 leading-relaxed font-medium">
                         {t('community.squad_desc')}
                       </p>
                     </div>
@@ -2858,13 +2859,16 @@ function AppContent() {
     </div>
 
       {/* Global Floating Action Button: Sensor Activo */}
-      {(activeTab === 'REPORTES' || activeTab === 'MAPA' || activeTab === 'COMUNIDAD') && (
-        <div className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] sm:bottom-6 right-4 sm:right-6 z-[55]">
+      {TABS_WITH_SENSOR.includes(activeTab) && (
+        <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-[55]">
           <button 
             onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-            className="flex items-center gap-2 sm:gap-2.5 bg-emerald-action text-white p-3 sm:px-4 sm:py-3 rounded-xl font-black shadow-md hover:bg-stormy-teal active:scale-95 transition-colors border border-white/80"
+            aria-label={`${t('common.active_sensor')} - ${t('common.report')}`}
+            title={t('common.active_sensor')}
+            className="flex items-center gap-2 bg-emerald-action text-white p-3 rounded-xl font-black shadow-md hover:bg-stormy-teal active:scale-95 transition-colors border border-white/80"
           >
-            <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Camera className="w-5 h-5 lg:w-6 lg:h-6" />
+            <span className="sr-only">{`${t('common.active_sensor')} - ${t('common.report')}`}</span>
             <div className="text-left leading-none hidden lg:block">
               <span className="block text-xs tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
               <span className="block text-[8px] font-black opacity-70 uppercase tracking-widest">{t('common.report')}</span>
