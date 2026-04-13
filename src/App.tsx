@@ -1552,8 +1552,7 @@ function AppContent() {
                       >
                         {/* Hero Type */}
                         {card.type === 'hero' && (
-                          <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-soft-maya-blue/25 via-white/92 to-transparent z-10" />
+                          <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden bg-gradient-to-br from-[#053447] via-[#0A4F61] to-[#0B6B62]">
                             
                             <div className="relative z-20 h-full p-5 sm:p-16 flex flex-col justify-center max-w-3xl space-y-4 sm:space-y-6">
                               {card.tag && (
@@ -1562,10 +1561,10 @@ function AppContent() {
                                   {t(card.tag)}
                                 </div>
                               )}
-                              <h2 className="text-2xl sm:text-7xl font-display font-black text-stormy-teal tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase">
+                              <h2 className="text-2xl sm:text-7xl font-display font-black text-white tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-zinc-700 font-medium text-sm sm:text-xl leading-relaxed max-w-sm sm:max-w-xl">
+                              <p className="text-white font-medium text-sm sm:text-xl leading-relaxed max-w-sm sm:max-w-xl">
                                 {t(card.description)}
                               </p>
                               <button 
@@ -1658,24 +1657,24 @@ function AppContent() {
 
                         {/* Contact Type */}
                         {card.type === 'contact' && (
-                          <div className="h-full relative overflow-hidden flex flex-col items-center justify-center text-center p-8 sm:p-16">
+                          <div className="h-full relative overflow-hidden flex flex-col items-center justify-center text-center p-8 sm:p-16 bg-gradient-to-br from-[#053447] via-[#0A4F61] to-[#0B6B62]">
                             {card.imageUrl && (
                               <div 
-                                className="absolute inset-0 bg-cover bg-right-center"
+                                className="absolute inset-0 bg-cover bg-right-center z-0"
                                 style={{ backgroundImage: `url(${card.imageUrl})` }}
                               />
                             )}
-                            <div className="absolute inset-0 bg-white/80 z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#022533]/65 via-[#063F52]/55 to-[#0A5C57]/45 z-10" />
                             
                             <div className="relative z-20 flex flex-col items-center justify-center space-y-8">
                               <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-stormy-teal shadow-xl border border-stormy-teal/10">
                                 <HeartHandshake className="w-10 h-10" />
                               </div>
                               <div className="space-y-4 max-w-xl">
-                                  <h2 className="text-3xl sm:text-5xl font-display font-black text-stormy-teal tracking-tighter uppercase">
+                                  <h2 className="text-3xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase">
                                   {t(card.title)}
                                 </h2>
-                                  <p className="text-zinc-600 text-base sm:text-lg font-medium">
+                                  <p className="text-white text-base sm:text-lg font-medium">
                                   {t(card.description)}
                                 </p>
                               </div>
