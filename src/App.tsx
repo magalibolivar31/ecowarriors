@@ -105,11 +105,10 @@ import {
   createReport as createReportService,
   addReportUpdate,
   deleteReport,
-  cancelReport,
   normalizeAllReports
 } from './services/reportService';
 import { subscribeToSquads, toggleSquadAttendance, createSquad, updateSquad, cancelSquad, deleteSquad } from './services/squadService';
-import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost, cancelMarketplacePost } from './services/marketplaceService';
+import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost } from './services/marketplaceService';
 import { getUserSettings, updateUserSettings, getUserProfile } from './services/userService';
 import { calculateMissions } from './services/missionService';
 import { calculateLevel } from './lib/levelUtils';
@@ -323,6 +322,8 @@ function AppContent() {
   const [marketplaceStatusFilter, setMarketplaceStatusFilter] = useState<'todos' | 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido'>('todos');
   const [editingPost, setEditingPost] = useState<MarketplacePost | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
+  const [deletingReportIds, setDeletingReportIds] = useState<Set<string>>(new Set());
+  const [deletingPostIds, setDeletingPostIds] = useState<Set<string>>(new Set());
 
   const validateField = (name: string, value: string) => {
     const errorKey = getValidationErrorKey(name, value);
@@ -334,19 +335,30 @@ function AppContent() {
 
   // Handlers para reportes
   const handleDeleteReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
+    setDeletingReportIds((prev) => new Set(prev).add(reportId));
     try {
       await deleteReport(reportId, reportType);
     } catch (e) {
+      setDeletingReportIds((prev) => {
+        const next = new Set(prev);
+        next.delete(reportId);
+        return next;
+      });
       console.error('Error eliminando reporte:', e);
       showAlert(t('common.error'), t('dashboard.delete_error'));
     }
   };
 
   const handleCancelReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
-    if (!currentUserId || !userProfile?.alias) return;
+    setDeletingReportIds((prev) => new Set(prev).add(reportId));
     try {
-      await cancelReport(reportId, reportType, currentUserId, userProfile.alias);
+      await deleteReport(reportId, reportType);
     } catch (e) {
+      setDeletingReportIds((prev) => {
+        const next = new Set(prev);
+        next.delete(reportId);
+        return next;
+      });
       console.error('Error cancelando reporte:', e);
       showAlert(t('common.error'), t('dashboard.cancel_error'));
     }
@@ -354,17 +366,29 @@ function AppContent() {
 
   // Handlers para marketplace
   const handleDeletePost = async (postId: string) => {
+    setDeletingPostIds((prev) => new Set(prev).add(postId));
     try {
       await deleteMarketplacePost(postId);
     } catch (e) {
+      setDeletingPostIds((prev) => {
+        const next = new Set(prev);
+        next.delete(postId);
+        return next;
+      });
       console.error('Error eliminando post:', e);
     }
   };
 
   const handleCancelPost = async (postId: string) => {
+    setDeletingPostIds((prev) => new Set(prev).add(postId));
     try {
-      await cancelMarketplacePost(postId);
+      await deleteMarketplacePost(postId);
     } catch (e) {
+      setDeletingPostIds((prev) => {
+        const next = new Set(prev);
+        next.delete(postId);
+        return next;
+      });
       console.error('Error cancelando post:', e);
     }
   };
@@ -545,6 +569,10 @@ function AppContent() {
       return true;
     });
   }, [reports, reportFilter, searchQuery, user, isAdmin]);
+  const visibleReports = useMemo(
+    () => filteredReports.filter((report) => !deletingReportIds.has(report.id)),
+    [filteredReports, deletingReportIds],
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentScrollRef = useRef<HTMLDivElement>(null);
@@ -2204,7 +2232,7 @@ function AppContent() {
                 </div>
               </div>
 
-              {filteredReports.length === 0 ? (
+              {visibleReports.length === 0 ? (
                 <div className="bg-white p-12 sm:p-20 rounded-[2.5rem] sm:rounded-[3rem] border border-zinc-100 text-center space-y-6">
                   <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto">
                     <Info className="w-10 h-10 text-stormy-teal/20" />
@@ -2220,18 +2248,28 @@ function AppContent() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                  {filteredReports.map((report) => (
-                    <div key={report.id} className="relative group">
-                      <ReportCard 
-                        report={report} 
-                        onClick={() => setSelectedReportForDetail(report)} 
-                        isAdmin={isAdmin}
-                        currentUserId={currentUserId}
-                        onDeleteReport={handleDeleteReport}
-                        onCancelReport={handleCancelReport}
-                      />
-                    </div>
-                  ))}
+                  <AnimatePresence>
+                    {visibleReports.map((report) => (
+                      <motion.div
+                        key={report.id}
+                        layout
+                        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -18, scale: 0.9 }}
+                        transition={{ duration: 0.22, ease: 'easeOut' }}
+                        className="relative group"
+                      >
+                        <ReportCard 
+                          report={report} 
+                          onClick={() => setSelectedReportForDetail(report)} 
+                          isAdmin={isAdmin}
+                          currentUserId={currentUserId}
+                          onDeleteReport={handleDeleteReport}
+                          onCancelReport={handleCancelReport}
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
               )}
             </motion.div>
@@ -2404,7 +2442,9 @@ function AppContent() {
                         return matchesSearch && matchesStatus && post.isActive !== false;
                       });
 
-                      if (filteredPosts.length === 0) {
+                      const visiblePosts = filteredPosts.filter((post) => !deletingPostIds.has(post.id));
+
+                      if (visiblePosts.length === 0) {
                         return (
                           <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
                             <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
@@ -2416,10 +2456,17 @@ function AppContent() {
                         );
                       }
 
-                      return filteredPosts.map(post => (
+                      return (
+                        <AnimatePresence>
+                          {visiblePosts.map(post => (
                         <motion.div 
                           layoutId={post.id}
                           key={post.id}
+                          layout
+                          initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -18, scale: 0.9 }}
+                          transition={{ duration: 0.22, ease: 'easeOut' }}
                           onClick={() => setIsDetailOpen(post)}
                           className="bg-white dark:bg-slate-800/90 rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
                         >
@@ -2495,7 +2542,9 @@ function AppContent() {
                             </div>
                           </div>
                         </motion.div>
-                      ));
+                          ))}
+                        </AnimatePresence>
+                      );
                     })()}
                   </div>
                 </div>
