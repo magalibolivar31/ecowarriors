@@ -2574,8 +2574,11 @@ function AppContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     {(() => {
                       const filteredPosts = posts.filter(post => {
-                        const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                            post.content?.toLowerCase().includes(searchQuery.toLowerCase());
+                        const normalizedTitle = typeof post.title === 'string' ? post.title : '';
+                        const normalizedContent = typeof post.content === 'string' ? post.content : '';
+                        const searchTerm = searchQuery.toLowerCase();
+                        const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
+                                            normalizedContent.toLowerCase().includes(searchTerm);
                         const matchesStatus = marketplaceStatusFilter === 'todos'
                           ? true
                           : post.status === marketplaceStatusFilter;
