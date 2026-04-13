@@ -121,7 +121,7 @@ import {
   notifyVolunteerRegistered,
   requestNotificationPermission
 } from './services/notificationService';
-import { Mission } from './constants/missions';
+import { Mission, getMissionIconTextClass } from './constants/missions';
 import { Report, ReportUpdate, Squad, MarketplacePost, UserSettings, ReportType } from './types';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
@@ -1572,10 +1572,10 @@ function AppContent() {
                         {card.type === 'info' && (
                           <div className="h-full bg-zinc-50 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-10">
                             <div className="space-y-2 sm:space-y-4">
-                              <h2 className="text-2xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase drop-shadow-lg">
+                              <h2 className="text-2xl sm:text-5xl font-display font-black text-zinc-900 tracking-tighter uppercase">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-white/90 text-xs sm:text-lg font-medium max-w-xl drop-shadow-sm">
+                              <p className="text-zinc-600 text-xs sm:text-lg font-medium max-w-xl">
                                 {t(card.description)}
                               </p>
                             </div>
@@ -2234,7 +2234,7 @@ function AppContent() {
                           {pieData.map((entry, i) => (
                             <div key={i} className="flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                              <span className="text-[8px] font-black uppercase tracking-widest text-white/40">{entry.name}</span>
+                              <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500">{entry.name}</span>
                             </div>
                           ))}
                         </div>
@@ -2332,7 +2332,7 @@ function AppContent() {
                       placeholder={t('reports.search_placeholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-zinc-100 shadow-sm outline-none focus:ring-2 focus:ring-emerald-action transition-all font-medium text-sm"
+                      className="theme-input w-full pl-11 pr-4 py-3 rounded-2xl border shadow-sm outline-none focus:ring-2 focus:ring-emerald-action transition-all font-medium text-sm"
                     />
                   </div>
                 </div>
@@ -2885,11 +2885,11 @@ function AppContent() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col"
+              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-700"
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className={cn("p-4 rounded-2xl text-white shadow-lg", selectedMission.color)}>
+                  <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextClass(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
                   </div>
                   <button 
@@ -2905,10 +2905,10 @@ function AppContent() {
                     {t(`mission.title_${selectedMission.id}`)}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="theme-badge-accent px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.reward} {t('mission.reward_label')}
                     </span>
-                    <span className="px-3 py-1 bg-zinc-100 text-zinc-500 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="theme-badge-muted px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.status === 'completed' ? t('common.completed') : t('common.in_progress')}
                     </span>
                   </div>
@@ -2927,12 +2927,12 @@ function AppContent() {
                       {t(`mission.obj_${selectedMission.id}`)}
                     </p>
                   </div>
-                  <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-700">
+                  <div className="theme-soft-card p-6 rounded-3xl border space-y-2">
+                    <div className="theme-soft-card-title flex items-center gap-2">
                       <Info className="w-4 h-4" />
                       <p className="text-[10px] font-black uppercase tracking-widest">{t('common.rocco_suggestion')}</p>
                     </div>
-                    <p className="text-emerald-800 font-bold text-sm">
+                    <p className="theme-soft-card-text font-bold text-sm">
                       {t(`mission.action_${selectedMission.id}`)}
                     </p>
                   </div>
