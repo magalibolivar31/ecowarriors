@@ -641,7 +641,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 onClick={() => setRemindersEnabled(!remindersEnabled)}
                 className={`w-12 h-6 rounded-full relative transition-colors border ${remindersEnabled ? 'bg-yellow-400 border-yellow-300' : 'bg-red-950 border-red-800'}`}
               >
-                 <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${remindersEnabled ? 'left-7 bg-red-900' : 'left-1 bg-white'}`} />
+                 <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${remindersEnabled ? 'left-7' : 'left-1'}`} />
               </button>
             </div>
 
@@ -984,7 +984,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <h3 className="font-black text-sm uppercase tracking-widest">{t('crisis.emergency_contacts')}</h3>
                 </div>
                 <div className="space-y-2">
-                  {contacts.map((contact: any, i: number) => (
+                  {contacts.map((contact: any, i: number) => {
+                    const phoneForDial = String(contact.phone ?? '').replace(/[^\d+]/g, '');
+                    return (
                     <div key={i} className="flex items-center justify-between p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
                       <div>
                         <p className="font-black">{contact.name}</p>
@@ -1004,12 +1006,12 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                         >
                           <X className="w-4 h-4" />
                         </button>
-                        <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20">
+                        <a href={phoneForDial ? `tel:${encodeURIComponent(phoneForDial)}` : '#'} className="p-3 bg-yellow-400 text-red-900 rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-black/20" aria-disabled={!phoneForDial} onClick={(e) => { if (!phoneForDial) e.preventDefault(); }}>
                           <Phone className="w-4 h-4" />
                         </a>
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
 
                 {isAddingContact ? (
