@@ -2182,12 +2182,19 @@ function AppContent() {
                           dataKey="name" 
                           axisLine={false} 
                           tickLine={false} 
-                          tick={{ fill: '#126B69', fontSize: 10, fontWeight: '900' }} 
+                          tick={{ fill: 'var(--text-secondary)', fontSize: 10, fontWeight: '900' }} 
                           dy={10}
                         />
                         <YAxis hide />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #D4E8E6', borderRadius: '24px', color: '#024153', padding: '16px', boxShadow: '0 12px 30px -12px rgba(2,65,83,0.18)' }}
+                          contentStyle={{
+                            backgroundColor: 'var(--surface-elevated)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '24px',
+                            color: 'var(--text-primary)',
+                            padding: '16px',
+                            boxShadow: 'var(--card-shadow)'
+                          }}
                           itemStyle={{ color: 'var(--color-primary)', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
                         />
                         <Line 
@@ -2196,7 +2203,7 @@ function AppContent() {
                           stroke="var(--color-primary-light)" 
                           strokeWidth={6} 
                           dot={{ r: 6, fill: 'var(--color-primary-light)', strokeWidth: 3, stroke: 'var(--color-primary)' }}
-                          activeDot={{ r: 10, fill: '#fff', strokeWidth: 0 }}
+                          activeDot={{ r: 10, fill: 'var(--surface-elevated)', strokeWidth: 0 }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -2226,7 +2233,12 @@ function AppContent() {
                               ))}
                             </Pie>
                             <Tooltip 
-                              contentStyle={{ backgroundColor: 'var(--color-primary)', border: 'none', borderRadius: '20px', color: '#fff' }}
+                              contentStyle={{
+                                backgroundColor: 'var(--surface-elevated)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '20px',
+                                color: 'var(--text-primary)'
+                              }}
                             />
                           </PieChart>
                         </ResponsiveContainer>

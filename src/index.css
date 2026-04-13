@@ -38,6 +38,7 @@
 
   --background: var(--color-white);
   --surface: var(--color-white);
+  --surface-elevated: #F8FAFC;
   --surface-muted: var(--color-surface-muted);
   --text-primary: var(--color-contrast);
   --text-secondary: #334155;
@@ -47,6 +48,7 @@
   --border: var(--color-border);
   --input-bg: var(--color-white);
   --modal-bg: var(--color-white);
+  --overlay-bg: color-mix(in srgb, var(--color-contrast) 28%, transparent);
   --button-bg: var(--color-primary);
   --button-hover: var(--color-primary-light);
   --chart-grid-stroke: #0241531A;
@@ -80,20 +82,22 @@
 }
 
 .dark {
-  --background: #024153;
-  --surface: #126B69;
-  --surface-muted: #0A555F;
-  --text-primary: #FFFFFF;
-  --text-secondary: #F3F4F6;
-  --text-muted: #CBD5E1;
-  --text-accent-success: #BBF7D0;
-  --text-accent-info: #BFDBFE;
-  --border: #75B9B3;
-  --input-bg: #126B69;
-  --modal-bg: #126B69;
-  --button-bg: #126B69;
-  --button-hover: #6EB57D;
-  --chart-grid-stroke: #FFFFFF1A;
+  --background: #0B1F2A;
+  --surface: #0F2A36;
+  --surface-elevated: #132F3B;
+  --surface-muted: #174052;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-accent-success: #4ADE80;
+  --text-accent-info: #67E8F9;
+  --border: rgba(255, 255, 255, 0.08);
+  --input-bg: #102D3A;
+  --modal-bg: #132F3B;
+  --overlay-bg: rgba(5, 15, 24, 0.72);
+  --button-bg: #22C55E;
+  --button-hover: #16A34A;
+  --chart-grid-stroke: rgba(148, 163, 184, 0.24);
   --badge-accent-bg: color-mix(in srgb, var(--color-primary-light) 26%, transparent);
   --badge-accent-text: var(--text-primary);
   --badge-muted-bg: color-mix(in srgb, var(--surface-muted) 80%, transparent);
@@ -105,8 +109,9 @@
 
   --brand-bg: var(--background);
   --brand-text: var(--text-primary);
-  --card-bg: var(--surface);
+  --card-bg: var(--surface-elevated);
   --card-border: var(--border);
+  --card-shadow: 0 18px 38px -28px rgba(0, 0, 0, 0.65);
 }
 
 .dark body {
@@ -115,15 +120,15 @@
 }
 
 .dark .bg-white {
-  background-color: var(--surface) !important;
+  background-color: var(--surface-elevated) !important;
 }
 
 .dark .bg-zinc-50 {
-  background-color: var(--surface-muted) !important;
+  background-color: var(--surface) !important;
 }
 
 .dark .bg-zinc-100 {
-  background-color: var(--surface) !important;
+  background-color: var(--surface-muted) !important;
 }
 
 .dark .bg-brand-bg {
@@ -188,11 +193,11 @@
 }
 
 .dark .shadow-sm {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 10px 24px -20px rgba(0, 0, 0, 0.8), 0 4px 10px -8px rgba(0, 0, 0, 0.6) !important;
 }
 
 .dark .shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 24px 42px -22px rgba(0, 0, 0, 0.75), 0 10px 18px -14px rgba(0, 0, 0, 0.72) !important;
 }
 
 body {
@@ -268,7 +273,8 @@ body {
 
 /* Responsive Modal */
 .modal-overlay {
-  @apply fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-stormy-teal/40 backdrop-blur-md;
+  background-color: var(--overlay-bg);
+  @apply fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 backdrop-blur-md;
 }
 
 .modal-content {
@@ -379,7 +385,36 @@ html:not(.dark) .bg-blue-900 {
 }
 
 .dark .bg-emerald-action {
-  background-color: var(--color-primary-light) !important;
+  background-color: var(--button-bg) !important;
+}
+
+.dark .bg-stormy-teal {
+  background-color: var(--button-bg) !important;
+}
+
+.dark .text-stormy-teal {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-maya-blue,
+.dark .text-soft-maya-blue {
+  color: var(--text-accent-info) !important;
+}
+
+.dark .bg-stormy-teal\/5 {
+  background-color: color-mix(in srgb, var(--button-bg) 10%, transparent) !important;
+}
+
+.dark .bg-stormy-teal\/10 {
+  background-color: color-mix(in srgb, var(--button-bg) 16%, transparent) !important;
+}
+
+.dark .bg-stormy-teal\/20 {
+  background-color: color-mix(in srgb, var(--button-bg) 22%, transparent) !important;
+}
+
+.dark .bg-stormy-teal\/40 {
+  background-color: color-mix(in srgb, var(--overlay-bg) 88%, transparent) !important;
 }
 
 .dark .text-zinc-400 {
