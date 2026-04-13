@@ -239,6 +239,8 @@ const FEEDBACK_FORM_URL = 'https://forms.gle/yTVGetUWAwyG7JbbA';
 
 const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose: () => void; children: React.ReactNode; title?: string }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -265,7 +267,7 @@ const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose:
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -294,7 +296,7 @@ const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose:
         previouslyFocused.focus();
       }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
   return (
