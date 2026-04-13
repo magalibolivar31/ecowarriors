@@ -232,6 +232,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
   }
 ];
 
+const FEEDBACK_FORM_URL = 'https://forms.gle/yTVGetUWAwyG7JbbA';
+
 // --- Components ---
 
 const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose: () => void; children: React.ReactNode; title?: string }) => {
@@ -240,21 +242,24 @@ const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose:
   useEffect(() => {
     if (!isOpen) return;
 
-    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const previouslyFocused = document.activeElement;
     const focusableSelector = [
       'a[href]',
       'button:not([disabled])',
       'textarea:not([disabled])',
       'input:not([disabled])',
       'select:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])'
+      '[tabindex]:not([tabindex^="-"])'
     ].join(', ');
 
     const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? [];
-    const firstFocusable = focusableElements[0] ?? modalRef.current;
-    const lastFocusable = focusableElements[focusableElements.length - 1] ?? modalRef.current;
+    const firstFocusable = focusableElements[0] ?? null;
+    const lastFocusable = focusableElements[focusableElements.length - 1] ?? null;
+    const fallbackFocusable = modalRef.current;
 
-    firstFocusable?.focus();
+    const initialFocusTimeout = window.setTimeout(() => {
+      (firstFocusable ?? fallbackFocusable)?.focus();
+    }, 0);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -266,24 +271,27 @@ const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose:
       if (event.key === 'Tab') {
         if (!focusableElements.length) {
           event.preventDefault();
-          modalRef.current?.focus();
+          fallbackFocusable?.focus();
           return;
         }
 
-        if (event.shiftKey && document.activeElement === firstFocusable) {
+        if (event.shiftKey && firstFocusable && document.activeElement === firstFocusable) {
           event.preventDefault();
-          lastFocusable?.focus();
-        } else if (!event.shiftKey && document.activeElement === lastFocusable) {
+          (lastFocusable ?? fallbackFocusable)?.focus();
+        } else if (!event.shiftKey && lastFocusable && document.activeElement === lastFocusable) {
           event.preventDefault();
-          firstFocusable?.focus();
+          (firstFocusable ?? fallbackFocusable)?.focus();
         }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
+      window.clearTimeout(initialFocusTimeout);
       document.removeEventListener('keydown', handleKeyDown);
-      previouslyFocused?.focus();
+      if (previouslyFocused && document.contains(previouslyFocused) && 'focus' in previouslyFocused && typeof previouslyFocused.focus === 'function') {
+        previouslyFocused.focus();
+      }
     };
   }, [isOpen, onClose]);
 
@@ -605,7 +613,7 @@ function AppContent() {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   const handleOpenFeedbackForm = () => {
-    window.open('https://forms.gle/yTVGetUWAwyG7JbbA', '_blank', 'noopener,noreferrer');
+    window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
     setIsFeedbackModalOpen(false);
   };
 
@@ -2955,6 +2963,8 @@ function AppContent() {
             <button
               onClick={handleOpenFeedbackForm}
               className="btn-primary w-full sm:flex-1 text-center"
+              aria-label={t('feedback.respond_form_new_tab')}
+              title={t('feedback.respond_form_new_tab')}
             >
               {t('feedback.respond_form')}
             </button>
