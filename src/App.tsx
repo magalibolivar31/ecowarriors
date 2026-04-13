@@ -1732,7 +1732,7 @@ function AppContent() {
                 className="bg-gradient-to-br from-red-700 to-red-900 border border-red-500/40
                            rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 
                            text-white overflow-hidden relative shadow-lg shadow-red-950/20
-                           cursor-pointer group
+                           cursor-pointer group [&_svg]:text-white
                            hover:shadow-xl 
                            hover:-translate-y-1 transition-all duration-300"
                 onClick={() => handleCrisisModeToggle(true)}

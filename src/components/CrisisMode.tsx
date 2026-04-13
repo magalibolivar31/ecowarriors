@@ -434,7 +434,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const reminderToggleThumbPositionClasses = remindersEnabled ? "left-7" : "left-1";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-800 via-red-700 to-red-900 text-white flex flex-col font-sans select-none">
+    <div className="min-h-screen bg-gradient-to-b from-red-800 via-red-700 to-red-900 text-white flex flex-col font-sans select-none [&_svg]:text-white">
       {/* Header */}
       <header className="p-4 bg-red-900/85 backdrop-blur-sm flex items-center justify-between border-b border-red-600/50 sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="flex items-center gap-3">
