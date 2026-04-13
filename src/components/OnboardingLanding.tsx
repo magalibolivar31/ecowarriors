@@ -283,9 +283,9 @@ export const OnboardingLanding: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-12 overflow-hidden">
+      <section className="landing-brand-hero relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-stormy-teal/10 to-transparent rounded-full blur-3xl opacity-50" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-white/20 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
 
         <motion.div 
@@ -294,12 +294,12 @@ export const OnboardingLanding: React.FC = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 text-center max-w-4xl mx-auto space-y-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-stormy-teal/10 text-stormy-teal text-xs font-bold uppercase tracking-widest mb-4">
+          <div className="landing-brand-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
             <Activity className="w-4 h-4" />
             {t('landing.hero_badge')}
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-display font-black tracking-tighter text-zinc-900 leading-[0.9] uppercase">
+          <h1 className="text-5xl md:text-7xl font-display font-black text-white tracking-tighter leading-[0.9] uppercase">
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
@@ -307,12 +307,12 @@ export const OnboardingLanding: React.FC = () => {
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ delay: 1, duration: 1 }}
-                className="absolute -bottom-2 left-0 h-3 bg-maya-blue/30 -z-10"
+                className="absolute -bottom-2 left-0 h-3 bg-white/20 -z-10"
               />
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-zinc-500 font-medium max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-white/85 font-medium max-w-2xl mx-auto">
             {t('landing.hero_subtitle')}
           </p>
 
@@ -325,7 +325,7 @@ export const OnboardingLanding: React.FC = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.2 + idx * 0.1 }}
                 className={cn(
-                  "relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl border-4 border-white",
+                  "relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl border-2 border-white/30",
                   idx % 2 === 0 ? "md:translate-y-4" : "md:-translate-y-4"
                 )}
               >
@@ -353,7 +353,7 @@ export const OnboardingLanding: React.FC = () => {
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-zinc-300"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/65"
         >
           <ChevronRight className="w-8 h-8 rotate-90" />
         </motion.div>
@@ -631,11 +631,11 @@ export const OnboardingLanding: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-stormy-teal landing-cta-card p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
+          <div className="landing-brand-cta p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
             <h3 className="text-3xl font-display font-black tracking-tighter uppercase leading-tight">
               {t('landing.ready_title')}
             </h3>
-            <p className="text-emerald-action/80 dark:text-slate-300 font-medium">
+            <p className="text-white/85 font-medium">
               {t('landing.ready_desc')}
             </p>
             <button 
@@ -644,15 +644,15 @@ export const OnboardingLanding: React.FC = () => {
               className={cn(
                 "w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 transition-all shadow-xl",
                 securityChecked 
-                  ? "bg-white text-stormy-teal hover:scale-105 active:scale-95" 
-                  : "bg-stormy-teal/50 dark:bg-slate-700/60 text-white/40 dark:text-slate-500 cursor-not-allowed opacity-50"
+                  ? "bg-emerald-action text-white hover:scale-105 hover:brightness-110 active:scale-95" 
+                  : "bg-black/20 text-white/40 cursor-not-allowed opacity-60"
               )}
             >
               {t('landing.start_now')}
               <ArrowRight className="w-6 h-6" />
             </button>
             {!securityChecked && (
-              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-emerald-action/60 dark:text-slate-500">
+              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-white/65">
                 {t('landing.security_warning')}
               </p>
             )}

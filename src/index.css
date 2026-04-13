@@ -80,6 +80,8 @@
   --card-radius: 2rem;
   --card-shadow: 0 8px 20px -16px rgba(2, 65, 83, 0.25);
   --mobile-tab-bar-height: 5.25rem;
+  --landing-brand-hero-gradient: linear-gradient(145deg, #024153 0%, #0b3f4e 45%, #126b69 100%);
+  --landing-brand-cta-gradient: linear-gradient(155deg, #024153 0%, #0b4a55 50%, #126b69 100%);
 }
 
 .dark {
@@ -555,6 +557,21 @@ html:not(.dark) .bg-blue-900 {
 
 /* ===== Landing Dark Mode Fixes ===== */
 
+.landing-brand-hero {
+  background: var(--landing-brand-hero-gradient);
+}
+
+.landing-brand-badge {
+  background-color: color-mix(in srgb, #ffffff 16%, transparent);
+  color: #ffffff;
+  border: 1px solid color-mix(in srgb, #ffffff 28%, transparent);
+}
+
+.landing-brand-cta {
+  background: var(--landing-brand-cta-gradient);
+  border: 1px solid color-mix(in srgb, #ffffff 14%, transparent);
+}
+
 /* Header: bg-white/80 opacity variant isn't caught by .dark .bg-white */
 .dark .bg-white\/80 {
   background-color: color-mix(in srgb, var(--background) 94%, transparent) !important;
@@ -572,15 +589,12 @@ html:not(.dark) .bg-blue-900 {
   color: var(--text-accent-info) !important;
 }
 
-/* The global .dark .bg-stormy-teal override sets it to the bright button green (#22C55E).
-   That works for small icons/buttons but ruins large section backgrounds where
-   text-emerald-action becomes invisible (green on green). These landing-specific
-   classes restore a proper dark surface for those large sections. */
+/* Keep highlighted landing brand sections visually fixed across light/dark modes. */
 .dark .landing-teal-section {
-  background-color: var(--surface-muted) !important;
+  background-color: #024153 !important;
 }
 
 .dark .landing-cta-card {
-  background-color: var(--surface-elevated) !important;
-  border: 1px solid var(--border);
+  background: var(--landing-brand-cta-gradient) !important;
+  border: 1px solid color-mix(in srgb, #ffffff 14%, transparent);
 }
