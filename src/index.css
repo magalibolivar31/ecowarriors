@@ -43,12 +43,18 @@
   --modal-bg: var(--color-white);
   --button-bg: var(--color-primary);
   --button-hover: var(--color-primary-light);
+  --chart-grid-stroke: #0241531A;
 
-  --urgency-1: var(--color-primary-light);
-  --urgency-2: var(--color-accent);
-  --urgency-3: var(--color-teal-soft);
-  --urgency-4: var(--color-accent-soft);
-  --urgency-5: var(--color-primary);
+  --urgency-low: var(--color-primary-light);
+  --urgency-moderate: var(--color-accent);
+  --urgency-elevated: var(--color-teal-soft);
+  --urgency-high: var(--color-accent-soft);
+  --urgency-critical: var(--color-primary);
+  --urgency-1: var(--urgency-low);
+  --urgency-2: var(--urgency-moderate);
+  --urgency-3: var(--urgency-elevated);
+  --urgency-4: var(--urgency-high);
+  --urgency-5: var(--urgency-critical);
 
   --brand-bg: var(--background);
   --brand-text: var(--text-primary);
@@ -68,6 +74,7 @@
   --modal-bg: #126B69;
   --button-bg: #126B69;
   --button-hover: #6EB57D;
+  --chart-grid-stroke: #FFFFFF1A;
 
   --brand-bg: var(--background);
   --brand-text: var(--text-primary);
@@ -231,6 +238,10 @@ body {
   @apply flex-1 overflow-y-auto p-6 sm:p-8;
 }
 
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+}
+
 .dark .bg-emerald-action {
   background-color: var(--color-primary-light) !important;
 }
@@ -272,52 +283,125 @@ body {
   border-color: var(--border) !important;
 }
 
-.dark [class*="bg-slate-"],
-.dark [class*="bg-blue-"],
-.dark [class*="bg-indigo-"],
-.dark [class*="bg-sky-"] {
-  background-color: var(--surface) !important;
-}
-
-.dark [class*="text-slate-"],
-.dark [class*="text-blue-"] {
-  color: var(--text-secondary) !important;
-}
-
-[class*="bg-blue-"],
-[class*="bg-sky-"],
-[class*="bg-indigo-"],
-[class*="bg-purple-"],
-[class*="bg-red-"],
-[class*="bg-amber-"],
-[class*="bg-orange-"],
-[class*="bg-yellow-"],
-[class*="bg-rose-"],
-[class*="bg-pink-"] {
+.bg-blue-50,
+.bg-blue-100,
+.bg-blue-500,
+.bg-sky-50,
+.bg-indigo-500,
+.bg-purple-50,
+.bg-purple-500,
+.bg-red-50,
+.bg-red-100,
+.bg-red-500,
+.bg-red-600,
+.bg-red-700,
+.bg-red-800,
+.bg-red-900,
+.bg-amber-50,
+.bg-amber-100,
+.bg-amber-500,
+.bg-amber-600,
+.bg-orange-100,
+.bg-rose-50,
+.bg-rose-500,
+.bg-yellow-100,
+.bg-yellow-400,
+.bg-pink-400\/10 {
   background-color: var(--surface-muted) !important;
 }
 
-[class*="text-blue-"],
-[class*="text-sky-"],
-[class*="text-indigo-"],
-[class*="text-purple-"],
-[class*="text-red-"],
-[class*="text-amber-"],
-[class*="text-orange-"],
-[class*="text-yellow-"],
-[class*="text-rose-"],
-[class*="text-pink-"] {
+.bg-red-500\/20,
+.bg-red-500\/30,
+.bg-red-600\/20,
+.bg-red-700\/60,
+.bg-red-800\/40,
+.bg-red-900\/40,
+.bg-amber-400\/10,
+.bg-amber-50\/50,
+.bg-amber-500\/20,
+.bg-rose-900\/20 {
+  background-color: color-mix(in srgb, var(--surface-muted) 80%, transparent) !important;
+}
+
+.text-blue-500,
+.text-blue-600,
+.text-blue-700,
+.text-sky-500,
+.text-purple-500,
+.text-purple-600,
+.text-red-200,
+.text-red-300,
+.text-red-400,
+.text-red-500,
+.text-red-600,
+.text-red-700,
+.text-red-900,
+.text-amber-400,
+.text-amber-500,
+.text-amber-600,
+.text-amber-700,
+.text-amber-800,
+.text-amber-900,
+.text-orange-500,
+.text-orange-700,
+.text-yellow-400,
+.text-yellow-500,
+.text-yellow-700,
+.text-rose-500,
+.text-pink-400 {
   color: var(--text-secondary) !important;
 }
 
-[class*="border-blue-"],
-[class*="border-indigo-"],
-[class*="border-red-"],
-[class*="border-amber-"],
-[class*="border-orange-"],
-[class*="border-yellow-"],
-[class*="border-rose-"] {
+.border-blue-100,
+.border-red-100,
+.border-red-200,
+.border-red-300,
+.border-red-400,
+.border-red-500,
+.border-red-600,
+.border-red-700,
+.border-amber-100,
+.border-amber-200,
+.border-amber-500,
+.border-orange-200,
+.border-yellow-200,
+.border-yellow-400,
+.border-rose-100 {
   border-color: var(--border) !important;
+}
+
+.border-red-400\/20,
+.border-red-400\/30,
+.border-red-500\/30,
+.border-red-500\/50,
+.border-yellow-400\/30,
+.border-rose-900\/30 {
+  border-color: color-mix(in srgb, var(--border) 75%, transparent) !important;
+}
+
+.dark .dark\:bg-slate-600,
+.dark .dark\:bg-slate-700,
+.dark .dark\:bg-slate-800,
+.dark .dark\:bg-slate-900,
+.dark .dark\:bg-slate-950,
+.dark .dark\:bg-slate-700\/50,
+.dark .dark\:bg-slate-800\/90,
+.dark .dark\:bg-slate-900\/50,
+.dark .dark\:bg-slate-900\/90,
+.dark .dark\:bg-slate-950\/80,
+.dark .dark\:bg-blue-900\/40 {
+  background-color: var(--surface) !important;
+}
+
+.dark .dark\:text-slate-100,
+.dark .dark\:text-slate-200,
+.dark .dark\:text-slate-300,
+.dark .dark\:text-slate-400,
+.dark .dark\:text-slate-500,
+.dark .dark\:text-slate-600,
+.dark .dark\:text-slate-700,
+.dark .dark\:text-blue-300 {
+  color: var(--text-secondary) !important;
 }
 
 /* Mascots */

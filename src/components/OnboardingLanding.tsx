@@ -380,9 +380,9 @@ export const OnboardingLanding: React.FC = () => {
                   {member.image ? (
                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-stormy-teal to-emerald-action flex items-center justify-center text-white font-black text-lg">
-                      {member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                    </div>
+                      <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-black text-lg">
+                        {member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                      </div>
                   )}
                 </div>
                 <div>

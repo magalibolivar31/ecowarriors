@@ -2168,7 +2168,7 @@ function AppContent() {
                             <stop offset="95%" stopColor="var(--color-primary-light)" stopOpacity={0}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#FFFFFF1A" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid-stroke)" vertical={false} />
                         <XAxis 
                           dataKey="name" 
                           axisLine={false} 
