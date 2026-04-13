@@ -72,12 +72,12 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
   const dateLocale = language === 'es' ? es : enUS;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[90vh] border border-zinc-100 dark:border-slate-700"
+        className="bg-white rounded-none sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[100svh] sm:max-h-[90vh] border border-zinc-100 dark:border-slate-700"
       >
         {/* Header */}
         <div className="relative h-48 sm:h-64 shrink-0">
@@ -130,7 +130,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
         </div>
 
         {/* Content */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-8 custom-scrollbar">
+        <div className="p-4 sm:p-8 overflow-y-auto space-y-6 sm:space-y-8 custom-scrollbar">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="space-y-2">

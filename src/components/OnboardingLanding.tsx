@@ -223,9 +223,9 @@ export const OnboardingLanding: React.FC = () => {
       </AnimatePresence>
 
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-4 sm:px-6 py-3 sm:py-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
               <img
                 src={ECOWARRIORS_LOGO_URL}
@@ -238,7 +238,7 @@ export const OnboardingLanding: React.FC = () => {
             <span className="font-display font-black tracking-tighter text-2xl hidden sm:block text-zinc-900">ECOWARRIORS</span>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
             <button 
               onClick={() => setDarkMode(!darkMode)}
               className="p-2.5 bg-zinc-100 rounded-xl text-zinc-500 hover:text-stormy-teal transition-all"
@@ -246,7 +246,7 @@ export const OnboardingLanding: React.FC = () => {
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <div className="flex items-center bg-zinc-100 rounded-xl p-1 mr-2">
+            <div className="flex items-center bg-zinc-100 rounded-xl p-1">
               <button 
                 onClick={() => setLanguage('es')}
                 className={cn(
@@ -268,13 +268,13 @@ export const OnboardingLanding: React.FC = () => {
             </div>
             <button 
               onClick={() => handleOpenAuth('login')}
-              className="px-6 py-2.5 rounded-2xl border border-zinc-300 bg-white text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-500 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:text-white"
+              className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl border border-zinc-300 bg-white text-xs sm:text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-500 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:text-white"
             >
               {t('landing.login')}
             </button>
             <button 
               onClick={() => handleOpenAuth('signup')}
-              className="px-6 py-2.5 bg-emerald-action text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-xl shadow-emerald-action/10 hover:scale-105 active:scale-95 transition-all"
+              className="px-4 sm:px-6 py-2 sm:py-2.5 bg-emerald-action text-white rounded-2xl text-xs sm:text-sm font-black uppercase tracking-widest shadow-xl shadow-emerald-action/10 hover:scale-105 active:scale-95 transition-all"
             >
               {t('landing.signup')}
             </button>
@@ -283,7 +283,7 @@ export const OnboardingLanding: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="landing-brand-hero relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-12 overflow-hidden">
+      <section className="landing-brand-hero relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-36 sm:pt-32 pb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-gradient-to-b from-white/20 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
@@ -292,14 +292,14 @@ export const OnboardingLanding: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 text-center max-w-4xl mx-auto space-y-8"
+          className="relative z-10 text-center max-w-4xl mx-auto space-y-6 sm:space-y-8"
         >
           <div className="landing-brand-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
             <Activity className="w-4 h-4" />
             {t('landing.hero_badge')}
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-display font-black text-white tracking-tighter leading-[0.9] uppercase">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-black text-white tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase">
             {t('landing.hero_title_1')} <span className="text-emerald-action">{t('landing.hero_title_2')}</span>, <br />
             <span className="relative">
               {t('landing.hero_title_3')}
@@ -312,12 +312,12 @@ export const OnboardingLanding: React.FC = () => {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/85 font-medium max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl md:text-2xl text-white/85 font-medium max-w-2xl mx-auto">
             {t('landing.hero_subtitle')}
           </p>
 
           {/* Team Composition */}
-          <div className="pt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+          <div className="pt-8 sm:pt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 max-w-5xl mx-auto">
             {TEAM_MEMBERS.map((member, idx) => (
               <motion.div
                 key={member.name}
@@ -360,7 +360,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Quiénes Somos */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-zinc-50">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-display font-black tracking-tighter uppercase">{t('landing.about_title')}</h2>
@@ -398,7 +398,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Tu Impacto (ODS) */}
-      <section className="py-24 px-6">
+      <section className="py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="space-y-4">
@@ -414,12 +414,12 @@ export const OnboardingLanding: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex overflow-x-auto no-scrollbar gap-6 pb-8 -mx-6 px-6">
+          <div className="flex overflow-x-auto no-scrollbar gap-4 sm:gap-6 pb-8 -mx-4 sm:-mx-6 px-4 sm:px-6">
             {ODS_ITEMS.map((ods) => (
               <motion.div 
                 key={ods.id}
                 className={cn(
-                  "shrink-0 w-64 p-8 rounded-[3rem] space-y-6 transition-all duration-500 !bg-opacity-100",
+                   "shrink-0 w-[min(85vw,16rem)] sm:w-64 p-5 sm:p-8 rounded-[2rem] sm:rounded-[3rem] space-y-4 sm:space-y-6 transition-all duration-500 !bg-opacity-100",
                   ods.bg
                 )}
               >
@@ -438,7 +438,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Educación Hídrica */}
-      <section className="py-24 px-6 bg-stormy-teal landing-teal-section text-white overflow-hidden relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-stormy-teal landing-teal-section text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-action/10 rounded-full -mr-48 -mt-48 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-maya-blue/10 rounded-full -ml-48 -mb-48 blur-3xl" />
 
@@ -473,7 +473,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Agradecimientos y galería */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-zinc-50">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-6 text-center">
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-tight">
@@ -546,8 +546,8 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Seguridad */}
-      <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto bg-zinc-50 p-10 md:p-16 rounded-[4rem] border border-zinc-200 space-y-10">
+      <section className="py-16 sm:py-24 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto bg-zinc-50 p-6 sm:p-10 md:p-16 rounded-[2.5rem] sm:rounded-[4rem] border border-zinc-200 space-y-8 sm:space-y-10">
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 bg-stormy-teal rounded-3xl flex items-center justify-center text-white shadow-lg shadow-stormy-teal/10 shrink-0">
               <ShieldCheck className="w-8 h-8" />
@@ -602,7 +602,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Directorio Útil */}
-      <section className="py-24 px-6 bg-zinc-50">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-zinc-50">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
@@ -631,7 +631,7 @@ export const OnboardingLanding: React.FC = () => {
             </div>
           </div>
 
-          <div className="landing-brand-cta p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
+          <div className="landing-brand-cta p-6 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] text-white space-y-6 sm:space-y-8 shadow-2xl shadow-stormy-teal/10">
             <h3 className="text-3xl font-display font-black tracking-tighter uppercase leading-tight">
               {t('landing.ready_title')}
             </h3>
@@ -642,7 +642,7 @@ export const OnboardingLanding: React.FC = () => {
               disabled={!securityChecked}
               onClick={() => handleOpenAuth('signup')}
               className={cn(
-                "w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 transition-all shadow-xl",
+                "w-full py-5 sm:py-6 rounded-3xl font-black text-base sm:text-xl flex items-center justify-center gap-3 sm:gap-4 transition-all shadow-xl",
                 securityChecked 
                   ? "bg-emerald-action text-white hover:scale-105 hover:brightness-110 active:scale-95" 
                   : "bg-black/20 text-white/40 cursor-not-allowed opacity-60"
