@@ -226,7 +226,7 @@ export const OnboardingLanding: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center">
+            <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:bg-slate-800 dark:ring-slate-600">
               <img
                 src={ECOWARRIORS_LOGO_URL}
                 alt="Logo EcoWarriors"

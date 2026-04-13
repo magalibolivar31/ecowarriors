@@ -1557,6 +1557,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('app_lang') as Language) || 'es');
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(() => localStorage.getItem('app_notifications') !== 'false');
   const [privacyMode, setPrivacyMode] = useState<PrivacyMode>(() => (localStorage.getItem('app_privacy') as PrivacyMode) || 'active');
+  // Product requirement: always start in light mode on each app load.
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
@@ -1572,7 +1573,6 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [privacyMode]);
 
   useEffect(() => {
-    localStorage.setItem('app_dark_mode', darkMode.toString());
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
