@@ -535,6 +535,43 @@ html:not(.dark) .bg-blue-900 {
   border-color: color-mix(in srgb, var(--border) 75%, transparent) !important;
 }
 
+/* Preserve high-contrast emergency palette in Crisis Mode. */
+.crisis-mode .text-yellow-400 {
+  color: #facc15 !important;
+}
+
+.crisis-mode .text-yellow-300 {
+  color: #fde047 !important;
+}
+
+.crisis-mode .bg-yellow-400 {
+  background-color: #facc15 !important;
+}
+
+.crisis-mode .bg-yellow-400\/40 {
+  background-color: rgb(250 204 21 / 0.4) !important;
+}
+
+.crisis-mode .border-yellow-400 {
+  border-color: #facc15 !important;
+}
+
+.crisis-mode .border-yellow-300 {
+  border-color: #fde047 !important;
+}
+
+.crisis-mode .border-yellow-400\/30 {
+  border-color: rgb(250 204 21 / 0.3) !important;
+}
+
+.crisis-mode .border-yellow-400\/40 {
+  border-color: rgb(250 204 21 / 0.4) !important;
+}
+
+.crisis-mode .border-yellow-400\/50 {
+  border-color: rgb(250 204 21 / 0.5) !important;
+}
+
 .dark .dark\:bg-slate-600,
 .dark .dark\:bg-slate-700,
 .dark .dark\:bg-slate-800,
