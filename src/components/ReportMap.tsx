@@ -328,21 +328,21 @@ export const ReportMap: React.FC<ReportMapProps> = ({
       )}
 
       {showMineEmptyState && (
-        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-white/85 dark:bg-dark-teal/85 rounded-[2rem] sm:rounded-[3rem]">
-          <div className="w-full max-w-md text-center rounded-3xl border border-stormy-teal/20 dark:border-stormy-teal/40 bg-white/90 dark:bg-stormy-teal/90 backdrop-blur-md shadow-2xl px-6 py-8 sm:px-8 sm:py-10 space-y-4">
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-emerald-400/20 flex items-center justify-center">
-              <MapPin className="w-7 h-7 text-emerald-700 dark:text-emerald-300" />
+        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-zinc-900/55 dark:bg-black/60 backdrop-blur-sm rounded-[2rem] sm:rounded-[3rem]">
+          <div className="w-full max-w-md text-center rounded-3xl border border-white/10 bg-zinc-900/95 dark:bg-zinc-950/95 shadow-2xl shadow-black/40 px-6 py-8 sm:px-8 sm:py-10 space-y-4">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
+              <MapPin className="w-7 h-7 text-zinc-100" />
             </div>
-            <p className="text-sm sm:text-base font-black text-zinc-700 dark:text-zinc-100 uppercase tracking-widest">
+            <p className="text-sm sm:text-base font-black text-zinc-100 uppercase tracking-widest">
               {t('map.no_my_reports_found')}
             </p>
-            <p className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            <p className="text-sm font-semibold text-zinc-200 leading-relaxed">
               {t('map.no_my_reports_cta')}
             </p>
-            <p className="text-xs font-bold text-stormy-teal dark:text-maya-blue uppercase tracking-wide">
+            <p className="text-xs font-bold text-zinc-300 uppercase tracking-wide">
               {t('map.no_my_reports_support')}
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-200 text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-action text-white text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-action/40 ring-1 ring-white/10">
               <Activity className="w-3.5 h-3.5 animate-pulse" />
               {t('map.no_my_reports_action')}
             </div>
