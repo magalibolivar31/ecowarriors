@@ -232,17 +232,82 @@ const CAROUSEL_CARDS: CarouselCard[] = [
   }
 ];
 
+const FEEDBACK_FORM_URL = 'https://forms.gle/yTVGetUWAwyG7JbbA';
+
 // --- Components ---
 
 const Modal = ({ isOpen, onClose, children, title }: { isOpen: boolean; onClose: () => void; children: React.ReactNode; title?: string }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previouslyFocused = document.activeElement;
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex^="-"])'
+    ].join(', ');
+
+    const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? [];
+    const firstFocusable = focusableElements[0] ?? null;
+    const lastFocusable = focusableElements[focusableElements.length - 1] ?? null;
+    const fallbackFocusable = modalRef.current;
+
+    const initialFocusTimeout = window.setTimeout(() => {
+      (firstFocusable ?? fallbackFocusable)?.focus();
+    }, 0);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        if (!focusableElements.length) {
+          event.preventDefault();
+          fallbackFocusable?.focus();
+          return;
+        }
+
+        if (event.shiftKey && firstFocusable && document.activeElement === firstFocusable) {
+          event.preventDefault();
+          (lastFocusable ?? fallbackFocusable)?.focus();
+        } else if (!event.shiftKey && lastFocusable && document.activeElement === lastFocusable) {
+          event.preventDefault();
+          (firstFocusable ?? fallbackFocusable)?.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.clearTimeout(initialFocusTimeout);
+      document.removeEventListener('keydown', handleKeyDown);
+      if (previouslyFocused && document.contains(previouslyFocused) && 'focus' in previouslyFocused && typeof previouslyFocused.focus === 'function') {
+        previouslyFocused.focus();
+      }
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
   return (
     <div className="modal-overlay">
       <motion.div 
+        ref={modalRef}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title || 'Modal'}
+        tabIndex={-1}
       >
         <div className="flex items-center justify-between p-6 border-b border-zinc-100 bg-brand-bg/50">
           <h3 className="text-xl font-display font-black text-stormy-teal uppercase tracking-tighter">{title}</h3>
@@ -507,6 +572,7 @@ function AppContent() {
   const [isSquadModalOpen, setIsSquadModalOpen] = useState(false);
   const [editingSquadId, setEditingSquadId] = useState<string | null>(null);
   const [isAttendeesModalOpen, setIsAttendeesModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [selectedSquadForAttendees, setSelectedSquadForAttendees] = useState<Squad | null>(null);
   const [squadAttendeesProfiles, setSquadAttendeesProfiles] = useState<any[]>([]);
   const [postType, setPostType] = useState<PostType | null>(null);
@@ -545,6 +611,11 @@ function AppContent() {
   const [pendingAnalysis, setPendingAnalysis] = useState<ReportAnalysis | null>(null);
   const [descriptionError, setDescriptionError] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+
+  const handleOpenFeedbackForm = () => {
+    window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
+    setIsFeedbackModalOpen(false);
+  };
 
   // Search & Filter
   const [filterType, setFilterType] = useState<PostType | null>(null);
@@ -1342,6 +1413,16 @@ function AppContent() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsFeedbackModalOpen(true)}
+              className="p-2.5 bg-zinc-50 text-zinc-700 rounded-xl hover:bg-zinc-100 transition-all flex items-center gap-2"
+              title={t('feedback.button')}
+              aria-label={t('feedback.button')}
+            >
+              <MessageSquare className="w-5 h-5" />
+              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">{t('feedback.button')}</span>
+            </button>
+
             <button 
               onClick={() => setIsCrisisMode(true)}
               className="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all flex items-center gap-2"
@@ -2872,6 +2953,30 @@ function AppContent() {
           </div>
         )}
       </AnimatePresence>
+
+      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title={t('feedback.title')}>
+        <div className="space-y-6">
+          <p className="text-zinc-600 dark:text-slate-300 leading-relaxed">
+            {t('feedback.description')}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={handleOpenFeedbackForm}
+              className="btn-primary w-full sm:flex-1 text-center"
+              aria-label={t('feedback.respond_form_new_tab')}
+              title={t('feedback.respond_form_new_tab')}
+            >
+              {t('feedback.respond_form')}
+            </button>
+            <button
+              onClick={() => setIsFeedbackModalOpen(false)}
+              className="btn-secondary w-full sm:flex-1 text-center"
+            >
+              {t('common.close')}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       <Modal isOpen={isVolunteerModalOpen} onClose={() => setIsVolunteerModalOpen(false)} title={t('community.volunteer_signup')}>
         <form onSubmit={handleRegisterVolunteer} className="space-y-8 p-4">
