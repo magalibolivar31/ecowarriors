@@ -349,7 +349,7 @@ function AppContent() {
     }
   };
 
-  const handleCancelReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
+  const handleOwnerDeleteReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
     setDeletingReportIds((prev) => new Set(prev).add(reportId));
     try {
       await deleteReport(reportId, reportType);
@@ -359,8 +359,8 @@ function AppContent() {
         next.delete(reportId);
         return next;
       });
-      console.error('Error cancelando reporte:', e);
-      showAlert(t('common.error'), t('dashboard.cancel_error'));
+      console.error('Error eliminando reporte:', e);
+      showAlert(t('common.error'), t('dashboard.delete_error'));
     }
   };
 
@@ -379,7 +379,7 @@ function AppContent() {
     }
   };
 
-  const handleCancelPost = async (postId: string) => {
+  const handleOwnerDeletePost = async (postId: string) => {
     setDeletingPostIds((prev) => new Set(prev).add(postId));
     try {
       await deleteMarketplacePost(postId);
@@ -389,7 +389,7 @@ function AppContent() {
         next.delete(postId);
         return next;
       });
-      console.error('Error cancelando post:', e);
+      console.error('Error eliminando post:', e);
     }
   };
 
@@ -2265,7 +2265,7 @@ function AppContent() {
                           isAdmin={isAdmin}
                           currentUserId={currentUserId}
                           onDeleteReport={handleDeleteReport}
-                          onCancelReport={handleCancelReport}
+                          onCancelReport={handleOwnerDeleteReport}
                         />
                       </motion.div>
                     ))}
@@ -2507,7 +2507,7 @@ function AppContent() {
                                   showConfirm(
                                     t('common.confirm'),
                                     t('dashboard.post_cancel_confirm'),
-                                    () => handleCancelPost(post.id)
+                                    () => handleOwnerDeletePost(post.id)
                                   );
                                 }}
                                 className="absolute top-2 right-2 p-1.5 bg-zinc-400 hover:bg-zinc-500 text-white rounded-full shadow-lg z-10 transition-colors"
