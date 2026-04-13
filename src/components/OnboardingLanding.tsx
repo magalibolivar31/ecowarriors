@@ -644,7 +644,7 @@ export const OnboardingLanding: React.FC = () => {
               className={cn(
                 "w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 transition-all shadow-xl",
                 securityChecked 
-                  ? "bg-emerald-action text-white hover:scale-105 hover:bg-emerald-500 active:scale-95" 
+                  ? "bg-emerald-action text-white hover:scale-105 hover:brightness-110 active:scale-95" 
                   : "bg-black/20 text-white/40 cursor-not-allowed opacity-60"
               )}
             >

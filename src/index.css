@@ -80,6 +80,8 @@
   --card-radius: 2rem;
   --card-shadow: 0 8px 20px -16px rgba(2, 65, 83, 0.25);
   --mobile-tab-bar-height: 5.25rem;
+  --landing-brand-hero-gradient: linear-gradient(145deg, #024153 0%, #0b3f4e 45%, #126b69 100%);
+  --landing-brand-cta-gradient: linear-gradient(155deg, #024153 0%, #0b4a55 50%, #126b69 100%);
 }
 
 .dark {
@@ -556,17 +558,17 @@ html:not(.dark) .bg-blue-900 {
 /* ===== Landing Dark Mode Fixes ===== */
 
 .landing-brand-hero {
-  background: linear-gradient(145deg, #024153 0%, #0b3f4e 45%, #126b69 100%) !important;
+  background: var(--landing-brand-hero-gradient);
 }
 
 .landing-brand-badge {
-  background-color: color-mix(in srgb, #ffffff 16%, transparent) !important;
-  color: #ffffff !important;
+  background-color: color-mix(in srgb, #ffffff 16%, transparent);
+  color: #ffffff;
   border: 1px solid color-mix(in srgb, #ffffff 28%, transparent);
 }
 
 .landing-brand-cta {
-  background: linear-gradient(155deg, #024153 0%, #0b4a55 50%, #126b69 100%) !important;
+  background: var(--landing-brand-cta-gradient);
   border: 1px solid color-mix(in srgb, #ffffff 14%, transparent);
 }
 
@@ -593,6 +595,6 @@ html:not(.dark) .bg-blue-900 {
 }
 
 .dark .landing-cta-card {
-  background: linear-gradient(155deg, #024153 0%, #0b4a55 50%, #126b69 100%) !important;
+  background: var(--landing-brand-cta-gradient) !important;
   border: 1px solid color-mix(in srgb, #ffffff 14%, transparent);
 }
