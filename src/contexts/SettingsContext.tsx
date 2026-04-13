@@ -345,7 +345,7 @@ const translations: Record<Language, Record<string, string>> = {
     'reports.invalid_coords': 'La ubicación debe contener coordenadas válidas (latitud y longitud).',
     'reports.zone': 'Zona',
     'reports.commitment': 'Compromiso',
-    'reports.undefined': 'Sin definir',
+    'reports.undefined': 'No especificado',
     'reports.optional': 'Opcional',
     'reports.resolved': 'Resuelto',
     'reports.crisis_alert': 'ALERTA DE CRISIS: Sin imagen de evidencia',
@@ -1209,7 +1209,7 @@ const translations: Record<Language, Record<string, string>> = {
     'reports.invalid_coords': 'Location must contain valid coordinates (latitude and longitude).',
     'reports.zone': 'Zone',
     'reports.commitment': 'Commitment',
-    'reports.undefined': 'Undefined',
+    'reports.undefined': 'Not specified',
     'crisis.report_help_text': 'This report helps prioritize community assistance. If there is an imminent life risk, call 911.',
     'crisis.visual_evidence': 'Visual Evidence (Optional)',
     'crisis.report_success': 'Crisis report sent and reflected on the collaborative map.',
@@ -1614,11 +1614,11 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       {/* Global Alert Modal */}
       {alertConfig?.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-stormy-teal/40 backdrop-blur-md">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden p-6 sm:p-8 space-y-6">
+          <div className="bg-white dark:bg-dark-teal w-full max-w-md rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden p-6 sm:p-8 space-y-6">
             <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-maya-blue uppercase tracking-tighter text-center">
               {alertConfig.title}
             </h3>
-            <p className="text-zinc-600 dark:text-slate-300 font-medium text-center">
+            <p className="text-zinc-600 dark:text-maya-blue font-medium text-center">
               {alertConfig.message}
             </p>
             <button
@@ -1634,17 +1634,17 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       {/* Global Confirm Modal */}
       {confirmConfig?.isOpen && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-stormy-teal/40 backdrop-blur-md">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden p-6 sm:p-8 space-y-6">
+          <div className="bg-white dark:bg-dark-teal w-full max-w-md rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden p-6 sm:p-8 space-y-6">
             <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-maya-blue uppercase tracking-tighter text-center">
               {confirmConfig.title}
             </h3>
-            <p className="text-zinc-600 dark:text-slate-300 font-medium text-center">
+            <p className="text-zinc-600 dark:text-maya-blue font-medium text-center">
               {confirmConfig.message}
             </p>
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setConfirmConfig(null)}
-                className="py-4 bg-zinc-100 dark:bg-slate-800 text-zinc-600 dark:text-slate-300 rounded-2xl font-bold uppercase tracking-widest text-xs"
+                className="py-4 bg-zinc-100 dark:bg-stormy-teal text-zinc-600 dark:text-maya-blue rounded-2xl font-bold uppercase tracking-widest text-xs"
               >
                 {t('common.cancel')}
               </button>

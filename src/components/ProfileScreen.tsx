@@ -108,6 +108,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
   const [showAllMissions, setShowAllMissions] = useState(false);
 
   const currentUser = auth.currentUser;
+  const displayOrDefault = (value?: string) => {
+    if (!value) return t('reports.undefined');
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'undefined' || normalized === 'null') return t('reports.undefined');
+    return value;
+  };
 
   useEffect(() => {
     if (!currentUser) return;
@@ -353,12 +359,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
                 <MapPin className="w-4 h-4 text-stormy-teal/40" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.zone')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{profile.zone}</span>
+                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{displayOrDefault(profile.zone)}</span>
               </div>
               <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
                 <Heart className="w-4 h-4 text-rose-500" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.commitment')}</span>
-                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{profile.commitment || t('reports.undefined')}</span>
+                <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{displayOrDefault(profile.commitment)}</span>
               </div>
             </div>
           </div>
