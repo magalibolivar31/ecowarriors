@@ -78,6 +78,11 @@ const formatDisplayValue = (value: string | undefined, fallback: string) => {
   return value;
 };
 
+const getMissionIconTextColor = (missionColor: string) =>
+  missionColor.includes('soft') || missionColor.includes('maya')
+    ? 'text-dark-teal'
+    : 'text-white';
+
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMyReports, missions }) => {
   const { t, language, setLanguage, notificationsEnabled, setNotificationsEnabled, privacyMode, setPrivacyMode, darkMode, setDarkMode, showAlert } = useSettings();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -480,7 +485,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       onClick={() => setSelectedMission(mission)}
                       className="w-full p-4 sm:p-5 bg-zinc-50 rounded-[1.5rem] sm:rounded-[2rem] border border-zinc-100 dark:border-slate-600 flex items-center gap-4 group hover:bg-white hover:shadow-lg transition-all text-left"
                     >
-                      <div className={cn("p-3 rounded-2xl text-white shadow-lg relative shrink-0", mission.color)}>
+                      <div className={cn("p-3 rounded-2xl shadow-lg relative shrink-0", mission.color, getMissionIconTextColor(mission.color))}>
                         <mission.icon className="w-5 h-5" />
                         {mission.status === 'completed' && (
                           <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-action rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center">
@@ -587,7 +592,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className={cn("p-4 rounded-2xl text-white shadow-lg", selectedMission.color)}>
+                  <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextColor(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
                   </div>
                   <button 
@@ -603,10 +608,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                     {t(`mission.title_${selectedMission.id}`)}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest theme-badge-accent">
                       {selectedMission.reward} {t('mission.reward_label')}
                     </span>
-                    <span className="px-3 py-1 bg-zinc-100 text-zinc-500 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest theme-badge-neutral">
                       {selectedMission.status === 'in-progress' ? t('mission.status_in_progress') : t('mission.status_available')}
                     </span>
                   </div>
@@ -625,12 +630,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       {t(`mission.obj_${selectedMission.id}`)}
                     </p>
                   </div>
-                  <div className="p-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl border border-emerald-100 dark:border-emerald-900/30 space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+                  <div className="p-6 rounded-3xl border space-y-2 theme-soft-card">
+                    <div className="flex items-center gap-2">
                       <Info className="w-4 h-4" />
                       <p className="text-[10px] font-black uppercase tracking-widest">{t('mission.suggested_action')}</p>
                     </div>
-                    <p className="text-emerald-800 dark:text-emerald-200 font-bold text-sm">
+                    <p className="font-bold text-sm">
                       {t(`mission.action_${selectedMission.id}`)}
                     </p>
                   </div>

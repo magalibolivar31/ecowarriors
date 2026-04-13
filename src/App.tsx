@@ -135,6 +135,10 @@ type Tab = 'DASHBOARD' | 'REPORTES' | 'COMUNIDAD' | 'MAPA' | 'CHATBOT' | 'PERFIL
 const TABS_WITH_SENSOR: Tab[] = ['REPORTES', 'MAPA', 'COMUNIDAD'];
 type Tag = 'ropa' | 'comida' | 'otros';
 type PostType = 'doy' | 'recibo';
+const getMissionIconTextColor = (missionColor: string) =>
+  missionColor.includes('soft') || missionColor.includes('maya')
+    ? 'text-dark-teal'
+    : 'text-white';
 
 interface Post {
   id: string;
@@ -2086,7 +2090,7 @@ function AppContent() {
                               "bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] border shadow-sm flex flex-col sm:flex-row items-start gap-8 sm:gap-10 cursor-pointer group transition-all border-zinc-100 hover:shadow-md"
                             )}
                           >
-                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white text-white", mission.color)}>
+                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white", mission.color, getMissionIconTextColor(mission.color))}>
                               <mission.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                             </div>
                             <div className="flex-1 space-y-4 sm:space-y-6">
@@ -2889,7 +2893,7 @@ function AppContent() {
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className={cn("p-4 rounded-2xl text-white shadow-lg", selectedMission.color)}>
+                  <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextColor(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
                   </div>
                   <button 
@@ -2905,10 +2909,10 @@ function AppContent() {
                     {t(`mission.title_${selectedMission.id}`)}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest theme-badge-accent">
                       {selectedMission.reward} {t('mission.reward_label')}
                     </span>
-                    <span className="px-3 py-1 bg-zinc-100 text-zinc-500 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest theme-badge-neutral">
                       {selectedMission.status === 'completed' ? t('common.completed') : t('common.in_progress')}
                     </span>
                   </div>
@@ -2927,12 +2931,12 @@ function AppContent() {
                       {t(`mission.obj_${selectedMission.id}`)}
                     </p>
                   </div>
-                  <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-700">
+                  <div className="p-6 rounded-3xl border space-y-2 theme-soft-card">
+                    <div className="flex items-center gap-2">
                       <Info className="w-4 h-4" />
                       <p className="text-[10px] font-black uppercase tracking-widest">{t('common.rocco_suggestion')}</p>
                     </div>
-                    <p className="text-emerald-800 font-bold text-sm">
+                    <p className="font-bold text-sm">
                       {t(`mission.action_${selectedMission.id}`)}
                     </p>
                   </div>
