@@ -46,6 +46,20 @@ import {
 } from './marketplaceService';
 
 describe('marketplaceService', () => {
+  const withThrowingSpreadField = (
+    message: string,
+    baseData: Record<string, unknown> = {},
+  ): Record<string, unknown> => {
+    const data = { ...baseData };
+    Object.defineProperty(data, 'brokenField', {
+      enumerable: true,
+      get() {
+        throw new Error(message);
+      },
+    });
+    return data;
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     firebaseMocks.auth.currentUser = { uid: 'user-1' };
@@ -148,7 +162,7 @@ describe('marketplaceService', () => {
             id: 'p2',
             data: () => ({
               title: 'Con imageUrl',
-              imageUrl: 'marketplace/b.jpg',
+              imageUrl: '/marketplace/b.jpg',
             }),
           },
           {
@@ -178,7 +192,7 @@ describe('marketplaceService', () => {
       {
         id: 'p2',
         title: 'Con imageUrl',
-        imageUrl: 'marketplace/b.jpg',
+        imageUrl: '/marketplace/b.jpg',
         images: ['https://cdn.test/ref:marketplace/b.jpg'],
       },
       {
@@ -188,6 +202,224 @@ describe('marketplaceService', () => {
         images: ['https://cdn.test/ref:marketplace/c.jpg'],
       },
     ]);
+  });
+
+  it('subscribeToMarketplace descarta imágenes no resolubles de storage', async () => {
+    const callback = vi.fn();
+
+    storageMocks.getDownloadURL.mockRejectedValueOnce(new Error('missing file'));
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'p1',
+            data: () => ({
+              title: 'Con imagen inválida',
+              images: ['marketplace/not-found.jpg', 'https://img.test/ok.jpg'],
+            }),
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'p1',
+        title: 'Con imagen inválida',
+        images: ['https://img.test/ok.jpg'],
+      },
+    ]);
+  });
+
+  it('subscribeToMarketplace ignora imágenes vacías en la resolución', async () => {
+    const callback = vi.fn();
+    const nativeFilter = Array.prototype.filter;
+    const filterSpy = vi.spyOn(Array.prototype, 'filter').mockImplementation(function (
+      this: unknown[],
+      predicate: (value: unknown, index: number, array: unknown[]) => unknown,
+      thisArg?: unknown,
+    ) {
+      const filtered = nativeFilter.call(this, predicate, thisArg);
+      if (
+        this.includes('https://img.test/ok.jpg')
+        && this.includes('')
+        && !filtered.includes('')
+      ) {
+        return [...filtered, ''] as unknown[];
+      }
+      return filtered;
+    });
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'p1',
+            data: () => ({
+              title: 'Con imagen vacía',
+              images: ['', 'https://img.test/ok.jpg'],
+            }),
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'p1',
+        title: 'Con imagen vacía',
+        images: ['https://img.test/ok.jpg'],
+      },
+    ]);
+
+    filterSpy.mockRestore();
+  });
+
+  it('subscribeToMarketplace descarta respuestas atrasadas exitosas', async () => {
+    const callback = vi.fn();
+    let resolveFirstImage: ((value: string) => void) | undefined;
+
+    storageMocks.getDownloadURL
+      .mockImplementationOnce(() => new Promise((resolve) => {
+        resolveFirstImage = resolve;
+      }))
+      .mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'old',
+            data: () => ({
+              title: 'Antigua',
+              images: ['marketplace/slow.jpg'],
+            }),
+          },
+        ],
+      });
+      void onNext({
+        docs: [
+          {
+            id: 'new',
+            data: () => ({
+              title: 'Nueva',
+            }),
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledWith([{ id: 'new', title: 'Nueva' }]);
+    });
+
+    resolveFirstImage?.('https://cdn.test/ref:marketplace/slow.jpg');
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('subscribeToMarketplace descarta fallback atrasado cuando falla snapshot viejo', async () => {
+    const callback = vi.fn();
+    let resolveFirstImage: ((value: string) => void) | undefined;
+
+    storageMocks.getDownloadURL
+      .mockImplementationOnce(() => new Promise((resolve) => {
+        resolveFirstImage = resolve;
+      }))
+      .mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
+
+    const staleData = withThrowingSpreadField('Snapshot data read failed', {
+      title: 'Snapshot viejo',
+      images: ['marketplace/slow.jpg'],
+    });
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'old',
+            data: () => staleData,
+          },
+        ],
+      });
+      void onNext({
+        docs: [
+          {
+            id: 'new',
+            data: () => ({
+              title: 'Snapshot nuevo',
+            }),
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledWith([{ id: 'new', title: 'Snapshot nuevo' }]);
+    });
+
+    resolveFirstImage?.('https://cdn.test/ref:marketplace/slow.jpg');
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+    expect(firebaseMocks.handleFirestoreError).not.toHaveBeenCalled();
+  });
+
+  it('subscribeToMarketplace usa fallback cuando falla el procesamiento del snapshot', async () => {
+    const callback = vi.fn();
+    const snapshotData = vi
+      .fn()
+      .mockReturnValueOnce(withThrowingSpreadField('Snapshot data read failed'))
+      .mockReturnValueOnce({ title: 'Fallback post' });
+
+    firestoreMocks.onSnapshot.mockImplementationOnce((_query, onNext) => {
+      void onNext({
+        docs: [
+          {
+            id: 'p1',
+            data: snapshotData,
+          },
+        ],
+      });
+      return vi.fn();
+    });
+
+    subscribeToMarketplace(callback);
+
+    await vi.waitFor(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledWith(
+      expect.any(Error),
+      firebaseMocks.OperationType.LIST,
+      'marketplace',
+    );
+    expect(callback).toHaveBeenCalledWith([{ id: 'p1', title: 'Fallback post' }]);
   });
 
   it('subscribeToMarketplace llama handleFirestoreError en error', () => {
