@@ -363,7 +363,7 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
       
       {validReports.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center 
-                        bg-white/80 dark:bg-zinc-900/80 z-[999] rounded-[2rem]">
+                        bg-white/80 dark:bg-dark-teal/80 z-[999] rounded-[2rem]">
           <div className="text-center space-y-2">
             <MapPin className="w-10 h-10 text-zinc-300 mx-auto" />
             <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">

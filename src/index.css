@@ -331,11 +331,6 @@ html:not(.dark) .bg-blue-900 {
 .bg-purple-500,
 .bg-red-50,
 .bg-red-100,
-.bg-red-500,
-.bg-red-600,
-.bg-red-700,
-.bg-red-800,
-.bg-red-900,
 .bg-amber-50,
 .bg-amber-100,
 .bg-amber-500,
@@ -349,12 +344,6 @@ html:not(.dark) .bg-blue-900 {
   background-color: var(--surface-muted) !important;
 }
 
-.bg-red-500\/20,
-.bg-red-500\/30,
-.bg-red-600\/20,
-.bg-red-700\/60,
-.bg-red-800\/40,
-.bg-red-900\/40,
 .bg-amber-400\/10,
 .bg-amber-50\/50,
 .bg-amber-500\/20,
@@ -368,13 +357,6 @@ html:not(.dark) .bg-blue-900 {
 .text-sky-500,
 .text-purple-500,
 .text-purple-600,
-.text-red-200,
-.text-red-300,
-.text-red-400,
-.text-red-500,
-.text-red-600,
-.text-red-700,
-.text-red-900,
 .text-amber-400,
 .text-amber-500,
 .text-amber-600,
@@ -392,13 +374,6 @@ html:not(.dark) .bg-blue-900 {
 }
 
 .border-blue-100,
-.border-red-100,
-.border-red-200,
-.border-red-300,
-.border-red-400,
-.border-red-500,
-.border-red-600,
-.border-red-700,
 .border-amber-100,
 .border-amber-200,
 .border-amber-500,
@@ -409,10 +384,6 @@ html:not(.dark) .bg-blue-900 {
   border-color: var(--border) !important;
 }
 
-.border-red-400\/20,
-.border-red-400\/30,
-.border-red-500\/30,
-.border-red-500\/50,
 .border-yellow-400\/30,
 .border-rose-900\/30 {
   border-color: color-mix(in srgb, var(--border) 75%, transparent) !important;

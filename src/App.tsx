@@ -1404,7 +1404,7 @@ function AppContent() {
 
   return (
     <div className={cn("min-h-screen flex flex-col transition-colors duration-300",
-      darkMode ? "bg-zinc-900 text-white" : "bg-brand-bg text-zinc-900"
+      darkMode ? "bg-brand-bg text-white" : "bg-brand-bg text-zinc-900"
     )}>
       {/* Top Header */}
       <header className="bg-white border-b border-zinc-100 sticky top-0 z-50 shadow-sm">
