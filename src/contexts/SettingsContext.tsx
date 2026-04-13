@@ -295,7 +295,7 @@ const translations: Record<Language, Record<string, string>> = {
     'reports.visual_evidence': 'Evidencia Visual',
     'reports.location_label': 'Ubicación',
     'reports.location_not_detected': 'Ubicación no detectada',
-    'reports.analyze_button': 'Analizar con IA',
+    'reports.analyze_button': 'Enviar reporte',
     'reports.upload_photo': 'Subir Foto',
     'reports.getting_gps': 'Obteniendo GPS...',
     'reports.geolocation_not_supported': 'Geolocalización no compatible.',
