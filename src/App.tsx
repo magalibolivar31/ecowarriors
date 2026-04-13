@@ -2860,7 +2860,7 @@ function AppContent() {
 
       {/* Global Floating Action Button: Sensor Activo */}
       {TABS_WITH_SENSOR.includes(activeTab) && (
-        <div className="fixed bottom-[calc(var(--mobile-tab-bar-height)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
+        <div className="fixed bottom-[calc(var(--mobile-tab-bar-height,5.25rem)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
           <button 
             onClick={() => { resetForm(); setIsReportModalOpen(true); }}
             aria-label={`${t('common.active_sensor')} - ${t('common.report')}`}
