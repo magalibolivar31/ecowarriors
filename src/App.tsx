@@ -2853,6 +2853,7 @@ function AppContent() {
                     currentUser={user}
                     reportsReady={reportsReady}
                     hasMyReports={hasMineReports}
+                    onCreateReport={() => { resetForm(); setIsReportModalOpen(true); }}
                     onSelectReport={(report) => setSelectedReportForDetail(report)} 
                   />
                 );
