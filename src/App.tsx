@@ -2106,7 +2106,7 @@ function AppContent() {
                                 />
                               </div>
                               <button 
-                                className="bg-zinc-900 dark:bg-maya-blue text-white dark:text-stormy-teal px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-maya-blue/90 transition-all flex items-center gap-2 sm:gap-3 group-hover:scale-105 shadow-xl shadow-zinc-200 dark:shadow-none"
+                                className="bg-stormy-teal text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-stormy-teal/90 transition-all flex items-center gap-2 sm:gap-3 group-hover:scale-105 shadow-lg shadow-stormy-teal/20"
                               >
                                 {t('community.view_detail')}
                                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -2389,33 +2389,33 @@ function AppContent() {
               className="space-y-8 sm:space-y-12"
             >
               {/* 1. Volunteer Registration Block */}
-              <section className="bg-emerald-action rounded-[2.5rem] sm:rounded-[3rem] p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 sm:w-80 h-64 sm:h-80 bg-white/10 rounded-full -mr-32 sm:-mr-40 -mt-32 sm:-mt-40 blur-3xl" />
+              <section className="bg-white rounded-[2.5rem] sm:rounded-[3rem] p-8 sm:p-12 border border-zinc-100 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 sm:w-80 h-64 sm:h-80 bg-emerald-action/10 rounded-full -mr-32 sm:-mr-40 -mt-32 sm:-mt-40 blur-3xl" />
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 sm:gap-12">
-                  <div className="bg-white/20 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] backdrop-blur-md shadow-inner shrink-0">
-                    <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
+                  <div className="bg-emerald-action/10 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] shadow-inner shrink-0">
+                    <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-emerald-action" />
                   </div>
                   <div className="flex-1 text-center md:text-left space-y-3 sm:space-y-4">
-                    <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight uppercase leading-tight">{t('community.volunteer_reg')}</h2>
-                    <p className="text-emerald-50 text-base sm:text-xl font-medium max-w-2xl leading-relaxed">
+                    <h2 className="text-3xl sm:text-4xl font-display font-black tracking-tight uppercase leading-tight text-stormy-teal">{t('community.volunteer_reg')}</h2>
+                    <p className="text-zinc-600 text-base sm:text-xl font-medium max-w-2xl leading-relaxed">
                       {t('community.volunteer_desc')}
                     </p>
                   </div>
                   <div className="shrink-0 w-full md:w-auto">
                     {checkingVolunteer ? (
-                      <div className="bg-white/20 px-8 py-4 rounded-2xl backdrop-blur-md flex items-center justify-center gap-3">
+                      <div className="bg-zinc-50 px-8 py-4 rounded-2xl flex items-center justify-center gap-3 border border-zinc-100">
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span className="font-black uppercase tracking-widest text-xs">{t('community.verifying')}</span>
+                        <span className="font-black uppercase tracking-widest text-xs text-stormy-teal">{t('community.verifying')}</span>
                       </div>
                     ) : isVolunteer ? (
-                      <div className="bg-white/30 border border-white/40 px-8 py-4 rounded-2xl backdrop-blur-md flex items-center justify-center gap-3">
-                        <CheckCircle2 className="w-6 h-6 text-white" />
-                        <span className="font-black uppercase tracking-widest text-xs">{t('community.already_volunteer')}</span>
+                      <div className="bg-zinc-50 border border-zinc-100 px-8 py-4 rounded-2xl flex items-center justify-center gap-3">
+                        <CheckCircle2 className="w-6 h-6 text-emerald-action" />
+                        <span className="font-black uppercase tracking-widest text-xs text-stormy-teal">{t('community.already_volunteer')}</span>
                       </div>
                     ) : (
                       <button
                         onClick={() => setIsVolunteerModalOpen(true)}
-                        className="w-full md:w-auto bg-white text-emerald-action px-10 py-5 rounded-2xl font-black text-lg sm:text-xl hover:bg-emerald-50 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                        className="w-full md:w-auto bg-stormy-teal text-white px-10 py-5 rounded-2xl font-black text-lg sm:text-xl hover:bg-stormy-teal/90 transition-all shadow-lg shadow-stormy-teal/20 hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
                       >
                         {t('community.want_to_help')}
                         <ArrowRight className="w-5 h-5" />
@@ -2452,17 +2452,15 @@ function AppContent() {
                   </div>
 
                   {/* Banner explicativo del marketplace */}
-                  <div className="bg-gradient-to-r from-emerald-50 to-teal-50 
-                                  dark:from-emerald-900/20 dark:to-teal-900/20
-                                  border border-emerald-100 dark:border-emerald-800/30
+                  <div className="bg-white border border-zinc-100
                                   rounded-[2rem] p-6 sm:p-8 mb-6">
                     <div className="flex items-start gap-4">
                       <div className="p-3 bg-emerald-action/10 rounded-2xl shrink-0">
                         <Heart className="w-6 h-6 text-emerald-action" />
                       </div>
                       <div className="space-y-2">
-                        <h3 className="font-black text-stormy-teal dark:text-emerald-300 
-                                       uppercase tracking-tight text-sm sm:text-base">
+                          <h3 className="font-black text-stormy-teal 
+                                        uppercase tracking-tight text-sm sm:text-base">
                           {t('community.marketplace_title')}
                         </h3>
                         <p className="text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm 
@@ -2769,14 +2767,14 @@ function AppContent() {
                     )}
                   </div>
 
-                  <div className="bg-zinc-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+                  <div className="bg-white rounded-[2.5rem] p-8 border border-zinc-100 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-100/40 rounded-full -mr-16 -mt-16 blur-2xl" />
                     <div className="relative z-10 space-y-4">
                       <div className="flex items-center gap-3">
                         <Info className="w-5 h-5 text-amber-400" />
-                        <h5 className="font-black text-xs uppercase tracking-widest">{t('community.what_is_squad')}</h5>
+                        <h5 className="font-black text-xs uppercase tracking-widest text-stormy-teal">{t('community.what_is_squad')}</h5>
                       </div>
-                      <p className="text-xs text-white/60 leading-relaxed font-medium">
+                      <p className="text-xs text-zinc-600 leading-relaxed font-medium">
                         {t('community.squad_desc')}
                       </p>
                     </div>
@@ -2860,22 +2858,20 @@ function AppContent() {
     </div>
 
       {/* Global Floating Action Button: Sensor Activo */}
-      <div className="fixed bottom-[5.25rem] sm:bottom-8 right-4 sm:right-8 z-[55]">
-        <button 
-          onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-          className="flex items-center gap-2 sm:gap-3 bg-emerald-action text-white p-3 sm:px-5 sm:py-3.5 rounded-2xl font-black shadow-lg hover:bg-stormy-teal active:scale-95 transition-colors border-2 border-white"
-        >
-          <div className="flex items-center gap-3">
-            <div>
-              <Camera className="w-5 h-5 sm:w-7 sm:h-7" />
+      {(activeTab === 'REPORTES' || activeTab === 'MAPA' || activeTab === 'COMUNIDAD') && (
+        <div className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom))] sm:bottom-6 right-4 sm:right-6 z-[55]">
+          <button 
+            onClick={() => { resetForm(); setIsReportModalOpen(true); }}
+            className="flex items-center gap-2 sm:gap-2.5 bg-emerald-action text-white p-3 sm:px-4 sm:py-3 rounded-xl font-black shadow-md hover:bg-stormy-teal active:scale-95 transition-colors border border-white/80"
+          >
+            <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
+            <div className="text-left leading-none hidden lg:block">
+              <span className="block text-xs tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
+              <span className="block text-[8px] font-black opacity-70 uppercase tracking-widest">{t('common.report')}</span>
             </div>
-            <div className="text-left leading-none hidden sm:block">
-              <span className="block text-sm tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
-              <span className="block text-[8px] font-black opacity-60 uppercase tracking-widest">{t('common.report')}</span>
-            </div>
-          </div>
-        </button>
-      </div>
+          </button>
+        </div>
+      )}
 
       {/* Modals */}
       <AnimatePresence>
@@ -3303,10 +3299,10 @@ function AppContent() {
                       <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-base sm:text-lg font-medium">{isDetailOpen.description}</p>
                     </div>
 
-                    <div className="bg-zinc-900 dark:bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+                    <div className="bg-zinc-50 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
                       <div className="text-center sm:text-left">
-                        <p className="text-[10px] font-bold opacity-60 uppercase tracking-widest mb-1">{t('community.participants_label')}</p>
-                        <p className="text-2xl sm:text-3xl font-display font-black">{isDetailOpen.attendees.length} {t('community.neighbors_label')}</p>
+                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">{t('community.participants_label')}</p>
+                        <p className="text-2xl sm:text-3xl font-display font-black text-stormy-teal">{isDetailOpen.attendees.length} {t('community.neighbors_label')}</p>
                       </div>
                       <button
                         onClick={() => {
@@ -3355,7 +3351,7 @@ function AppContent() {
                                   className={cn(
                                     "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
                                     isDetailOpen.status === status 
-                                      ? "bg-zinc-900 dark:bg-emerald-600 text-white" 
+                                      ? "bg-stormy-teal text-white" 
                                       : "bg-zinc-100 dark:bg-slate-700 text-zinc-500 dark:text-slate-400 hover:bg-zinc-200 dark:hover:bg-slate-600"
                                   )}
                                 >
@@ -3457,7 +3453,7 @@ function AppContent() {
           
           <button 
             onClick={() => setIsAttendeesModalOpen(false)}
-            className="w-full py-5 bg-zinc-900 dark:bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-emerald-700 transition-all"
+            className="w-full py-5 bg-stormy-teal text-white rounded-2xl font-black uppercase tracking-widest hover:bg-stormy-teal/90 transition-all"
           >
             {t('common.close')}
           </button>

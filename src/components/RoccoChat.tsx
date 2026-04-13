@@ -129,7 +129,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
   };
 
   return (
-    <div className="flex flex-col h-full bg-zinc-50 dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-zinc-100 dark:border-slate-800 shadow-sm">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 p-4 sm:p-6 border-b border-zinc-100 dark:border-slate-700 flex items-center justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
@@ -221,7 +221,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                   <button
                     key={i}
                     onClick={() => handleSend(q)}
-                    className="px-4 py-2 bg-zinc-50 dark:bg-slate-900 hover:bg-stormy-teal/5 text-zinc-600 dark:text-slate-400 hover:text-stormy-teal rounded-xl text-[10px] font-bold border border-zinc-100 dark:border-slate-700 hover:border-stormy-teal/20 transition-all flex items-center gap-2 uppercase tracking-widest whitespace-nowrap"
+                    className="px-4 py-2 bg-white dark:bg-slate-900 hover:bg-stormy-teal/5 text-zinc-600 dark:text-slate-400 hover:text-stormy-teal rounded-xl text-[10px] font-bold border border-zinc-100 dark:border-slate-700 hover:border-stormy-teal/20 transition-all flex items-center gap-2 uppercase tracking-widest whitespace-nowrap"
                   >
                     <Lightbulb className="w-3 h-3" />
                     {q}
@@ -237,7 +237,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder={t('rocco.placeholder')}
-                  className="w-full pl-4 pr-12 py-4 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium dark:text-white"
+                  className="w-full pl-4 pr-12 py-4 bg-white dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium dark:text-white"
                 />
                 <button 
                   onClick={() => {
@@ -277,7 +277,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                         .replace('{title}', t(`mission.title_${m.id}`))
                         .replace('{description}', t(`mission.desc_${m.id}`))
                     )}
-                    className="p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 group hover:border-stormy-teal/20 dark:hover:border-maya-blue/20 transition-all cursor-pointer"
+                    className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 group hover:border-stormy-teal/20 dark:hover:border-maya-blue/20 transition-all cursor-pointer"
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <div className={cn("p-2 rounded-lg shadow-sm text-white", m.color)}>
@@ -293,7 +293,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                   </div>
                 ))
               ) : (
-                <div className="py-10 text-center space-y-3 bg-zinc-50 dark:bg-slate-900 rounded-3xl border border-dashed border-zinc-200 dark:border-slate-700">
+                <div className="py-10 text-center space-y-3 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-zinc-200 dark:border-slate-700">
                   <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto shadow-sm border dark:border-slate-700">
                     <Sparkles className="w-6 h-6 text-amber-500" />
                   </div>
@@ -307,11 +307,11 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
             </div>
           </div>
 
-          <div className="p-6 bg-stormy-teal rounded-[2rem] text-white relative overflow-hidden shrink-0">
-            <Sparkles className="absolute -top-4 -right-4 w-24 h-24 text-white/10 rotate-12" />
+          <div className="p-6 bg-zinc-50 dark:bg-slate-900 rounded-[2rem] border border-zinc-100 dark:border-slate-700 text-zinc-900 dark:text-white relative overflow-hidden shrink-0">
+            <Sparkles className="absolute -top-4 -right-4 w-24 h-24 text-stormy-teal/10 rotate-12" />
             <div className="relative z-10">
-              <h4 className="text-sm font-black uppercase tracking-tight mb-2">{t('rocco.tip_title')}</h4>
-              <p className="text-xs font-medium leading-relaxed opacity-90">
+              <h4 className="text-sm font-black uppercase tracking-tight mb-2 text-stormy-teal">{t('rocco.tip_title')}</h4>
+              <p className="text-xs font-medium leading-relaxed text-zinc-600 dark:text-slate-300">
                 {t('rocco.tip_desc')}
               </p>
               {(() => {
@@ -319,7 +319,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
                 return (
                   <button 
                     onClick={() => handleSend(t('rocco.tip_help').replace('{tip}', TIP_TEXT))}
-                    className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/20 hover:bg-white/30 px-3 py-2 rounded-xl transition-all"
+                    className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-stormy-teal text-white hover:bg-stormy-teal/90 px-3 py-2 rounded-xl transition-all"
                   >
                     {t('rocco.learn_more')}
                     <ArrowRight className="w-3 h-3" />

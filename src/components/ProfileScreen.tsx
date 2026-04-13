@@ -280,7 +280,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
     <div className="max-w-4xl mx-auto pb-24 sm:pb-20 space-y-8 sm:space-y-10 px-4 sm:px-0">
       {/* Hero Section: Identity Card */}
       <section className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-stormy-teal/10 to-transparent rounded-[2rem] sm:rounded-[3rem] -z-10" />
+        <div className="absolute inset-0 bg-zinc-50 rounded-[2rem] sm:rounded-[3rem] -z-10" />
         <div className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 shadow-xl shadow-stormy-teal/5 dark:shadow-none text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-32 bg-stormy-teal opacity-5" />
           
@@ -357,12 +357,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 max-w-md mx-auto">
-              <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
+              <div className="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
                 <MapPin className="w-4 h-4 text-stormy-teal/40" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.zone')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{formatDisplayValue(profile.zone, t('reports.undefined'))}</span>
               </div>
-              <div className="bg-zinc-50 dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl flex flex-col items-center gap-1">
+              <div className="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
                 <Heart className="w-4 h-4 text-rose-500" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.commitment')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{formatDisplayValue(profile.commitment, t('reports.undefined'))}</span>
@@ -638,7 +638,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
                 <button 
                   onClick={() => setSelectedMission(null)}
-                  className="w-full py-5 bg-zinc-900 dark:bg-white dark:text-zinc-900 text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all"
+                  className="w-full py-5 bg-stormy-teal text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-stormy-teal/90 transition-all"
                 >
                   {t('mission.close')}
                 </button>
@@ -738,7 +738,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
                 <button 
                   onClick={() => setIsPrivacyModalOpen(false)}
-                  className="w-full py-5 bg-zinc-900 dark:bg-white dark:text-zinc-900 text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all"
+                  className="w-full py-5 bg-stormy-teal text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-stormy-teal/90 transition-all"
                 >
                   {t('mission.close')}
                 </button>
@@ -790,7 +790,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               </div>
             ))
           ) : (
-            <div className="col-span-3 py-10 bg-zinc-50 dark:bg-slate-900/50 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-slate-700 text-center">
+            <div className="col-span-3 py-10 bg-white dark:bg-slate-900/50 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-slate-700 text-center">
               <p className="text-[10px] text-zinc-400 dark:text-slate-500 font-bold uppercase tracking-widest">{t('reports.empty_mine')}</p>
             </div>
           )}
@@ -798,25 +798,25 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
         <button 
           onClick={onViewMyReports}
-          className="w-full p-6 sm:p-8 bg-stormy-teal text-white rounded-[2rem] sm:rounded-[2.5rem] flex items-center justify-between group hover:scale-[1.01] active:scale-95 transition-all shadow-xl shadow-stormy-teal/10"
+          className="w-full p-6 sm:p-8 bg-white text-zinc-900 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 flex items-center justify-between group hover:shadow-md active:scale-95 transition-all"
         >
           <div className="flex items-center gap-4 sm:gap-6">
-            <div className="p-3 sm:p-4 bg-white/10 rounded-2xl">
-              <FileText className="w-6 h-6 sm:w-8 sm:h-8" />
+            <div className="p-3 sm:p-4 bg-stormy-teal/10 rounded-2xl">
+              <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-stormy-teal" />
             </div>
             <div className="text-left">
-              <h3 className="text-xl sm:text-2xl font-display font-black uppercase tracking-tighter">{t('profile.manage_reports')}</h3>
-              <p className="text-white/60 text-[10px] sm:text-sm font-medium">{t('profile.manage_reports_desc')}</p>
+              <h3 className="text-xl sm:text-2xl font-display font-black uppercase tracking-tighter text-stormy-teal">{t('profile.manage_reports')}</h3>
+              <p className="text-zinc-500 text-[10px] sm:text-sm font-medium">{t('profile.manage_reports_desc')}</p>
             </div>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:translate-x-2 transition-transform shrink-0">
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-stormy-teal rounded-full flex items-center justify-center group-hover:translate-x-2 transition-transform shrink-0">
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
         </button>
       </section>
 
       {/* Settings Section */}
-      <section className="bg-zinc-50 dark:bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 space-y-4">
+      <section className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 space-y-4">
         <h3 className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest ml-4 mb-6">{t('profile.settings')}</h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
