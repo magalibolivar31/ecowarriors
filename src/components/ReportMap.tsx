@@ -24,6 +24,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 interface ReportMapProps {
   reports: Report[];
   onSelectReport: (report: Report) => void;
+  onCreateReport?: () => void;
   filter: 'abiertos' | 'resueltos' | 'mios';
   onFilterChange: (filter: 'abiertos' | 'resueltos' | 'mios') => void;
   currentUser?: { uid: string } | null;
@@ -125,6 +126,7 @@ const SearchControl = () => {
 export const ReportMap: React.FC<ReportMapProps> = ({
   reports,
   onSelectReport,
+  onCreateReport,
   filter,
   onFilterChange,
   currentUser,
@@ -328,8 +330,8 @@ export const ReportMap: React.FC<ReportMapProps> = ({
       )}
 
       {showMineEmptyState && (
-        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-zinc-900/55 dark:bg-black/60 backdrop-blur-sm rounded-[2rem] sm:rounded-[3rem]">
-          <div className="w-full max-w-md text-center rounded-3xl border border-white/10 bg-zinc-900/95 dark:bg-zinc-950/95 shadow-2xl shadow-black/40 px-6 py-8 sm:px-8 sm:py-10 space-y-4">
+        <div className="absolute inset-0 z-[40] pointer-events-none flex items-center justify-center px-4 pt-24 pb-32 sm:px-8 sm:pt-20 sm:pb-24">
+          <div className="w-full max-w-md pointer-events-auto text-center rounded-3xl border border-white/10 bg-zinc-900/90 dark:bg-zinc-950/90 shadow-2xl shadow-black/40 px-6 py-7 sm:px-8 sm:py-8 space-y-4">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
               <MapPin className="w-7 h-7 text-zinc-100" />
             </div>
@@ -347,6 +349,17 @@ export const ReportMap: React.FC<ReportMapProps> = ({
               {t('map.no_my_reports_action')}
             </div>
           </div>
+        </div>
+      )}
+
+      {showMineEmptyState && onCreateReport && (
+        <div className="absolute top-16 right-4 z-[1001]">
+          <button
+            onClick={onCreateReport}
+            className="px-4 py-2.5 rounded-xl bg-emerald-action text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-action/40 border border-white/40 hover:bg-stormy-teal transition-colors"
+          >
+            {t('map.no_my_reports_action')}
+          </button>
         </div>
       )}
 
