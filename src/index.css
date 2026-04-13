@@ -552,3 +552,35 @@ html:not(.dark) .bg-blue-900 {
 .mascot-guide {
   @apply flex items-start gap-4 p-6 bg-maya-blue/10 rounded-3xl border border-maya-blue/20;
 }
+
+/* ===== Landing Dark Mode Fixes ===== */
+
+/* Header: bg-white/80 opacity variant isn't caught by .dark .bg-white */
+.dark .bg-white\/80 {
+  background-color: color-mix(in srgb, var(--background) 94%, transparent) !important;
+  border-color: var(--border) !important;
+}
+
+/* ODS cards use !text-zinc-900 (Tailwind ! prefix = !important), which bypasses
+   the normal .dark .text-zinc-900 override. Target the actual generated class. */
+.dark .\!text-zinc-900 {
+  color: var(--text-primary) !important;
+}
+
+/* text-dark-teal (#024153) has no dark mode override — nearly invisible on dark bg */
+.dark .text-dark-teal {
+  color: var(--text-accent-info) !important;
+}
+
+/* The global .dark .bg-stormy-teal override sets it to the bright button green (#22C55E).
+   That works for small icons/buttons but ruins large section backgrounds where
+   text-emerald-action becomes invisible (green on green). These landing-specific
+   classes restore a proper dark surface for those large sections. */
+.dark .landing-teal-section {
+  background-color: var(--surface-muted) !important;
+}
+
+.dark .landing-cta-card {
+  background-color: var(--surface-elevated) !important;
+  border: 1px solid var(--border);
+}

@@ -223,7 +223,7 @@ export const OnboardingLanding: React.FC = () => {
       </AnimatePresence>
 
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-6 py-4">
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
@@ -426,7 +426,7 @@ export const OnboardingLanding: React.FC = () => {
                 <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg bg-white", ods.color)}>
                   <ods.icon className="w-8 h-8" />
                 </div>
-                <div className="space-y-2 !text-zinc-900">
+                <div className="space-y-2 text-zinc-900">
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">{t('landing.ods_label')} {ods.id}</p>
                   <h3 className="text-xl font-black uppercase tracking-tight leading-tight">{t(ods.title)}</h3>
                   <p className="text-xs font-medium opacity-70 leading-relaxed">{t(ods.desc)}</p>
@@ -438,7 +438,7 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Educación Hídrica */}
-      <section className="py-24 px-6 bg-stormy-teal text-white overflow-hidden relative">
+      <section className="py-24 px-6 bg-stormy-teal landing-teal-section text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-action/10 rounded-full -mr-48 -mt-48 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-maya-blue/10 rounded-full -ml-48 -mb-48 blur-3xl" />
 
@@ -451,7 +451,7 @@ export const OnboardingLanding: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-none">
               {t('landing.edu_title')}
             </h2>
-            <p className="text-xl text-emerald-action/80 font-medium leading-relaxed">
+            <p className="text-xl text-emerald-action/80 dark:text-slate-300 font-medium leading-relaxed">
               {t('landing.edu_desc')}
             </p>
           </div>
@@ -462,10 +462,10 @@ export const OnboardingLanding: React.FC = () => {
               { label: t('landing.stat_prevention'), value: '24h', desc: t('landing.stat_prevention_desc') },
               { label: t('landing.stat_impact'), value: '10x', desc: t('landing.stat_impact_desc') },
             ].map((stat) => (
-              <div key={stat.label} className="p-6 bg-white/5 rounded-3xl border border-white/10">
-                <p className="text-3xl font-black text-emerald-action">{stat.value}</p>
+              <div key={stat.label} className="p-6 bg-white/5 dark:bg-white/10 rounded-3xl border border-white/10 dark:border-white/20">
+                <p className="text-3xl font-black text-emerald-action dark:text-white">{stat.value}</p>
                 <p className="text-xs font-bold uppercase tracking-widest mt-1">{stat.label}</p>
-                <p className="text-[10px] text-emerald-action/60 mt-2">{stat.desc}</p>
+                <p className="text-[10px] text-emerald-action/60 dark:text-slate-400 mt-2">{stat.desc}</p>
               </div>
             ))}
           </div>
@@ -631,11 +631,11 @@ export const OnboardingLanding: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-stormy-teal p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
+          <div className="bg-stormy-teal landing-cta-card p-12 rounded-[4rem] text-white space-y-8 shadow-2xl shadow-stormy-teal/10">
             <h3 className="text-3xl font-display font-black tracking-tighter uppercase leading-tight">
               {t('landing.ready_title')}
             </h3>
-            <p className="text-emerald-action/80 font-medium">
+            <p className="text-emerald-action/80 dark:text-slate-300 font-medium">
               {t('landing.ready_desc')}
             </p>
             <button 
@@ -645,14 +645,14 @@ export const OnboardingLanding: React.FC = () => {
                 "w-full py-6 rounded-3xl font-black text-xl flex items-center justify-center gap-4 transition-all shadow-xl",
                 securityChecked 
                   ? "bg-white text-stormy-teal hover:scale-105 active:scale-95" 
-                  : "bg-stormy-teal/50 text-white/40 cursor-not-allowed opacity-50"
+                  : "bg-stormy-teal/50 dark:bg-slate-700/60 text-white/40 dark:text-slate-500 cursor-not-allowed opacity-50"
               )}
             >
               {t('landing.start_now')}
               <ArrowRight className="w-6 h-6" />
             </button>
             {!securityChecked && (
-              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-emerald-action/60">
+              <p className="text-center text-[10px] font-bold uppercase tracking-widest text-emerald-action/60 dark:text-slate-500">
                 {t('landing.security_warning')}
               </p>
             )}
