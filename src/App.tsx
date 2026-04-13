@@ -3392,6 +3392,7 @@ function AppContent() {
         { id: 'REPORTES', icon: MapPin },
         { id: 'MAPA', icon: MapIcon },
         { id: 'COMUNIDAD', icon: Users },
+        { id: 'CHATBOT', icon: Bot },
         { id: 'PERFIL', icon: User },
       ].map((item) => (
         <button
