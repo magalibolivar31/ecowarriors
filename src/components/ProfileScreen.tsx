@@ -509,7 +509,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       onClick={() => setSelectedMission(mission)}
                       className="w-full p-4 sm:p-5 bg-zinc-50 rounded-[1.5rem] sm:rounded-[2rem] border border-zinc-100 dark:border-slate-600 flex items-center gap-4 group hover:bg-white hover:shadow-lg transition-all text-left"
                     >
-                      <div className={cn("p-3 rounded-2xl text-white shadow-lg relative shrink-0", mission.color)}>
+                      <div className={cn("p-3 rounded-2xl shadow-lg relative shrink-0", mission.color, getMissionIconTextClass(mission.color))}>
                         <mission.icon className="w-5 h-5" />
                         {mission.status === 'completed' && (
                           <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-action rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center">
