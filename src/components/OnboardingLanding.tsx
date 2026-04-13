@@ -96,6 +96,108 @@ const ODS_ITEMS = [
   },
 ];
 
+type LandingSupportLogo = {
+  name: string;
+  imageUrl: string;
+  link?: string;
+};
+
+type LandingProjectPhoto = {
+  id: string;
+  imageUrl: string;
+  alt: string;
+};
+
+const LANDING_SUPPORT_LOGOS: LandingSupportLogo[] = [
+  {
+    name: 'Chicas Programadoras',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Flogo_chicasprogramadoras.jpg?alt=media&token=44775707-ce8a-4aae-badc-9d18f0b17620',
+  },
+  {
+    name: 'Hospital Casa Cuna',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Flogo_hospital.png?alt=media&token=854935eb-2c65-4654-80ef-5c8698094be3',
+  },
+  {
+    name: 'Blue Coding',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Flogo_bluecoding.png?alt=media&token=f5bff576-dcf1-4da5-b0d2-e725ec3e692b',
+  },
+  {
+    name: 'Globant',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Flogo_globant.png?alt=media&token=585aaf63-0fdc-4372-8d79-64dcabeb62b9',
+  },
+  {
+    name: 'CAETI',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Flogo_caeti.jpg?alt=media&token=e4c65baa-10ca-4d0f-a16d-e008d049361a',
+  },
+  {
+    name: 'Mujeres en TI',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logos%2Fimages.jpg?alt=media&token=5e639c9c-9b64-4c08-8e56-793068cdcae2',
+  },
+];
+
+const LANDING_PROJECT_GALLERY: LandingProjectPhoto[] = [
+  {
+    id: 'gallery-1-bluecoding',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_bluecoding.JPG?alt=media&token=ff14c858-0bbc-4b80-adea-027008307f05',
+    alt: 'Equipo EcoWarriors en Blue Coding',
+  },
+  {
+    id: 'gallery-1-globant',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_globant.jpg?alt=media&token=82a79688-f267-4a55-8e53-ed3c6cae2f1e',
+    alt: 'Presentación de EcoWarriors en Globant',
+  },
+  {
+    id: 'gallery-1-caeti',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_caeti.jpg?alt=media&token=663e7abb-6f9e-4d32-95fb-4300a236b966',
+    alt: 'EcoWarriors compartiendo el proyecto en CAETI',
+  },
+  {
+    id: 'gallery-1-hospital',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_hospital.jpeg?alt=media&token=7e479659-04b9-498c-828f-10db31e43c28',
+    alt: 'Equipo EcoWarriors en Hospital Casa Cuna',
+  },
+  {
+    id: 'gallery-1-mujeresenti',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_mujeresenti.JPG?alt=media&token=0c68c21f-6a8c-47fd-bc84-a2f8dc8df989',
+    alt: 'Presentación de EcoWarriors en Mujeres en TI',
+  },
+  {
+    id: 'gallery-2-bluecoding',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F2_bluecoding.JPG?alt=media&token=57814874-a500-422e-9208-934dd759e057',
+    alt: 'Actividad de EcoWarriors en Blue Coding',
+  },
+  {
+    id: 'gallery-2-globant',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F2_globant.JPG?alt=media&token=a0f389ea-265a-4d34-ac4c-b95c30c8c588',
+    alt: 'Equipo EcoWarriors durante encuentro en Globant',
+  },
+  {
+    id: 'gallery-2-caeti',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F2_caeti.jpg?alt=media&token=af805842-6e53-4b90-a71f-0836d92bd667',
+    alt: 'Participación de EcoWarriors en CAETI',
+  },
+  {
+    id: 'gallery-2-mujeresenti',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F2_mujeresenti.jpg?alt=media&token=1eaa8d8b-6ecd-4dd6-852e-5c6657982d82',
+    alt: 'Encuentro de EcoWarriors en Mujeres en TI',
+  },
+  {
+    id: 'gallery-3-globant',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F3_globant.jpg?alt=media&token=3a9b76b8-dca3-4a4e-99b5-f0b62807a3b8',
+    alt: 'EcoWarriors compartiendo avances en Globant',
+  },
+  {
+    id: 'gallery-1-todas',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F1_todas.jpg?alt=media&token=6f85182e-26c7-4b7e-8f38-7acae18f7f55',
+    alt: 'Foto grupal del equipo EcoWarriors',
+  },
+  {
+    id: 'gallery-3-mujeresenti',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logosfotos%2F3_mujeresenti.jpg?alt=media&token=095e3307-cfdf-42a2-8808-38eb532b0c8c',
+    alt: 'Cierre de presentación de EcoWarriors en Mujeres en TI',
+  },
+];
+
 export const OnboardingLanding: React.FC = () => {
   const { t, language, setLanguage, darkMode, setDarkMode } = useSettings();
   const [securityChecked, setSecurityChecked] = useState(false);
@@ -359,6 +461,79 @@ export const OnboardingLanding: React.FC = () => {
                 <p className="text-[10px] text-emerald-action/60 mt-2">{stat.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Agradecimientos y galería */}
+      <section className="py-24 px-6 bg-zinc-50">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="space-y-6 text-center">
+            <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-tight">
+              {t('landing.support_thanks_title')}
+            </h2>
+            <p className="text-zinc-500 max-w-3xl mx-auto font-medium">
+              {t('landing.support_thanks_subtitle')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
+            {LANDING_SUPPORT_LOGOS.map((logo) => {
+              const logoContent = (
+                <div className="h-28 bg-white rounded-3xl border border-zinc-100 shadow-sm p-5 flex items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                  <img
+                    src={logo.imageUrl}
+                    alt={logo.name}
+                    className="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              );
+
+              return logo.link ? (
+                <a
+                  key={logo.name}
+                  href={logo.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-stormy-teal/40 rounded-3xl"
+                  aria-label={logo.name}
+                >
+                  {logoContent}
+                </a>
+              ) : (
+                <div key={logo.name}>{logoContent}</div>
+              );
+            })}
+          </div>
+
+          <div className="space-y-6">
+            <div className="text-center space-y-3">
+              <h3 className="text-3xl md:text-4xl font-display font-black tracking-tighter uppercase">
+                {t('landing.support_gallery_title')}
+              </h3>
+              <p className="text-zinc-500 font-medium">
+                {t('landing.support_gallery_subtitle')}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {LANDING_PROJECT_GALLERY.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="rounded-3xl overflow-hidden border border-zinc-100 shadow-sm bg-white aspect-[4/3]"
+                >
+                  <img
+                    src={photo.imageUrl}
+                    alt={photo.alt}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
