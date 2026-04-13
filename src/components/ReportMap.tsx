@@ -27,6 +27,8 @@ interface ReportMapProps {
   filter: 'abiertos' | 'resueltos' | 'mios';
   onFilterChange: (filter: 'abiertos' | 'resueltos' | 'mios') => void;
   currentUser?: { uid: string } | null;
+  reportsReady?: boolean;
+  hasMyReports?: boolean;
 }
 
 const SearchControl = () => {
@@ -120,7 +122,15 @@ const SearchControl = () => {
 };
 
 
-export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, filter, onFilterChange, currentUser }) => {
+export const ReportMap: React.FC<ReportMapProps> = ({
+  reports,
+  onSelectReport,
+  filter,
+  onFilterChange,
+  currentUser,
+  reportsReady = true,
+  hasMyReports = false,
+}) => {
   const { t, privacyMode } = useSettings();
   const DEFAULT_CENTER: [number, number] = [-34.6037, -58.3816]; // Buenos Aires default
 
@@ -175,6 +185,10 @@ export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, f
       default: return '#9DCAE9';
     }
   };
+
+  const showLoadingOverlay = !reportsReady;
+  const showMineEmptyState = !showLoadingOverlay && filter === 'mios' && !hasMyReports;
+  const showGeneralEmptyState = !showLoadingOverlay && filteredReports.length === 0 && !showMineEmptyState;
 
   return (
     <div className="w-full h-full min-h-[300px] relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-4 border-white shadow-2xl bg-zinc-100">
@@ -306,19 +320,44 @@ export const ReportMap: React.FC<ReportMapProps> = ({ reports, onSelectReport, f
         })}
       </MapContainer>
       
-      {filteredReports.length === 0 && (
+      {showLoadingOverlay && (
+        <div className="absolute inset-0 z-[999] flex flex-col items-center justify-center gap-3 bg-white/75 dark:bg-zinc-900/80 rounded-[2rem] sm:rounded-[3rem]">
+          <Activity className="w-10 h-10 text-emerald-600 animate-pulse" />
+          <p className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-300">{t('map.loading')}</p>
+        </div>
+      )}
+
+      {showMineEmptyState && (
+        <div className="absolute inset-0 z-[999] flex items-center justify-center px-4 sm:px-8 bg-white/85 dark:bg-zinc-900/85 rounded-[2rem] sm:rounded-[3rem]">
+          <div className="w-full max-w-md text-center rounded-3xl border border-stormy-teal/20 dark:border-stormy-teal/40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl px-6 py-8 sm:px-8 sm:py-10 space-y-4">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-emerald-400/20 flex items-center justify-center">
+              <MapPin className="w-7 h-7 text-emerald-700 dark:text-emerald-300" />
+            </div>
+            <p className="text-sm sm:text-base font-black text-zinc-700 dark:text-zinc-100 uppercase tracking-widest">
+              {t('map.no_my_reports_found')}
+            </p>
+            <p className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+              {t('map.no_my_reports_cta')}
+            </p>
+            <p className="text-xs font-bold text-stormy-teal dark:text-maya-blue uppercase tracking-wide">
+              {t('map.no_my_reports_support')}
+            </p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-200 text-xs font-black uppercase tracking-wider">
+              <Activity className="w-3.5 h-3.5 animate-pulse" />
+              {t('map.no_my_reports_action')}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showGeneralEmptyState && (
         <div className="absolute inset-0 flex items-center justify-center 
                         bg-white/80 dark:bg-zinc-900/80 z-[999] rounded-[2rem]">
           <div className="text-center space-y-2">
             <MapPin className="w-10 h-10 text-zinc-300 mx-auto" />
             <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest">
-              {filter === 'mios' ? t('map.no_my_reports_found') : t('map.no_reports_found')}
+              {t('map.no_reports_found')}
             </p>
-            {filter === 'mios' && (
-              <p className="text-xs font-semibold text-zinc-500">
-                {t('map.no_my_reports_cta')}
-              </p>
-            )}
           </div>
         </div>
       )}
