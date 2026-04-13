@@ -21,6 +21,15 @@ export interface Mission {
   progress: number; // 0 to 100
 }
 
+const LIGHT_MISSION_BACKGROUNDS = new Set([
+  'bg-soft-maya-blue',
+  'bg-maya-blue',
+  'bg-soft-teal'
+]);
+
+export const getMissionIconTextClass = (color: string) =>
+  LIGHT_MISSION_BACKGROUNDS.has(color) ? 'text-zinc-900' : 'text-white';
+
 export const MISSIONS: Omit<Mission, 'status' | 'progress'>[] = [
   {
     id: 'primer-reporte',

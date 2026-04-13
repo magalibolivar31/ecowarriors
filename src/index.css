@@ -31,6 +31,10 @@
   --color-white: #FFFFFF;
   --color-surface-muted: #F5FBFA;
   --color-border: #D4E8E6;
+  --color-soft-card-bg: #ECFDF5;
+  --color-soft-card-border: #A7F3D0;
+  --color-soft-card-title: #047857;
+  --color-soft-card-text: #065F46;
 
   --background: var(--color-white);
   --surface: var(--color-white);
@@ -44,6 +48,14 @@
   --button-bg: var(--color-primary);
   --button-hover: var(--color-primary-light);
   --chart-grid-stroke: #0241531A;
+  --badge-accent-bg: color-mix(in srgb, var(--color-primary-light) 24%, transparent);
+  --badge-accent-text: var(--text-primary);
+  --badge-muted-bg: var(--surface-muted);
+  --badge-muted-text: var(--text-secondary);
+  --soft-card-bg: var(--color-soft-card-bg);
+  --soft-card-border: var(--color-soft-card-border);
+  --soft-card-title: var(--color-soft-card-title);
+  --soft-card-text: var(--color-soft-card-text);
 
   --urgency-low: var(--color-primary-light);
   --urgency-moderate: var(--color-accent);
@@ -78,6 +90,14 @@
   --button-bg: #126B69;
   --button-hover: #6EB57D;
   --chart-grid-stroke: #FFFFFF1A;
+  --badge-accent-bg: color-mix(in srgb, var(--color-primary-light) 26%, transparent);
+  --badge-accent-text: var(--text-primary);
+  --badge-muted-bg: color-mix(in srgb, var(--surface-muted) 80%, transparent);
+  --badge-muted-text: var(--text-secondary);
+  --soft-card-bg: color-mix(in srgb, var(--surface-muted) 82%, transparent);
+  --soft-card-border: color-mix(in srgb, var(--border) 78%, transparent);
+  --soft-card-title: var(--text-secondary);
+  --soft-card-text: var(--text-primary);
 
   --brand-bg: var(--background);
   --brand-text: var(--text-primary);
@@ -148,6 +168,19 @@
 
 .dark input::placeholder, .dark textarea::placeholder {
   color: var(--text-secondary) !important;
+}
+
+.dark .focus\:bg-white:focus {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+.dark textarea,
+.dark select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
 }
 
 .dark .shadow-sm {
@@ -241,6 +274,51 @@ body {
 
 .modal-body {
   @apply flex-1 overflow-y-auto p-6 sm:p-8;
+}
+
+.theme-input {
+  background-color: var(--input-bg) !important;
+  border-color: var(--border);
+  color: var(--text-primary) !important;
+}
+
+.theme-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.theme-badge-accent {
+  background-color: var(--badge-accent-bg) !important;
+  color: var(--badge-accent-text) !important;
+}
+
+.theme-badge-muted {
+  background-color: var(--badge-muted-bg) !important;
+  color: var(--badge-muted-text) !important;
+}
+
+.theme-soft-card {
+  background-color: var(--soft-card-bg) !important;
+  border-color: var(--soft-card-border) !important;
+}
+
+.theme-soft-card-title {
+  color: var(--soft-card-title) !important;
+}
+
+.theme-soft-card-text {
+  color: var(--soft-card-text) !important;
+}
+
+.theme-text-primary {
+  color: var(--text-primary) !important;
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.theme-text-muted {
+  color: var(--text-muted) !important;
 }
 
 .bg-gradient-primary {

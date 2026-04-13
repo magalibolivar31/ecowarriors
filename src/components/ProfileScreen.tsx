@@ -46,7 +46,7 @@ import { es, enUS } from 'date-fns/locale';
 import { useSettings } from '../contexts/SettingsContext';
 import { calculateMissions } from '../services/missionService';
 import { getLevelProgress } from '../lib/levelUtils';
-import { Mission } from '../constants/missions';
+import { Mission, getMissionIconTextClass } from '../constants/missions';
 import { calculateAchievements, Achievement } from '../services/achievementService';
 import { Report, Squad } from '../types';
 import { updateUserProfile, uploadProfilePhoto } from '../services/userService';
@@ -389,7 +389,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             <div className={cn("p-4 rounded-2xl mb-2", stat.bg)}>
               <stat.icon className={cn("w-6 h-6", stat.color)} />
             </div>
-            <span className="text-3xl sm:text-4xl font-black text-stormy-teal dark:text-white">{stat.value}</span>
+            <span className="theme-text-primary text-3xl sm:text-4xl font-black">{stat.value}</span>
             <span className="text-[10px] font-black text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{stat.label}</span>
           </motion.div>
         ))}
@@ -587,7 +587,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className={cn("p-4 rounded-2xl text-white shadow-lg", selectedMission.color)}>
+                  <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextClass(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
                   </div>
                   <button 
@@ -603,10 +603,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                     {t(`mission.title_${selectedMission.id}`)}
                   </h3>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="theme-badge-accent px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.reward} {t('mission.reward_label')}
                     </span>
-                    <span className="px-3 py-1 bg-zinc-100 text-zinc-500 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="theme-badge-muted px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.status === 'in-progress' ? t('mission.status_in_progress') : t('mission.status_available')}
                     </span>
                   </div>
@@ -625,12 +625,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       {t(`mission.obj_${selectedMission.id}`)}
                     </p>
                   </div>
-                  <div className="p-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl border border-emerald-100 dark:border-emerald-900/30 space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+                  <div className="theme-soft-card p-6 rounded-3xl border space-y-2">
+                    <div className="theme-soft-card-title flex items-center gap-2">
                       <Info className="w-4 h-4" />
                       <p className="text-[10px] font-black uppercase tracking-widest">{t('mission.suggested_action')}</p>
                     </div>
-                    <p className="text-emerald-800 dark:text-emerald-200 font-bold text-sm">
+                    <p className="theme-soft-card-text font-bold text-sm">
                       {t(`mission.action_${selectedMission.id}`)}
                     </p>
                   </div>
