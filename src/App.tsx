@@ -360,6 +360,7 @@ function AppContent() {
   const [selectedReportForHistory, setSelectedReportForHistory] = useState<Report | null>(null);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
+  const [reportsReady, setReportsReady] = useState(false);
   const [userUpdates, setUserUpdates] = useState<ReportUpdate[]>([]);
   const [missions, setMissions] = useState<Mission[]>([]);
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
@@ -660,6 +661,11 @@ function AppContent() {
     () => filteredReports.filter((report) => !deletingReportIds.has(report.id)),
     [filteredReports, deletingReportIds],
   );
+  const hasMineReports = useMemo(
+    () => reports.some((report) => report.createdBy === user?.uid),
+    [reports, user?.uid],
+  );
+  const shouldHighlightSensorFab = activeTab === 'MAPA' && reportFilter === 'mios' && reportsReady && !hasMineReports;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentScrollRef = useRef<HTMLDivElement>(null);
@@ -898,9 +904,12 @@ function AppContent() {
           setCrewEvents(squads);
         });
 
+        setReportsReady(false);
+
         // Listen to reports using the new service
         unsubReports = subscribeToAllReports((allReports) => {
           setReports(allReports);
+          setReportsReady(true);
         });
 
         // Listen to all updates for mission calculation
@@ -914,6 +923,7 @@ function AppContent() {
         setPosts([]);
         setCrewEvents([]);
         setReports([]);
+        setReportsReady(false);
         setUserSettings(null);
         if (unsubPosts) unsubPosts();
         if (unsubEvents) unsubEvents();
@@ -2809,6 +2819,8 @@ function AppContent() {
                     filter={reportFilter}
                     onFilterChange={setReportFilter}
                     currentUser={user}
+                    reportsReady={reportsReady}
+                    hasMyReports={hasMineReports}
                     onSelectReport={(report) => setSelectedReportForDetail(report)} 
                   />
                 );
@@ -2851,9 +2863,19 @@ function AppContent() {
 
       {/* Global Floating Action Button: Sensor Activo */}
       <div className="fixed bottom-[5.25rem] sm:bottom-8 right-4 sm:right-8 z-[55]">
+        {shouldHighlightSensorFab && (
+          <div className="mb-3 sm:mb-4 mr-1 max-w-[220px] sm:max-w-[260px] ml-auto rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-emerald-500/30 dark:border-emerald-400/40 px-3 py-2 shadow-xl backdrop-blur-md animate-pulse">
+            <p className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 text-right">
+              {t('map.no_my_reports_action')}
+            </p>
+          </div>
+        )}
         <button 
           onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-          className="flex items-center gap-2 sm:gap-3 bg-emerald-600 text-white p-3 sm:px-6 sm:py-4 rounded-2xl sm:rounded-3xl font-black shadow-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all group border-2 sm:border-4 border-white dark:border-slate-800 relative overflow-hidden"
+          className={cn(
+            "flex items-center gap-2 sm:gap-3 bg-emerald-600 text-white p-3 sm:px-6 sm:py-4 rounded-2xl sm:rounded-3xl font-black shadow-xl hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all group border-2 sm:border-4 border-white dark:border-slate-800 relative overflow-hidden",
+            shouldHighlightSensorFab && "ring-4 ring-emerald-300/70 dark:ring-emerald-400/40 animate-pulse"
+          )}
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative z-10 flex items-center gap-3">
