@@ -157,7 +157,7 @@ export const RoccoChat: React.FC<RoccoChatProps> = ({ missions: externalMissions
 
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         {/* Chat Area */}
-        <div className="flex-[3] flex flex-col min-w-0 h-full border-b xl:border-b-0 xl:border-r border-zinc-100 overflow-hidden relative">
+        <div className="flex-[3] flex flex-col min-w-0 h-full border-b lg:border-b-0 lg:border-r border-zinc-100 overflow-hidden relative">
           <div 
             ref={scrollRef}
             className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scroll-smooth"

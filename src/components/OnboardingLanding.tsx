@@ -223,7 +223,7 @@ export const OnboardingLanding: React.FC = () => {
       </AnimatePresence>
 
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-4 sm:px-6 py-3 sm:py-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 dark:bg-[#0B1F2A]/95 backdrop-blur-xl border-b border-zinc-100 dark:border-slate-700/60 px-4 sm:px-6 pb-3 sm:pb-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
