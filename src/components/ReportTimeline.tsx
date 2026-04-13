@@ -109,7 +109,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
 
   const statusConfig = (status: ReportStatus) => {
     switch (status) {
-      case 'Abierto (nuevo)': return { color: 'bg-blue-100 text-blue-700', label: t('reports.status_new') };
+      case 'Abierto (nuevo)': return { color: 'bg-soft-maya-blue/30 text-stormy-teal', label: t('reports.status_new') };
       case 'Abierto (en seguimiento)': return { color: 'bg-orange-100 text-orange-700', label: t('reports.status_followup') };
       case 'Abierto (agravado)': return { color: 'bg-red-100 text-red-700', label: t('reports.status_aggravated') };
       case 'Resuelto': return { color: 'bg-emerald-100 text-emerald-700', label: t('reports.status_resolved') };
@@ -152,7 +152,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button 
                 onClick={() => handleQuickAction('Abierto (en seguimiento)')}
-                className="flex items-center justify-center gap-3 py-4 bg-blue-50 text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition-all border border-blue-100 shadow-sm"
+                className="flex items-center justify-center gap-3 py-4 bg-soft-maya-blue/20 text-stormy-teal rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-soft-maya-blue/30 transition-all border border-zinc-100 shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 {t('reports.add_update')}

@@ -101,7 +101,7 @@ const SearchControl = ({ onSearch }: { onSearch: (coords: [number, number]) => v
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t('map.search_placeholder')}
-            className="w-full pl-11 pr-10 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-zinc-200 dark:border-slate-700 rounded-2xl shadow-xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium text-zinc-900 dark:text-white"
+            className="w-full pl-11 pr-10 py-3 bg-white/90 backdrop-blur-md border border-zinc-200 dark:border-slate-700 rounded-2xl shadow-xl outline-none focus:ring-2 focus:ring-stormy-teal transition-all text-sm font-medium text-zinc-900 dark:text-white"
           />
           {query && (
             <button 
@@ -117,7 +117,7 @@ const SearchControl = ({ onSearch }: { onSearch: (coords: [number, number]) => v
           <motion.p 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-2 ml-4 text-xs font-bold text-red-500 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1 rounded-lg shadow-sm border border-red-100 dark:border-red-900/30 w-fit"
+            className="mt-2 ml-4 text-xs font-bold text-red-500 bg-white/90 backdrop-blur-md px-3 py-1 rounded-lg shadow-sm border border-red-100 dark:border-red-900/30 w-fit"
           >
             {error}
           </motion.p>
@@ -139,7 +139,7 @@ const SearchControl = ({ onSearch }: { onSearch: (coords: [number, number]) => v
 const MapLegend = () => {
   const { t } = useSettings();
   return (
-    <div className="absolute bottom-24 right-4 z-[1000] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-zinc-200 dark:border-slate-700 space-y-3 hidden sm:block">
+    <div className="absolute bottom-24 right-4 z-[1000] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-zinc-200 dark:border-slate-700 space-y-3 hidden sm:block">
       <h4 className="text-[10px] font-black text-stormy-teal dark:text-maya-blue uppercase tracking-widest border-b border-zinc-100 dark:border-slate-800 pb-2">{t('map.legend_title')}</h4>
       <div className="space-y-2">
         {[

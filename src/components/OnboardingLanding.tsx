@@ -226,7 +226,7 @@ export const OnboardingLanding: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:bg-slate-800 dark:ring-slate-600">
+            <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-white ring-1 ring-zinc-200 overflow-hidden shadow-sm flex items-center justify-center dark:ring-slate-600">
               <img
                 src={ECOWARRIORS_LOGO_URL}
                 alt="Logo EcoWarriors"
@@ -268,7 +268,7 @@ export const OnboardingLanding: React.FC = () => {
             </div>
             <button 
               onClick={() => handleOpenAuth('login')}
-              className="px-6 py-2.5 rounded-2xl border border-zinc-300 bg-white text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:bg-slate-700 dark:hover:text-white"
+              className="px-6 py-2.5 rounded-2xl border border-zinc-300 bg-white text-sm font-black text-zinc-800 shadow-sm transition-all hover:border-stormy-teal/35 hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-action/50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-500 dark:text-slate-100 dark:hover:border-emerald-action/60 dark:hover:text-white"
             >
               {t('landing.login')}
             </button>

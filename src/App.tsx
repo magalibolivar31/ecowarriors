@@ -1515,7 +1515,7 @@ function AppContent() {
               className="space-y-5 sm:space-y-12"
             >
               {/* 1. Carrusel de Novedades (Rediseñado) */}
-              <div className="relative group overflow-hidden rounded-[2rem] sm:rounded-[4rem] bg-gradient-to-br from-stormy-teal to-emerald-900 shadow-2xl h-[340px] sm:h-[550px]">
+              <div className="relative group overflow-hidden rounded-[2rem] sm:rounded-[4rem] bg-white border border-zinc-100 shadow-sm h-[340px] sm:h-[550px]">
                 <AnimatePresence mode='wait'>
                   {carouselCards.map((card, idx) => (
                     idx === currentSlide && (
@@ -1530,7 +1530,7 @@ function AppContent() {
                         {/* Hero Type */}
                         {card.type === 'hero' && (
                           <div className="relative h-full flex flex-col sm:flex-row items-center overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-stormy-teal/80 via-stormy-teal/30 to-transparent z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-soft-maya-blue/25 via-white/92 to-transparent z-10" />
                             
                             <div className="relative z-20 h-full p-5 sm:p-16 flex flex-col justify-center max-w-3xl space-y-4 sm:space-y-6">
                               {card.tag && (
@@ -1539,10 +1539,10 @@ function AppContent() {
                                   {t(card.tag)}
                                 </div>
                               )}
-                              <h2 className="text-2xl sm:text-7xl font-display font-black text-white tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase drop-shadow-lg">
+                              <h2 className="text-2xl sm:text-7xl font-display font-black text-stormy-teal tracking-tighter leading-[0.95] sm:leading-[0.9] uppercase">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-white font-medium text-sm sm:text-xl leading-relaxed max-w-sm sm:max-w-xl drop-shadow-md">
+                              <p className="text-zinc-700 font-medium text-sm sm:text-xl leading-relaxed max-w-sm sm:max-w-xl">
                                 {t(card.description)}
                               </p>
                               <button 
@@ -1559,7 +1559,7 @@ function AppContent() {
                                 <img 
                                   src={card.imageUrl} 
                                   className="h-full w-auto object-contain object-right-bottom transition-transform duration-700 group-hover:scale-105" 
-                                  style={{ filter: 'drop-shadow(0px 20px 40px rgba(0,0,0,0.4))' }}
+                                  style={{ filter: 'drop-shadow(0px 20px 30px rgba(2,65,83,0.15))' }}
                                   referrerPolicy="no-referrer" 
                                   alt={card.title}
                                 />
@@ -1570,7 +1570,7 @@ function AppContent() {
 
                         {/* Info Type (Ciclo) */}
                         {card.type === 'info' && (
-                          <div className="h-full bg-gradient-to-br from-stormy-teal to-zinc-900 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-10">
+                          <div className="h-full bg-zinc-50 p-5 sm:p-16 flex flex-col justify-center space-y-5 sm:space-y-10">
                             <div className="space-y-2 sm:space-y-4">
                               <h2 className="text-2xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase drop-shadow-lg">
                                 {t(card.title)}
@@ -1583,17 +1583,17 @@ function AppContent() {
                             <div className="grid grid-cols-2 gap-3 sm:gap-8">
                               {[
                                 { title: t('dashboard.prevention'), desc: t('dashboard.prevention_desc'), icon: <ShieldCheck className="w-6 h-6" />, color: 'text-maya-blue bg-maya-blue/10' },
-                                { title: t('dashboard.alert'), desc: t('dashboard.alert_desc'), icon: <AlertTriangle className="w-6 h-6" />, color: 'text-amber-400 bg-amber-400/10' },
+                                { title: t('dashboard.alert'), desc: t('dashboard.alert_desc'), icon: <AlertTriangle className="w-6 h-6" />, color: 'text-soft-teal bg-soft-teal/20' },
                                 { title: t('dashboard.action'), desc: t('dashboard.action_desc'), icon: <Zap className="w-6 h-6" />, color: 'text-emerald-action bg-emerald-action/10' },
-                                { title: t('dashboard.recovery'), desc: t('dashboard.recovery_desc'), icon: <HeartHandshake className="w-6 h-6" />, color: 'text-pink-400 bg-pink-400/10' }
+                                { title: t('dashboard.recovery'), desc: t('dashboard.recovery_desc'), icon: <HeartHandshake className="w-6 h-6" />, color: 'text-stormy-teal bg-stormy-teal/10' }
                               ].map((step, i) => (
-                                <div key={i} className="flex items-start gap-2 sm:gap-5 group/item bg-white/5 sm:bg-transparent rounded-2xl p-2.5 sm:p-0">
+                                <div key={i} className="flex items-start gap-2 sm:gap-5 group/item bg-white rounded-2xl p-2.5 sm:p-0">
                                   <div className={cn("w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover/item:scale-110", step.color)}>
                                     {step.icon}
                                   </div>
                                   <div className="space-y-0.5 sm:space-y-1">
-                                    <h4 className="font-black text-white uppercase tracking-tight text-xs sm:text-lg">{step.title}</h4>
-                                    <p className="text-white/70 sm:text-white/60 text-[10px] sm:text-xs font-medium leading-tight">{step.desc}</p>
+                                    <h4 className="font-black text-stormy-teal uppercase tracking-tight text-xs sm:text-lg">{step.title}</h4>
+                                    <p className="text-zinc-600 text-[10px] sm:text-xs font-medium leading-tight">{step.desc}</p>
                                   </div>
                                 </div>
                               ))}
@@ -1603,15 +1603,15 @@ function AppContent() {
 
                         {/* Video Type */}
                         {card.type === 'video' && (
-                          <div className="h-full bg-zinc-50 dark:bg-slate-900/50 p-8 sm:p-16 flex flex-col justify-center space-y-8">
+                            <div className="h-full bg-zinc-50 p-8 sm:p-16 flex flex-col justify-center space-y-8">
                             <div className="space-y-4">
                               <div className="w-16 h-16 bg-stormy-teal rounded-3xl flex items-center justify-center text-white shadow-xl">
                                 <Bot className="w-8 h-8" />
                               </div>
-                              <h2 className="text-3xl sm:text-5xl font-display font-black text-stormy-teal dark:text-white tracking-tighter uppercase">
+                              <h2 className="text-3xl sm:text-5xl font-display font-black text-stormy-teal tracking-tighter uppercase">
                                 {t(card.title)}
                               </h2>
-                              <p className="text-zinc-500 dark:text-slate-300 text-base sm:text-lg font-medium max-w-xl">
+                              <p className="text-zinc-600 text-base sm:text-lg font-medium max-w-xl">
                                 {t(card.description)}
                               </p>
                             </div>
@@ -1623,7 +1623,7 @@ function AppContent() {
                                   href={link.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="px-8 py-4 bg-white dark:bg-slate-800 border-2 border-zinc-100 dark:border-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest text-stormy-teal dark:text-white hover:border-stormy-teal transition-all flex items-center gap-3 shadow-sm"
+                                  className="px-8 py-4 bg-white border-2 border-zinc-100 rounded-2xl font-black text-xs uppercase tracking-widest text-stormy-teal hover:border-stormy-teal transition-all flex items-center gap-3 shadow-sm"
                                 >
                                   <Zap className="w-4 h-4" />
                                   {t(link.label)}
@@ -1642,17 +1642,17 @@ function AppContent() {
                                 style={{ backgroundImage: `url(${card.imageUrl})` }}
                               />
                             )}
-                            <div className="absolute inset-0 bg-gradient-to-r from-stormy-teal via-stormy-teal/80 to-transparent z-10" />
+                            <div className="absolute inset-0 bg-white/80 z-10" />
                             
                             <div className="relative z-20 flex flex-col items-center justify-center space-y-8">
                               <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-stormy-teal shadow-xl border border-stormy-teal/10">
                                 <HeartHandshake className="w-10 h-10" />
                               </div>
                               <div className="space-y-4 max-w-xl">
-                                <h2 className="text-3xl sm:text-5xl font-display font-black text-white tracking-tighter uppercase">
+                                  <h2 className="text-3xl sm:text-5xl font-display font-black text-stormy-teal tracking-tighter uppercase">
                                   {t(card.title)}
                                 </h2>
-                                <p className="text-white/70 text-base sm:text-lg font-medium">
+                                  <p className="text-zinc-600 text-base sm:text-lg font-medium">
                                   {t(card.description)}
                                 </p>
                               </div>
@@ -1676,13 +1676,13 @@ function AppContent() {
                 <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex gap-2 sm:gap-3 z-20">
                   <button 
                     onClick={() => setCurrentSlide(prev => (prev - 1 + carouselCards.length) % carouselCards.length)} 
-                    className="p-2.5 sm:p-4 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
+                    className="p-2.5 sm:p-4 bg-white rounded-xl sm:rounded-2xl hover:bg-zinc-50 transition-all border border-zinc-100 text-stormy-teal shadow-sm"
                   >
                     <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button 
                     onClick={() => setCurrentSlide(prev => (prev + 1) % carouselCards.length)} 
-                    className="p-2.5 sm:p-4 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl hover:bg-white/20 transition-all border border-white/10 text-white"
+                    className="p-2.5 sm:p-4 bg-white rounded-xl sm:rounded-2xl hover:bg-zinc-50 transition-all border border-zinc-100 text-stormy-teal shadow-sm"
                   >
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
@@ -1696,7 +1696,7 @@ function AppContent() {
                       onClick={() => setCurrentSlide(i)}
                       className={cn(
                         "h-1.5 rounded-full transition-all duration-500",
-                        currentSlide === i ? "w-8 bg-emerald-action" : "w-2 bg-white/30"
+                        currentSlide === i ? "w-8 bg-emerald-action" : "w-2 bg-zinc-300"
                       )}
                     />
                   ))}
@@ -1707,23 +1707,23 @@ function AppContent() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-red-500 to-red-700 
+                className="bg-white border border-zinc-100
                            rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 
-                           text-white overflow-hidden relative shadow-xl 
-                           shadow-red-500/20 cursor-pointer group
-                           hover:shadow-2xl hover:shadow-red-500/30 
+                           text-stormy-teal overflow-hidden relative shadow-sm 
+                           cursor-pointer group
+                           hover:shadow-md 
                            hover:-translate-y-1 transition-all duration-300"
                 onClick={() => handleCrisisModeToggle(true)}
               >
                 <div className="absolute -top-6 -right-6 w-32 h-32 
-                                bg-white/10 rounded-full blur-2xl" />
+                                bg-soft-maya-blue/20 rounded-full blur-2xl" />
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
-                      <AlertTriangle className="w-7 h-7 text-white" />
+                      <div className="p-3 bg-soft-maya-blue/20 rounded-2xl">
+                        <AlertTriangle className="w-7 h-7 text-stormy-teal" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-widest 
-                                     bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                                     bg-emerald-action/10 text-emerald-action px-3 py-1.5 rounded-full">
                       {t('dashboard.preparation')}
                     </span>
                   </div>
@@ -1732,11 +1732,11 @@ function AppContent() {
                                    uppercase tracking-tighter leading-none">
                       {t('dashboard.crisis_mode')}
                     </h3>
-                    <p className="text-sm font-medium text-white/80 leading-relaxed">
+                    <p className="text-sm font-medium text-zinc-600 leading-relaxed">
                       {t('dashboard.crisis_desc')}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-black 
+                  <div className="flex items-center gap-2 text-stormy-teal font-black 
                                   text-xs uppercase tracking-widest 
                                   group-hover:gap-3 transition-all">
                     <span>{t('dashboard.activate_now')}</span>
@@ -1764,15 +1764,15 @@ function AppContent() {
                   href="https://www.instagram.com/equipoecowarriors?igsh=aXd0aGNra3JtNmY1&utm_source=qr" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-br from-stormy-teal to-emerald-900 p-5 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] text-white flex items-center justify-between group cursor-pointer overflow-hidden relative shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:brightness-110 transition-all duration-500 border border-white/5"
+                  className="bg-white p-5 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] text-stormy-teal flex items-center justify-between group cursor-pointer overflow-hidden relative shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-500 border border-zinc-100"
                 >
-                  <div className="absolute inset-0 opacity-10 group-hover:scale-110 transition-transform duration-700 bg-gradient-to-br from-pink-500 to-purple-600" />
+                  <div className="absolute inset-0 opacity-10 group-hover:scale-110 transition-transform duration-700 bg-soft-maya-blue" />
                   <div className="relative z-10 space-y-2">
                     <Instagram className="w-10 h-10 mb-2 text-emerald-action" />
                     <h4 className="text-2xl font-black uppercase tracking-tighter leading-none">@equipoecowarriors</h4>
-                    <p className="text-xs font-medium opacity-80 uppercase tracking-widest">{t('dashboard.instagram_follow')}</p>
+                    <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">{t('dashboard.instagram_follow')}</p>
                   </div>
-                  <ArrowRight className="w-10 h-10 relative z-10 group-hover:translate-x-2 transition-transform text-white/50 group-hover:text-white" />
+                  <ArrowRight className="w-10 h-10 relative z-10 group-hover:translate-x-2 transition-transform text-zinc-400 group-hover:text-stormy-teal" />
                 </a>
               </div>
 
@@ -2083,23 +2083,23 @@ function AppContent() {
                             whileHover={{ y: -8 }}
                             onClick={() => setSelectedMission(mission)}
                             className={cn(
-                              "bg-white dark:bg-slate-800/90 p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] border shadow-sm flex flex-col sm:flex-row items-start gap-8 sm:gap-10 cursor-pointer group transition-all border-zinc-100 dark:border-slate-600 hover:shadow-2xl"
+                              "bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] border shadow-sm flex flex-col sm:flex-row items-start gap-8 sm:gap-10 cursor-pointer group transition-all border-zinc-100 hover:shadow-md"
                             )}
                           >
-                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white dark:border-slate-700 text-white", mission.color)}>
+                            <div className={cn("p-6 sm:p-8 rounded-2xl sm:rounded-[2.5rem] shrink-0 shadow-inner border border-white text-white", mission.color)}>
                               <mission.icon className="w-10 h-10 sm:w-12 sm:h-12" />
                             </div>
                             <div className="flex-1 space-y-4 sm:space-y-6">
                               <div className="flex justify-between items-start">
-                                <h4 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 dark:text-white tracking-tighter uppercase leading-none">
+                                <h4 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 tracking-tighter uppercase leading-none">
                                   {t(`mission.title_${mission.id}`)}
                                 </h4>
-                                <span className="text-[10px] font-black text-emerald-action bg-emerald-action/5 dark:bg-emerald-action/20 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-emerald-action/10 dark:border-emerald-action/30">+{mission.reward} {t('mission.reward_label')}</span>
+                                <span className="text-[10px] font-black text-emerald-action bg-emerald-action/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-emerald-action/10">+{mission.reward} {t('mission.reward_label')}</span>
                               </div>
-                              <p className="text-zinc-500 dark:text-slate-300 font-medium text-sm sm:text-lg leading-relaxed">
+                              <p className="text-zinc-600 font-medium text-sm sm:text-lg leading-relaxed">
                                 {t(`mission.desc_${mission.id}`)}
                               </p>
-                              <div className="w-full h-1.5 sm:h-2 bg-zinc-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                              <div className="w-full h-1.5 sm:h-2 bg-zinc-100 rounded-full overflow-hidden">
                                 <motion.div 
                                   initial={{ width: 0 }}
                                   animate={{ width: `${mission.progress}%` }}
@@ -2138,12 +2138,12 @@ function AppContent() {
               </div>
 
               {/* 6. Community Impact Visualizer */}
-              <div className="bg-stormy-teal p-8 sm:p-16 rounded-[2.5rem] sm:rounded-[4.5rem] text-white shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 sm:w-[50rem] h-64 sm:h-[50rem] bg-white/5 rounded-full -mr-32 sm:-mr-[25rem] -mt-32 sm:-mt-[25rem] blur-[60px] sm:blur-[120px]" />
+              <div className="bg-white p-8 sm:p-16 rounded-[2.5rem] sm:rounded-[4.5rem] text-zinc-900 shadow-sm border border-zinc-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 sm:w-[50rem] h-64 sm:h-[50rem] bg-soft-maya-blue/20 rounded-full -mr-32 sm:-mr-[25rem] -mt-32 sm:-mt-[25rem] blur-[60px] sm:blur-[120px]" />
                 
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-12 sm:gap-16 mb-12 sm:mb-20 relative z-10">
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="text-4xl sm:text-5xl font-display font-black tracking-tighter uppercase leading-none">{t('community.real_impact')}</h3>
+                    <h3 className="text-4xl sm:text-5xl font-display font-black tracking-tighter uppercase leading-none text-stormy-teal">{t('community.real_impact')}</h3>
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-action rounded-full animate-pulse" />
                       <p className="text-[10px] sm:text-xs font-black text-emerald-action uppercase tracking-[0.3em]">{t('community.collective_resilience')}</p>
@@ -2152,8 +2152,8 @@ function AppContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16">
                     <div className="space-y-2 sm:space-y-4">
                       <p className="text-5xl sm:text-7xl font-black text-emerald-action tracking-tighter leading-none">{totalResolved}</p>
-                      <p className="text-[10px] sm:text-xs font-black text-white/40 uppercase tracking-[0.2em]">{t('community.resolved_spots')}</p>
-                      <p className="text-xs sm:text-sm text-emerald-100/60 font-medium leading-relaxed">
+                      <p className="text-[10px] sm:text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">{t('community.resolved_spots')}</p>
+                      <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed">
                         {totalResolved === 1 ? t('community.resolved_desc_singular') : t('community.resolved_desc_plural').replace('{count}', String(totalResolved))}
                       </p>
                     </div>
@@ -2161,8 +2161,8 @@ function AppContent() {
                       <p className="text-5xl sm:text-7xl font-black text-maya-blue tracking-tighter leading-none">
                         {reports.filter(r => r.isActive).length}
                       </p>
-                      <p className="text-[10px] sm:text-xs font-black text-white/40 uppercase tracking-[0.2em]">{t('community.active_reports')}</p>
-                      <p className="text-xs sm:text-sm text-maya-blue/60 font-medium leading-relaxed">{t('community.active_reports_desc')}</p>
+                      <p className="text-[10px] sm:text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">{t('community.active_reports')}</p>
+                      <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed">{t('community.active_reports_desc')}</p>
                     </div>
                   </div>
                 </div>
@@ -2182,13 +2182,13 @@ function AppContent() {
                           dataKey="name" 
                           axisLine={false} 
                           tickLine={false} 
-                          tick={{ fill: '#ffffff30', fontSize: 10, fontWeight: '900' }} 
+                          tick={{ fill: '#126B69', fontSize: 10, fontWeight: '900' }} 
                           dy={10}
                         />
                         <YAxis hide />
                         <Tooltip 
-                          contentStyle={{ backgroundColor: 'var(--color-primary)', border: 'none', borderRadius: '24px', color: '#fff', padding: '16px', boxShadow: '0 25px 50px -12px rgba(2,65,83,0.45)' }}
-                          itemStyle={{ color: 'var(--color-primary-light)', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
+                          contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #D4E8E6', borderRadius: '24px', color: '#024153', padding: '16px', boxShadow: '0 12px 30px -12px rgba(2,65,83,0.18)' }}
+                          itemStyle={{ color: 'var(--color-primary)', fontWeight: '900', textTransform: 'uppercase', fontSize: '12px' }}
                         />
                         <Line 
                           type="monotone" 
@@ -2204,9 +2204,9 @@ function AppContent() {
 
                   <div className="h-[250px] sm:h-[350px] w-full min-w-0 flex flex-col items-center justify-center">
                     {pieData.length === 0 ? (
-                      <div className="text-center p-8 bg-white/5 rounded-3xl border border-white/10 w-full h-full flex flex-col items-center justify-center">
-                        <Package className="w-10 h-10 text-white/20 mb-4" />
-                        <p className="text-[10px] font-black uppercase tracking-widest text-white/40">{t('community.no_waste_data')}</p>
+                      <div className="text-center p-8 bg-zinc-50 rounded-3xl border border-zinc-100 w-full h-full flex flex-col items-center justify-center">
+                        <Package className="w-10 h-10 text-zinc-300 mb-4" />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{t('community.no_waste_data')}</p>
                       </div>
                     ) : (
                       <>
@@ -2243,12 +2243,12 @@ function AppContent() {
                   </div>
                 </div>
 
-                <div className="mt-8 sm:mt-12 pt-8 sm:pt-12 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative z-10">
+                  <div className="mt-8 sm:mt-12 pt-8 sm:pt-12 border-t border-zinc-100 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative z-10">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-action/10 flex items-center justify-center text-emerald-action">
                       <Users className="w-6 h-6 sm:w-7 sm:h-7" />
                     </div>
-                    <p className="text-xs sm:text-sm font-medium text-emerald-100/80 leading-tight">
+                    <p className="text-xs sm:text-sm font-medium text-zinc-600 leading-tight">
                       {volunteers.length > 0 
                         ? `${volunteers.length} ${t('community.active_warriors')}`
                         : t('community.be_first')}
@@ -2258,17 +2258,17 @@ function AppContent() {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-maya-blue/10 flex items-center justify-center text-maya-blue">
                       <Droplets className="w-6 h-6 sm:w-7 sm:h-7" />
                     </div>
-                    <p className="text-xs sm:text-sm font-medium text-maya-blue/80 leading-tight">
+                    <p className="text-xs sm:text-sm font-medium text-zinc-600 leading-tight">
                       {crews.length > 0 
                         ? `${crews.length} ${crews.length > 1 ? t('community.scheduled_crews_plural') : t('community.scheduled_crews')}`
                         : t('community.no_squads')}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-brand-bg/10 flex items-center justify-center text-white">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-soft-maya-blue/20 flex items-center justify-center text-stormy-teal">
                       <Cloud className="w-6 h-6 sm:w-7 sm:h-7" />
                     </div>
-                    <p className="text-xs sm:text-sm font-medium text-white/80 leading-tight">
+                    <p className="text-xs sm:text-sm font-medium text-zinc-600 leading-tight">
                       {weatherData 
                         ? `${t('community.weather_current')}: ${weatherData.condition} · ${weatherData.temp}°C`
                         : t('community.weather_loading')}
@@ -2572,13 +2572,13 @@ function AppContent() {
                           exit={{ opacity: 0, y: -18, scale: 0.9 }}
                           transition={{ duration: 0.22, ease: 'easeOut' }}
                           onClick={() => setIsDetailOpen(post)}
-                          className="bg-white dark:bg-slate-800/90 rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
+                          className="bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
                         >
-                          <div className="aspect-square relative bg-zinc-50 dark:bg-slate-900 overflow-hidden">
+                          <div className="aspect-square relative bg-zinc-50 overflow-hidden">
                             {post.images && post.images[0] ? (
                               <img src={post.images[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg dark:bg-slate-800">
+                              <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg">
                                 <Heart className="w-16 h-16 text-stormy-teal/10 dark:text-white/5" />
                               </div>
                             )}
@@ -2636,7 +2636,7 @@ function AppContent() {
                             <p className="text-zinc-500 dark:text-slate-300 text-xs line-clamp-2 leading-relaxed font-medium">{post.content || t('community.no_description')}</p>
                             <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
                               <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-brand-bg dark:bg-slate-700 border border-zinc-100 dark:border-slate-600" />
+                                <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
                                 <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{t('community.active_neighbor')}</span>
                               </div>
                               <div className="flex items-center gap-1 text-emerald-action font-black text-[9px] uppercase tracking-widest group-hover:translate-x-1 transition-transform">
@@ -2695,7 +2695,7 @@ function AppContent() {
                             key={event.id} 
                             whileHover={{ scale: 1.01 }}
                             onClick={() => setSelectedSquadForDetail(event)}
-                            className="bg-white dark:bg-slate-800/90 rounded-[2rem] border border-zinc-100 dark:border-slate-600 shadow-sm overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                            className="bg-white rounded-[2rem] border border-zinc-100 dark:border-slate-600 shadow-sm overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
                           >
                             <div className="p-6 space-y-5">
                               <div className="space-y-2">
@@ -2706,13 +2706,13 @@ function AppContent() {
                                       <div className="flex gap-1">
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleEditSquad(event); }}
-                                          className="p-1.5 bg-zinc-100 dark:bg-slate-700 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-maya-blue transition-all"
+                                          className="p-1.5 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-lg hover:bg-stormy-teal/10 dark:hover:bg-stormy-teal/20 hover:text-stormy-teal dark:hover:text-maya-blue transition-all"
                                         >
                                           <Edit2 className="w-3.5 h-3.5" />
                                         </button>
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleCancelSquad(event.id); }}
-                                          className="p-1.5 bg-zinc-100 dark:bg-slate-700 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 transition-all"
+                                          className="p-1.5 bg-zinc-100 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 transition-all"
                                         >
                                           <X className="w-3.5 h-3.5" />
                                         </button>
@@ -2745,7 +2745,7 @@ function AppContent() {
                                 className={cn(
                                   "w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2",
                                   isAttending 
-                                    ? "bg-zinc-100 dark:bg-slate-700 text-zinc-400 dark:text-slate-500 cursor-default" 
+                                    ? "bg-zinc-100 text-zinc-400 dark:text-slate-500 cursor-default" 
                                     : "bg-emerald-action text-white hover:bg-emerald-action/90 shadow-lg shadow-emerald-action/20 active:scale-95"
                                 )}
                               >
@@ -2860,7 +2860,7 @@ function AppContent() {
 
       {/* Global Floating Action Button: Sensor Activo */}
       {TABS_WITH_SENSOR.includes(activeTab) && (
-        <div className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-[55]">
+        <div className="fixed bottom-[calc(var(--mobile-tab-bar-height,5.25rem)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
           <button 
             onClick={() => { resetForm(); setIsReportModalOpen(true); }}
             aria-label={`${t('common.active_sensor')} - ${t('common.report')}`}
@@ -3004,7 +3004,7 @@ function AppContent() {
                 onBlur={(e) => validateField('vName', e.target.value)}
                 placeholder={t('community.volunteer_name_placeholder')}
                 className={cn(
-                  "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
+                  "w-full p-5 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
                   fieldErrors.vName && "border-red-500 focus:ring-red-500"
                 )}
               />
@@ -3022,7 +3022,7 @@ function AppContent() {
                 onBlur={(e) => validateField('vContact', e.target.value)}
                 placeholder={t('community.volunteer_contact_placeholder')}
                 className={cn(
-                  "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
+                  "w-full p-5 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
                   fieldErrors.vContact && "border-red-500 focus:ring-red-500"
                 )}
               />
@@ -3042,7 +3042,7 @@ function AppContent() {
               aria-describedby={fieldErrors.vZone ? 'volunteer-zone-error' : undefined}
               placeholder={t('community.volunteer_zone')}
               className={cn(
-                "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
+                "w-full p-5 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium text-zinc-900 dark:text-white",
                 fieldErrors.vZone && "border-red-500 focus:ring-red-500"
               )}
             />
@@ -3058,7 +3058,7 @@ function AppContent() {
               onBlur={(e) => validateField('vHelpType', e.target.value)}
               placeholder={t('community.volunteer_help_placeholder')}
               className={cn(
-                "w-full p-5 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium min-h-[100px] text-zinc-900 dark:text-white",
+                "w-full p-5 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-medium min-h-[100px] text-zinc-900 dark:text-white",
                 fieldErrors.vHelpType && "border-red-500 focus:ring-red-500"
               )}
             />
@@ -3096,7 +3096,7 @@ function AppContent() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] shadow-2xl"
+              className="w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl"
             >
               <ReportForm 
                 onClose={() => setIsReportModalOpen(false)} 
@@ -3141,7 +3141,7 @@ function AppContent() {
                   </div>
                 ))}
                 {selectedImages.length < 5 && (
-                  <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-dashed border-zinc-200 dark:border-slate-700 flex items-center justify-center text-zinc-300 dark:text-slate-600 hover:bg-zinc-50 dark:hover:bg-slate-800">
+                  <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-dashed border-zinc-200 dark:border-slate-700 flex items-center justify-center text-zinc-300 dark:text-slate-600 hover:bg-zinc-50">
                     <Plus className="w-8 h-8" />
                   </button>
                 )}
@@ -3156,7 +3156,7 @@ function AppContent() {
               type="text" 
               placeholder={t('community.post_title_placeholder')}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 text-zinc-900 dark:text-white font-bold",
+                "w-full p-4 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 text-zinc-900 dark:text-white font-bold",
                 fieldErrors.title && "border-red-500 focus:ring-red-500"
               )}
               value={title}
@@ -3177,7 +3177,7 @@ function AppContent() {
                   onClick={() => setTag(tagValue)} 
                   className={cn(
                     "flex-1 py-3 rounded-xl text-xs font-bold capitalize transition-all", 
-                    tag === tagValue ? "bg-emerald-600 text-white" : "bg-zinc-100 dark:bg-slate-700 text-zinc-500 dark:text-slate-400"
+                    tag === tagValue ? "bg-emerald-600 text-white" : "bg-zinc-100 text-zinc-500 dark:text-slate-400"
                   )}
                 >
                   {t(`community.tag_${tagValue}`)}
@@ -3191,7 +3191,7 @@ function AppContent() {
             <textarea 
               placeholder={t('community.post_details_placeholder')}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 min-h-[120px] text-zinc-900 dark:text-white font-medium",
+                "w-full p-4 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 min-h-[120px] text-zinc-900 dark:text-white font-medium",
                 fieldErrors.description && "border-red-500 focus:ring-red-500"
               )}
               value={description}
@@ -3217,7 +3217,7 @@ function AppContent() {
               type="text" 
               placeholder={t('community.post_contact_placeholder')}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 text-zinc-900 dark:text-white font-bold",
+                "w-full p-4 bg-zinc-50 border border-zinc-200 dark:border-slate-700 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 text-zinc-900 dark:text-white font-bold",
                 fieldErrors.contact && "border-red-500 focus:ring-red-500"
               )}
               value={contact}
@@ -3247,9 +3247,9 @@ function AppContent() {
           <div className="fixed inset-0 z-[70] flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md">
             <motion.div 
               layoutId={isDetailOpen.id}
-              className="bg-white dark:bg-slate-800 sm:rounded-[3rem] w-full max-w-2xl overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh] shadow-2xl"
+              className="bg-white sm:rounded-[3rem] w-full max-w-2xl overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh] shadow-2xl"
             >
-              <div className="relative w-full bg-zinc-100 dark:bg-slate-900 shrink-0" style={{ maxHeight: '40%' }}>
+              <div className="relative w-full bg-zinc-100 shrink-0" style={{ maxHeight: '40%' }}>
                 {('images' in isDetailOpen && isDetailOpen.images && isDetailOpen.images[0]) ? (
                   <img 
                     src={isDetailOpen.images[0]} 
@@ -3280,7 +3280,7 @@ function AppContent() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="bg-zinc-50 dark:bg-slate-900/50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
+                      <div className="bg-zinc-50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
                         <Calendar className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
                         <div>
                           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{t('community.date_label')}</p>
@@ -3289,7 +3289,7 @@ function AppContent() {
                           </p>
                         </div>
                       </div>
-                      <div className="bg-zinc-50 dark:bg-slate-900/50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
+                      <div className="bg-zinc-50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
                         <MapPin className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
                         <div>
                           <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{t('community.location_label')}</p>
@@ -3331,7 +3331,7 @@ function AppContent() {
                       <h2 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{isDetailOpen.title}</h2>
                       <div className="flex gap-2">
                         <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.tag}</span>
-                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-slate-700 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type}</span>
                       </div>
                     </div>
 
@@ -3356,7 +3356,7 @@ function AppContent() {
                                     "px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all",
                                     isDetailOpen.status === status 
                                       ? "bg-stormy-teal text-white" 
-                                      : "bg-zinc-100 dark:bg-slate-700 text-zinc-500 dark:text-slate-400 hover:bg-zinc-200 dark:hover:bg-slate-600"
+                                      : "bg-zinc-100 text-zinc-500 dark:text-slate-400 hover:bg-zinc-200"
                                   )}
                                 >
                                   {status === 'disponible' ? t('community.status_available') :
@@ -3438,7 +3438,7 @@ function AppContent() {
               </div>
             ) : (
               squadAttendeesProfiles.map((profile, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
+                <div key={i} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
                   <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 overflow-hidden flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-lg">
                     {profile.photoURL ? (
                       <img src={profile.photoURL} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -3472,24 +3472,24 @@ function AppContent() {
       >
         {selectedSquadForDetail && (
           <div className="space-y-6">
-            <div className="p-6 bg-zinc-50 dark:bg-slate-900 rounded-3xl border border-zinc-100 dark:border-slate-800">
+            <div className="p-6 bg-zinc-50 rounded-3xl border border-zinc-100 dark:border-slate-800">
               <p className="text-zinc-600 dark:text-slate-300 font-medium leading-relaxed">
                 {selectedSquadForDetail.description}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
+              <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.date_label')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.date}</span>
               </div>
-              <div className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
+              <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
                 <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.squad_time_label')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.time}</span>
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
+            <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.location_label')}</span>
               <span className="font-bold text-stormy-teal dark:text-maya-blue">{selectedSquadForDetail.location}</span>
             </div>
@@ -3542,7 +3542,7 @@ function AppContent() {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => setSquadToCancel(null)}
-              className="py-4 bg-zinc-100 dark:bg-slate-800 text-zinc-600 dark:text-slate-300 rounded-2xl font-bold uppercase tracking-widest text-xs"
+              className="py-4 bg-zinc-100 text-zinc-600 dark:text-slate-300 rounded-2xl font-bold uppercase tracking-widest text-xs"
             >
               {t('common.cancel')}
             </button>
@@ -3572,7 +3572,7 @@ function AppContent() {
               onBlur={(e) => validateField('sTitle', e.target.value)}
               placeholder={t('community.squad_title_placeholder')}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
+                "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
                 fieldErrors.sTitle && "border-red-500 focus:ring-red-500"
               )}
             />
@@ -3589,7 +3589,7 @@ function AppContent() {
               placeholder={t('community.squad_desc_placeholder')}
               rows={3}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-medium text-zinc-900 dark:text-white",
+                "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-medium text-zinc-900 dark:text-white",
                 fieldErrors.sDescription && "border-red-500 focus:ring-red-500"
               )}
             />
@@ -3612,7 +3612,7 @@ function AppContent() {
                 type="date" 
                 value={sDate}
                 onChange={(e) => setSDate(e.target.value)}
-                className="w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
+                className="w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
               />
             </div>
             <div className="space-y-2">
@@ -3621,7 +3621,7 @@ function AppContent() {
                 type="time" 
                 value={sTime}
                 onChange={(e) => setSTime(e.target.value)}
-                className="w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
+                className="w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
               />
             </div>
           </div>
@@ -3635,7 +3635,7 @@ function AppContent() {
               aria-describedby={fieldErrors.sLocation ? 'squad-location-error' : undefined}
               placeholder={t('community.squad_location_placeholder')}
               className={cn(
-                "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
+                "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
                 fieldErrors.sLocation && "border-red-500 focus:ring-red-500"
               )}
             />
@@ -3649,7 +3649,7 @@ function AppContent() {
               type="number" 
               value={sMaxParticipants}
               onChange={(e) => setSMaxParticipants(parseInt(e.target.value) || 0)}
-              className="w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
+              className="w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white"
             />
           </div>
           <button 
