@@ -429,7 +429,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-stormy-teal dark:text-maya-blue" />
-            <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-white uppercase tracking-tight">{t('profile.level')}</h3>
+            <h3 className="text-lg sm:text-xl font-display font-black theme-text-primary uppercase tracking-tight">{t('profile.level')}</h3>
           </div>
           <span className="bg-stormy-teal dark:bg-stormy-teal/80 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
             {t('profile.level')} {profile.level}
@@ -462,7 +462,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
         <section className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
           <div className="flex items-center gap-3">
             <Trophy className="w-6 h-6 text-amber-500" />
-            <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-white uppercase tracking-tight">{t('profile.achievements')}</h3>
+            <h3 className="text-lg sm:text-xl font-display font-black theme-text-primary uppercase tracking-tight">{t('profile.achievements')}</h3>
           </div>
           
           <div className="grid grid-cols-3 gap-4">
@@ -493,7 +493,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Target className="w-6 h-6 text-rose-500" />
-              <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-white uppercase tracking-tight">{t('profile.missions')}</h3>
+              <h3 className="text-lg sm:text-xl font-display font-black theme-text-primary uppercase tracking-tight">{t('profile.missions')}</h3>
             </div>
             <span className="text-[9px] sm:text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse">{t('common.in_progress')}</span>
           </div>
