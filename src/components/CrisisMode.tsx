@@ -61,7 +61,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     },
     { 
       title: t('crisis.water_guide'), 
-      icon: <Droplets className="w-6 h-6 text-blue-500" />, 
+      icon: <Droplets className="w-6 h-6 text-stormy-teal" />, 
       steps: [t('crisis.water_step1'), t('crisis.water_step2'), t('crisis.water_step3')],
       warning: t('crisis.water_warning')
     }

@@ -53,7 +53,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
       case 'Abierto (en seguimiento)': return { color: 'bg-maya-blue/10 dark:bg-maya-blue/30 text-maya-blue dark:text-maya-blue', icon: <Clock className="w-4 h-4" />, label: t('reports.status_followup') };
       case 'Abierto (agravado)': return { color: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300', icon: <AlertTriangle className="w-4 h-4" />, label: t('reports.status_aggravated') };
       case 'Resuelto': return { color: 'bg-emerald-action/10 dark:bg-emerald-action/30 text-emerald-action dark:text-emerald-action', icon: <CheckCircle2 className="w-4 h-4" />, label: t('reports.status_resolved') };
-      default: return { color: 'bg-zinc-100 dark:bg-slate-700 text-zinc-700 dark:text-slate-300', icon: <Activity className="w-4 h-4" />, label: status };
+      default: return { color: 'bg-zinc-100 text-zinc-700 dark:text-slate-300', icon: <Activity className="w-4 h-4" />, label: status };
     }
   };
 
@@ -77,7 +77,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white dark:bg-slate-800 rounded-[2rem] sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[90vh] border border-zinc-100 dark:border-slate-700"
+        className="bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col max-h-[90vh] border border-zinc-100 dark:border-slate-700"
       >
         {/* Header */}
         <div className="relative h-48 sm:h-64 shrink-0">
@@ -94,7 +94,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
               <span className="font-black uppercase tracking-widest text-[10px]">{t('reports.crisis_alert')}</span>
             </div>
           ) : (
-            <div className="w-full h-full bg-zinc-100 dark:bg-slate-900 flex flex-col items-center justify-center text-zinc-300 dark:text-slate-700">
+            <div className="w-full h-full bg-zinc-100 flex flex-col items-center justify-center text-zinc-300 dark:text-slate-700">
               <Camera className="w-12 sm:w-16 h-12 sm:h-16 mb-2" />
               <span className="font-black uppercase tracking-widest text-[10px]">{t('reports.no_evidence_image')}</span>
             </div>
@@ -142,7 +142,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
 
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-zinc-500 dark:text-slate-400">
-                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 dark:bg-slate-900 flex items-center justify-center text-stormy-teal dark:text-maya-blue border border-zinc-100 dark:border-slate-700">
+                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 flex items-center justify-center text-stormy-teal dark:text-maya-blue border border-zinc-100 dark:border-slate-700">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -154,7 +154,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
                 </div>
 
                 <div className="flex items-center gap-3 text-zinc-500 dark:text-slate-400">
-                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 dark:bg-slate-900 flex items-center justify-center text-maya-blue dark:text-maya-blue border border-zinc-100 dark:border-slate-700">
+                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 flex items-center justify-center text-maya-blue dark:text-maya-blue border border-zinc-100 dark:border-slate-700">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
@@ -166,7 +166,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
                 </div>
 
                 <div className="flex items-center gap-3 text-zinc-500 dark:text-slate-400">
-                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 dark:bg-slate-900 flex items-center justify-center text-emerald-action dark:text-emerald-action border border-zinc-100 dark:border-slate-700">
+                  <div className="w-10 h-10 rounded-2xl bg-zinc-50 flex items-center justify-center text-emerald-action dark:text-emerald-action border border-zinc-100 dark:border-slate-700">
                     <User className="w-5 h-5" />
                   </div>
                   <div>
@@ -180,7 +180,7 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
             </div>
 
             <div className="space-y-6">
-              <div className="bg-zinc-50 dark:bg-slate-900 p-6 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 dark:border-slate-700 space-y-4">
+              <div className="bg-zinc-50 p-6 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 dark:border-slate-700 space-y-4">
                 <div className="flex items-center gap-3">
                   <History className="w-5 h-5 text-zinc-400 dark:text-slate-500" />
                   <h4 className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest">{t('reports.system_status')}</h4>

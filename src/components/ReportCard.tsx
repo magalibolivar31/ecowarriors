@@ -28,12 +28,12 @@ export const ReportCard: React.FC<ReportCardProps> = ({
   
   const getStatusConfig = (status: ReportStatus) => {
     switch (status) {
-      case 'Abierto (nuevo)': return { color: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300', icon: <Activity className="w-3 h-3" />, label: t('reports.status_new') };
+      case 'Abierto (nuevo)': return { color: 'bg-soft-maya-blue/30 text-stormy-teal', icon: <Activity className="w-3 h-3" />, label: t('reports.status_new') };
       case 'Abierto (en seguimiento)': return { color: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300', icon: <Clock className="w-3 h-3" />, label: t('reports.status_followup') };
       case 'Abierto (agravado)': return { color: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300', icon: <AlertTriangle className="w-3 h-3" />, label: t('reports.status_aggravated') };
       case 'Resuelto': return { color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300', icon: <CheckCircle2 className="w-3 h-3" />, label: t('reports.status_resolved') };
-      case 'Cancelado': return { color: 'bg-zinc-100 dark:bg-slate-700 text-zinc-700 dark:text-slate-300', icon: <X className="w-3 h-3" />, label: t('reports.status_cancelled') };
-      default: return { color: 'bg-zinc-100 dark:bg-slate-700 text-zinc-700 dark:text-slate-300', icon: <Info className="w-3 h-3" />, label: status };
+      case 'Cancelado': return { color: 'bg-zinc-100 text-zinc-700', icon: <X className="w-3 h-3" />, label: t('reports.status_cancelled') };
+      default: return { color: 'bg-zinc-100 text-zinc-700', icon: <Info className="w-3 h-3" />, label: status };
     }
   };
 
@@ -43,9 +43,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({
   return (
     <div 
       onClick={onClick}
-      className="group bg-white dark:bg-slate-800/90 rounded-[2rem] border border-zinc-100 dark:border-slate-600 shadow-sm hover:shadow-xl hover:border-emerald-action/30 transition-all cursor-pointer overflow-hidden flex flex-col h-full"
+      className="group bg-white rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-md hover:border-emerald-action/30 transition-all cursor-pointer overflow-hidden flex flex-col h-full"
     >
-      <div className="relative aspect-video overflow-hidden bg-zinc-100 dark:bg-slate-900">
+      <div className="relative aspect-video overflow-hidden bg-zinc-100">
         {report.initialImageUrl ? (
           <img 
             src={report.initialImageUrl} 
@@ -54,14 +54,14 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : report.type === 'crisis' ? (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 animate-pulse">
+          <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 text-red-500 animate-pulse">
             <AlertTriangle className="w-12 h-12 mb-2" />
             <span className="text-[10px] font-black uppercase tracking-widest">{t('reports.crisis_alert')}</span>
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-zinc-300 dark:text-slate-700 bg-brand-bg dark:bg-slate-800">
-            <AlertTriangle className="w-8 h-8 mb-2 text-stormy-teal/20 dark:text-white/10" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-stormy-teal/30 dark:text-white/20">{t('reports.no_image')}</span>
+          <div className="w-full h-full flex flex-col items-center justify-center text-zinc-300 bg-brand-bg">
+            <AlertTriangle className="w-8 h-8 mb-2 text-stormy-teal/20" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-stormy-teal/30">{t('reports.no_image')}</span>
           </div>
         )}
 
@@ -111,7 +111,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             {report.type === 'crisis' ? t('reports.mode_crisis') : t('reports.mode_environmental')}
           </span>
           <span className={cn(
-            "px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg backdrop-blur-md flex items-center gap-1.5 bg-white/90 dark:bg-slate-800/90",
+            "px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm flex items-center gap-1.5 bg-white border border-zinc-100",
             statusConfig.color.replace('bg-', 'text-')
           )}>
             {statusConfig.icon}
@@ -123,16 +123,16 @@ export const ReportCard: React.FC<ReportCardProps> = ({
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex-1 space-y-3">
             <div className="hidden sm:flex items-center justify-between">
-              <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
                 {report.createdAt?.seconds ? format(new Date(report.createdAt.seconds * 1000), "d MMM, yyyy", { locale: dateLocale }) : t('reports.recent')}
               </span>
-              <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1">
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {report.createdAt?.seconds ? format(new Date(report.createdAt.seconds * 1000), "HH:mm", { locale: dateLocale }) : ''}
               </span>
             </div>
 
-            <h4 className="text-lg font-display font-black text-stormy-teal dark:text-white uppercase tracking-tighter leading-tight group-hover:text-emerald-action transition-colors line-clamp-2">
+            <h4 className="text-lg font-display font-black text-stormy-teal uppercase tracking-tighter leading-tight group-hover:text-emerald-action transition-colors line-clamp-2">
               {report.title}
               {isAdmin && report.isActive === false && (
                 <span className="ml-2 text-red-500 text-[10px] font-black tracking-widest">({t('reports.status_cancelled')})</span>
@@ -151,7 +151,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
               </div>
             )}
 
-            <div className="flex items-start gap-2 text-zinc-500 dark:text-slate-300">
+            <div className="flex items-start gap-2 text-zinc-500">
               <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-action" />
               <p className="text-[11px] font-medium line-clamp-2 leading-relaxed">
                 {Number.isFinite(report.location?.lat) && Number.isFinite(report.location?.lng) 
@@ -161,15 +161,15 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
+          <div className="pt-4 mt-4 border-t border-zinc-50 flex items-center justify-between">
             <div className="hidden sm:flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-stormy-teal/10 dark:bg-stormy-teal/30 flex items-center justify-center text-[9px] font-black text-stormy-teal dark:text-maya-blue">
+              <div className="w-6 h-6 rounded-full bg-stormy-teal/10 flex items-center justify-center text-[9px] font-black text-stormy-teal">
                 <UserAlias uid={report.createdBy} fallback={report.createdByName} initialOnly />
               </div>
               <UserAlias 
                 uid={report.createdBy} 
                 fallback={report.createdByName} 
-                className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest" 
+                className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest" 
               />
             </div>
             <div className="flex items-center gap-1 text-emerald-action font-black text-[9px] uppercase tracking-widest group-hover:translate-x-1 transition-transform">

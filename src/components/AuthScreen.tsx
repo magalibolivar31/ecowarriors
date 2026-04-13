@@ -278,17 +278,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
   };
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto dark:bg-slate-950 sm:dark:bg-slate-950/80">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white sm:bg-black/60 sm:backdrop-blur-xl overflow-y-auto sm:dark:bg-slate-950/80">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="bg-white dark:bg-slate-900 w-full max-w-[min(100vw,42rem)] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative min-h-full sm:min-h-0 sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
+        className="bg-white w-full max-w-[min(100vw,42rem)] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative min-h-full sm:min-h-0 sm:max-h-[90vh] border border-zinc-100 dark:border-slate-800"
       >
         {/* Header */}
-        <div className="p-8 border-b border-zinc-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
+        <div className="p-8 border-b border-zinc-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white z-10">
           <button 
             onClick={mode === 'forgot-password' ? () => setMode('login') : onClose}
-            className="p-3 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-2xl transition-colors"
+            className="p-3 hover:bg-zinc-100 rounded-2xl transition-colors"
           >
             <ChevronLeft className="w-6 h-6 text-zinc-500 dark:text-slate-400" />
           </button>
@@ -319,7 +319,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
               animate={{ opacity: 1, y: 0 }}
               className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-[2rem] border-2 border-amber-100 dark:border-amber-900/30 text-amber-800 dark:text-amber-400 text-sm font-medium mt-4 flex items-start gap-4 shadow-xl shadow-amber-500/5"
             >
-              <div className="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-sm shrink-0">
+              <div className="p-3 bg-white rounded-2xl shadow-sm shrink-0">
                 <Globe className="w-6 h-6 text-amber-500" />
               </div>
               <div className="space-y-4">
@@ -329,7 +329,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                 </div>
                 <button 
                   onClick={handleGoogleSignIn}
-                  className="w-full px-6 py-4 bg-white dark:bg-slate-800 border-2 border-amber-200 dark:border-amber-900/50 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-all flex items-center justify-center gap-3 shadow-sm"
+                  className="w-full px-6 py-4 bg-white border-2 border-amber-200 dark:border-amber-900/50 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-all flex items-center justify-center gap-3 shadow-sm"
                 >
                   <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
                   {t('auth.login_google')}
@@ -361,7 +361,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setAlias(e.target.value)}
                         onBlur={(e) => validateField('alias', e.target.value)}
                         className={cn(
-                          "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                           fieldErrors.alias && "border-red-500 focus:border-red-500"
                         )}
                       />
@@ -383,7 +383,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setZone(e.target.value)}
                           onBlur={(e) => validateField('zone', e.target.value)}
                           className={cn(
-                            "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                             fieldErrors.zone && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -403,7 +403,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                           onChange={(e) => setCommitment(e.target.value)}
                           onBlur={(e) => validateField('commitment', e.target.value)}
                           className={cn(
-                            "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                            "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                             fieldErrors.commitment && "border-red-500 focus:border-red-500"
                           )}
                         />
@@ -428,7 +428,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={(e) => validateField('email', e.target.value)}
                   className={cn(
-                    "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                    "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                     fieldErrors.email && "border-red-500 focus:border-red-500"
                   )}
                   suppressHydrationWarning
@@ -452,7 +452,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                       onChange={(e) => setPassword(e.target.value)}
                       onBlur={(e) => validateField('password', e.target.value)}
                       className={cn(
-                        "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                        "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                         fieldErrors.password && "border-red-500 focus:border-red-500"
                       )}
                       suppressHydrationWarning
@@ -475,7 +475,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={(e) => validateField('confirmPassword', e.target.value)}
                         className={cn(
-                          "w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-slate-950 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
+                          "w-full pl-14 pr-6 py-5 bg-zinc-50 border-2 border-transparent focus:border-emerald-action focus:bg-white dark:focus:bg-slate-900 rounded-3xl outline-none transition-all font-bold text-zinc-800 dark:text-white",
                           fieldErrors.confirmPassword && "border-red-500 focus:border-red-500"
                         )}
                         suppressHydrationWarning
@@ -551,14 +551,14 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                   <div className="w-full border-t border-zinc-100 dark:border-slate-800" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase tracking-widest font-black text-zinc-400 dark:text-slate-500">
-                  <span className="bg-white dark:bg-slate-900 px-6">{t('auth.or_continue')}</span>
+                  <span className="bg-white px-6">{t('auth.or_continue')}</span>
                 </div>
               </div>
 
               <button 
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full py-5 bg-white dark:bg-slate-900 border-2 border-zinc-100 dark:border-slate-800 text-zinc-700 dark:text-white rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-4"
+                className="w-full py-5 bg-white border-2 border-zinc-100 dark:border-slate-800 text-zinc-700 dark:text-white rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-zinc-50 transition-all flex items-center justify-center gap-4"
               >
                 <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
                 {t('auth.google_continue')}

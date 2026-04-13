@@ -152,7 +152,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
   if (success) {
     return (
-      <div className="bg-white dark:bg-slate-800 sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-12 flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.3s_ease-out]">
+      <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-12 flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.3s_ease-out]">
         <div className="w-20 h-20 bg-emerald-action rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-action/20">
           <CheckCircle2 className="w-10 h-10" />
         </div>
@@ -169,7 +169,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh]">
+    <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh]">
       <div className="flex items-center justify-between p-6 sm:p-8 border-b border-zinc-100 dark:border-slate-700 bg-emerald-action/10 dark:bg-emerald-900/20 shrink-0">
         <div className="flex items-center gap-3">
           <div className="p-2.5 sm:p-3 bg-emerald-action rounded-2xl text-white">
@@ -182,7 +182,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
             <p className="text-[10px] sm:text-xs font-bold text-emerald-action uppercase tracking-widest">{t('reports.traceability_system')}</p>
           </div>
         </div>
-        <button onClick={onClose} className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-700 rounded-full transition-colors">
+        <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
           <X className="w-6 h-6 text-zinc-500 dark:text-slate-400" />
         </button>
       </div>
@@ -230,7 +230,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                 onBlur={(e) => validateField('title', e.target.value)}
                 placeholder={t('reports.title_placeholder')}
                 className={cn(
-                  "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-200 dark:border-slate-700 font-bold outline-none focus:border-emerald-action transition-colors text-zinc-900 dark:text-white",
+                  "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-200 dark:border-slate-700 font-bold outline-none focus:border-emerald-action transition-colors text-zinc-900 dark:text-white",
                   fieldErrors.title && "border-red-500 focus:border-red-500"
                 )}
               />
@@ -257,7 +257,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                 placeholder={t('reports.description_placeholder')}
                 rows={4}
                 className={cn(
-                  "w-full p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-200 dark:border-slate-700 font-medium outline-none focus:border-emerald-action transition-colors resize-none text-zinc-900 dark:text-white",
+                  "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-200 dark:border-slate-700 font-medium outline-none focus:border-emerald-action transition-colors resize-none text-zinc-900 dark:text-white",
                   fieldErrors.description && "border-red-500 focus:border-red-500"
                 )}
               />
@@ -278,7 +278,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                 />
                 <label
                   htmlFor="report-image"
-                  className="flex flex-col items-center justify-center p-8 bg-zinc-50 dark:bg-slate-900 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-slate-700 cursor-pointer hover:bg-zinc-100 dark:hover:bg-slate-800 transition-all aspect-video overflow-hidden group"
+                  className="flex flex-col items-center justify-center p-8 bg-zinc-50 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-slate-700 cursor-pointer hover:bg-zinc-100 transition-all aspect-video overflow-hidden group"
                 >
                   {image ? (
                     <img src={image || undefined} className="absolute inset-0 w-full h-full object-cover" />
@@ -295,7 +295,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
             <div className="space-y-2">
               <label className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.location_label')}</label>
               <div className="flex gap-3">
-                <div className="flex-1 p-4 bg-zinc-50 dark:bg-slate-900 rounded-2xl border border-zinc-200 dark:border-slate-700 font-bold text-xs flex items-center justify-between min-h-[56px]">
+                <div className="flex-1 p-4 bg-zinc-50 rounded-2xl border border-zinc-200 dark:border-slate-700 font-bold text-xs flex items-center justify-between min-h-[56px]">
                   {isLocating ? (
                     <div className="flex items-center gap-2 text-emerald-action">
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -358,7 +358,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
             <div className="flex gap-4">
               <button
                 onClick={() => setIsConfirming(false)}
-                className="flex-1 py-5 bg-zinc-100 dark:bg-slate-800 text-zinc-500 dark:text-slate-400 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-zinc-200 dark:hover:bg-slate-700 transition-colors"
+                className="flex-1 py-5 bg-zinc-100 text-zinc-500 dark:text-slate-400 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors"
               >
                 {t('reports.edit_data')}
               </button>

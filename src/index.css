@@ -60,6 +60,8 @@
   --brand-text: var(--text-primary);
   --card-bg: var(--surface);
   --card-border: var(--border);
+  --card-radius: 2rem;
+  --card-shadow: 0 8px 20px -16px rgba(2, 65, 83, 0.25);
 }
 
 .dark {
@@ -173,7 +175,9 @@ body {
 .brand-card {
   background-color: var(--card-bg);
   border-color: var(--card-border);
-  @apply rounded-2xl border shadow-sm hover:shadow-md transition-all duration-300;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  @apply border transition-all duration-300;
 }
 
 /* Brand Button */
@@ -240,6 +244,38 @@ body {
 
 .bg-gradient-primary {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+}
+
+html:not(.dark) .shadow-xl,
+html:not(.dark) .shadow-2xl,
+html:not(.dark) .shadow-lg {
+  box-shadow: 0 10px 24px -20px rgba(2, 65, 83, 0.24) !important;
+}
+
+html:not(.dark) .bg-\[\#024153\],
+html:not(.dark) .bg-dark-teal,
+html:not(.dark) .bg-slate-50,
+html:not(.dark) .bg-slate-100,
+html:not(.dark) .bg-slate-200,
+html:not(.dark) .bg-slate-300,
+html:not(.dark) .bg-slate-400,
+html:not(.dark) .bg-slate-500,
+html:not(.dark) .bg-slate-600,
+html:not(.dark) .bg-slate-700,
+html:not(.dark) .bg-slate-800,
+html:not(.dark) .bg-slate-900,
+html:not(.dark) .bg-slate-950,
+html:not(.dark) .bg-blue-50,
+html:not(.dark) .bg-blue-100,
+html:not(.dark) .bg-blue-200,
+html:not(.dark) .bg-blue-300,
+html:not(.dark) .bg-blue-400,
+html:not(.dark) .bg-blue-500,
+html:not(.dark) .bg-blue-600,
+html:not(.dark) .bg-blue-700,
+html:not(.dark) .bg-blue-800,
+html:not(.dark) .bg-blue-900 {
+  background-color: var(--surface) !important;
 }
 
 .dark .bg-emerald-action {

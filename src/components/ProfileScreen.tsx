@@ -281,7 +281,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       {/* Hero Section: Identity Card */}
       <section className="relative">
         <div className="absolute inset-0 bg-zinc-50 rounded-[2rem] sm:rounded-[3rem] -z-10" />
-        <div className="bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 shadow-xl shadow-stormy-teal/5 dark:shadow-none text-center relative overflow-hidden">
+        <div className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 shadow-xl shadow-stormy-teal/5 dark:shadow-none text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-32 bg-stormy-teal opacity-5" />
           
           <div className="relative z-10">
@@ -357,12 +357,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 max-w-md mx-auto">
-              <div className="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
+              <div className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
                 <MapPin className="w-4 h-4 text-stormy-teal/40" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.zone')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base">{formatDisplayValue(profile.zone, t('reports.undefined'))}</span>
               </div>
-              <div className="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
+              <div className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 flex flex-col items-center gap-1">
                 <Heart className="w-4 h-4 text-rose-500" />
                 <span className="text-[9px] sm:text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('reports.commitment')}</span>
                 <span className="font-bold text-stormy-teal dark:text-maya-blue text-xs sm:text-base line-clamp-1">{formatDisplayValue(profile.commitment, t('reports.undefined'))}</span>
@@ -384,7 +384,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-white dark:bg-slate-800/90 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 dark:border-slate-600 shadow-sm flex flex-col items-center gap-2 hover:shadow-md transition-all"
+            className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 dark:border-slate-600 shadow-sm flex flex-col items-center gap-2 hover:shadow-md transition-all"
           >
             <div className={cn("p-4 rounded-2xl mb-2", stat.bg)}>
               <stat.icon className={cn("w-6 h-6", stat.color)} />
@@ -396,7 +396,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       </section>
 
       {/* Progress Section */}
-      <section className="bg-white dark:bg-slate-800/90 p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-6">
+      <section className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-stormy-teal dark:text-maya-blue" />
@@ -412,7 +412,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             <span>{profile.xp} XP</span>
             <span>{nextLevelXP} XP</span>
           </div>
-          <div className="h-6 bg-zinc-100 dark:bg-slate-700 rounded-full overflow-hidden p-1">
+          <div className="h-6 bg-zinc-100 rounded-full overflow-hidden p-1">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
@@ -430,7 +430,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       {/* Achievements & Missions Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Achievements */}
-        <section className="bg-white dark:bg-slate-800/90 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
+        <section className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
           <div className="flex items-center gap-3">
             <Trophy className="w-6 h-6 text-amber-500" />
             <h3 className="text-lg sm:text-xl font-display font-black text-stormy-teal dark:text-white uppercase tracking-tight">{t('profile.achievements')}</h3>
@@ -440,7 +440,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             {achievements.length > 0 ? (
               achievements.map((achievement, i) => (
                 <div key={i} className="flex flex-col items-center gap-2 group">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-zinc-50 dark:bg-slate-700 rounded-2xl flex items-center justify-center group-hover:bg-amber-50 dark:group-hover:bg-amber-500/20 transition-colors">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-zinc-50 rounded-2xl flex items-center justify-center group-hover:bg-amber-50 dark:group-hover:bg-amber-500/20 transition-colors">
                     <Award className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
                   </div>
                   <span className="text-[9px] sm:text-[10px] font-bold text-zinc-500 dark:text-slate-300 uppercase tracking-tighter text-center leading-tight">
@@ -450,7 +450,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               ))
             ) : (
               <div className="col-span-3 py-10 text-center space-y-2">
-                <div className="w-16 h-16 bg-zinc-50 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto opacity-50">
+                <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center mx-auto opacity-50">
                   <Award className="w-8 h-8 text-zinc-300 dark:text-slate-500" />
                 </div>
                 <p className="text-[10px] text-zinc-400 dark:text-slate-500 font-bold uppercase tracking-widest">{t('profile.no_achievements')}</p>
@@ -460,7 +460,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
         </section>
 
         {/* Active Missions */}
-        <section className="bg-white dark:bg-slate-800/90 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
+        <section className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Target className="w-6 h-6 text-rose-500" />
@@ -478,7 +478,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                     <button 
                       key={mission.id} 
                       onClick={() => setSelectedMission(mission)}
-                      className="w-full p-4 sm:p-5 bg-zinc-50 dark:bg-slate-700/50 rounded-[1.5rem] sm:rounded-[2rem] border border-zinc-100 dark:border-slate-600 flex items-center gap-4 group hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg transition-all text-left"
+                      className="w-full p-4 sm:p-5 bg-zinc-50 rounded-[1.5rem] sm:rounded-[2rem] border border-zinc-100 dark:border-slate-600 flex items-center gap-4 group hover:bg-white hover:shadow-lg transition-all text-left"
                     >
                       <div className={cn("p-3 rounded-2xl text-white shadow-lg relative shrink-0", mission.color)}>
                         <mission.icon className="w-5 h-5" />
@@ -495,7 +495,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                           </h4>
                           <span className="text-[9px] sm:text-[10px] font-black text-emerald-action uppercase shrink-0">+{mission.reward} {t('mission.reward_label')}</span>
                         </div>
-                        <div className="h-1.5 bg-zinc-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-zinc-200 rounded-full overflow-hidden">
                           <motion.div 
                             initial={{ width: 0 }}
                             animate={{ width: `${mission.progress}%` }}
@@ -533,12 +533,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl w-full max-w-md overflow-hidden border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-md overflow-hidden border border-zinc-100 dark:border-slate-800"
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{t('common.edit_profile')}</h3>
-                  <button onClick={() => setIsEditModalOpen(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-full">
+                  <button onClick={() => setIsEditModalOpen(false)} className="p-2 hover:bg-zinc-100 rounded-full">
                     <X className="w-6 h-6 text-zinc-400 dark:text-slate-500" />
                   </button>
                 </div>
@@ -552,7 +552,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                       onChange={(e) => setEditName(e.target.value)}
                       onBlur={(e) => validateField('editName', e.target.value)}
                       className={cn(
-                        "w-full p-5 bg-zinc-50 dark:bg-slate-800 border-2 border-zinc-100 dark:border-slate-700 rounded-3xl focus:border-emerald-500 outline-none font-bold text-zinc-900 dark:text-white",
+                        "w-full p-5 bg-zinc-50 border-2 border-zinc-100 dark:border-slate-700 rounded-3xl focus:border-emerald-500 outline-none font-bold text-zinc-900 dark:text-white",
                         fieldErrors.editName && "border-red-500 focus:border-red-500"
                       )}
                       placeholder={t('common.new_alias_placeholder')}
@@ -583,7 +583,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
@@ -592,7 +592,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                   </div>
                   <button 
                     onClick={() => setSelectedMission(null)}
-                    className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                    className="p-2 hover:bg-zinc-100 rounded-full transition-colors"
                   >
                     <X className="w-6 h-6 text-zinc-400 dark:text-slate-500" />
                   </button>
@@ -606,7 +606,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                     <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.reward} {t('mission.reward_label')}
                     </span>
-                    <span className="px-3 py-1 bg-zinc-100 dark:bg-slate-800 text-zinc-500 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span className="px-3 py-1 bg-zinc-100 text-zinc-500 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest">
                       {selectedMission.status === 'in-progress' ? t('mission.status_in_progress') : t('mission.status_available')}
                     </span>
                   </div>
@@ -656,7 +656,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
+              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-800"
             >
               <div className="p-8 space-y-6">
                 <div className="flex items-center justify-between">
@@ -670,7 +670,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                   </div>
                   <button 
                     onClick={() => setIsPrivacyModalOpen(false)}
-                    className="p-2 hover:bg-zinc-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                    className="p-2 hover:bg-zinc-100 rounded-full transition-colors"
                   >
                     <X className="w-6 h-6 text-zinc-400 dark:text-slate-500" />
                   </button>
@@ -763,8 +763,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {recentReports.length > 0 ? (
             recentReports.map(report => (
-              <div key={report.id} className="bg-white dark:bg-slate-800 p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 shadow-sm flex flex-col gap-3">
-                <div className="aspect-square rounded-2xl bg-zinc-100 dark:bg-slate-900 overflow-hidden">
+              <div key={report.id} className="bg-white p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 shadow-sm flex flex-col gap-3">
+                <div className="aspect-square rounded-2xl bg-zinc-100 overflow-hidden">
                   {report.initialImageUrl ? (
                     <img src={report.initialImageUrl} referrerPolicy="no-referrer" className="w-full h-full object-cover" alt={report.type} />
                   ) : (
@@ -790,7 +790,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               </div>
             ))
           ) : (
-            <div className="col-span-3 py-10 bg-white dark:bg-slate-900/50 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-slate-700 text-center">
+            <div className="col-span-3 py-10 bg-white rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-slate-700 text-center">
               <p className="text-[10px] text-zinc-400 dark:text-slate-500 font-bold uppercase tracking-widest">{t('reports.empty_mine')}</p>
             </div>
           )}
@@ -816,16 +816,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       </section>
 
       {/* Settings Section */}
-      <section className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 space-y-4">
+      <section className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-800 space-y-4">
         <h3 className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest ml-4 mb-6">{t('profile.settings')}</h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button 
             onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
+            className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-slate-900 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
                 {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
               </div>
               <div className="text-left">
@@ -835,17 +835,17 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                 </span>
               </div>
             </div>
-            <div className={cn("w-10 h-6 rounded-full p-1 transition-colors", darkMode ? "bg-emerald-action" : "bg-zinc-200 dark:bg-slate-700")}>
+            <div className={cn("w-10 h-6 rounded-full p-1 transition-colors", darkMode ? "bg-emerald-action" : "bg-zinc-200")}>
               <div className={cn("w-4 h-4 bg-white rounded-full transition-transform", darkMode ? "translate-x-4" : "translate-x-0")} />
             </div>
           </button>
 
           <button 
             onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
+            className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className={cn("p-3 rounded-2xl bg-zinc-50 dark:bg-slate-900 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors", notificationsEnabled ? "text-emerald-action" : "text-rose-500")}>
+              <div className={cn("p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors", notificationsEnabled ? "text-emerald-action" : "text-rose-500")}>
                 <Bell className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -855,17 +855,17 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                 </span>
               </div>
             </div>
-            <div className={cn("w-10 h-6 rounded-full p-1 transition-colors", notificationsEnabled ? "bg-emerald-action" : "bg-zinc-200 dark:bg-slate-700")}>
+            <div className={cn("w-10 h-6 rounded-full p-1 transition-colors", notificationsEnabled ? "bg-emerald-action" : "bg-zinc-200")}>
               <div className={cn("w-4 h-4 bg-white rounded-full transition-transform", notificationsEnabled ? "translate-x-4" : "translate-x-0")} />
             </div>
           </button>
 
           <button 
             onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
+            className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-slate-900 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-maya-blue">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-maya-blue">
                 <Globe className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -880,10 +880,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
 
           <button 
             onClick={() => setIsPrivacyModalOpen(true)}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
+            className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:shadow-md transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-slate-900 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-amber-500">
                 <Lock className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -898,10 +898,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
           
           <button 
             onClick={onLogout}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:border-rose-100 dark:hover:border-rose-900/30 transition-all group"
+            className="flex items-center justify-between p-5 bg-white rounded-2xl sm:rounded-3xl hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:border-rose-100 dark:hover:border-rose-900/30 transition-all group"
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-slate-900 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-rose-500">
+              <div className="p-3 rounded-2xl bg-zinc-50 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors text-rose-500">
                 <LogOut className="w-5 h-5" />
               </div>
               <span className="font-bold text-zinc-700 dark:text-slate-200 text-sm sm:text-base">{t('profile.logout')}</span>
