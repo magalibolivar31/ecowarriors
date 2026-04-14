@@ -177,12 +177,15 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
   useEffect(() => {
     localStorage.setItem('crisis_reminders', remindersEnabled.toString());
+    if (userSettings) {
+      onUpdateSettings({ crisisRemindersEnabled: remindersEnabled });
+    }
     if (remindersEnabled) {
       console.log(t('crisis.system_reminders_on'));
     } else {
       console.log(t('crisis.system_reminders_off'));
     }
-  }, [remindersEnabled]);
+  }, [remindersEnabled, userSettings]);
 
   useEffect(() => {
     localStorage.setItem('crisis_backpack', JSON.stringify(checkedItems));
@@ -199,6 +202,77 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       onUpdateSettings({ trustedContacts: contacts });
     }
   }, [contacts]);
+
+  useEffect(() => {
+    let isSyncing = false;
+
+    const syncPendingDamageReports = async () => {
+      if (isSyncing || !navigator.onLine || !auth.currentUser) return;
+      const pendingRaw = localStorage.getItem('pending_damage_reports');
+      if (!pendingRaw) return;
+
+      let pendingReports: any[] = [];
+      try {
+        pendingReports = JSON.parse(pendingRaw);
+      } catch {
+        localStorage.removeItem('pending_damage_reports');
+        return;
+      }
+
+      if (!Array.isArray(pendingReports) || pendingReports.length === 0) {
+        localStorage.removeItem('pending_damage_reports');
+        return;
+      }
+
+      isSyncing = true;
+      const remaining: any[] = [];
+      let syncedCount = 0;
+
+      for (const pending of pendingReports) {
+        try {
+          const location = pending?.location;
+          if (
+            !location ||
+            typeof location.lat !== 'number' ||
+            typeof location.lng !== 'number' ||
+            !Number.isFinite(location.lat) ||
+            !Number.isFinite(location.lng)
+          ) {
+            continue;
+          }
+
+          await createReport(
+            pending?.type === 'ambiental' ? 'ambiental' : 'crisis',
+            pending?.title || t('crisis.default_report_title'),
+            pending?.description || t('crisis.default_report_desc')
+              .replace('{type}', t('crisis.default_report_title'))
+              .replace('{zone}', t('crisis.zone_not_specified')),
+            location,
+            pending?.imageBase64 || null
+          );
+          syncedCount += 1;
+        } catch (error) {
+          remaining.push(pending);
+        }
+      }
+
+      if (remaining.length > 0) {
+        localStorage.setItem('pending_damage_reports', JSON.stringify(remaining));
+      } else {
+        localStorage.removeItem('pending_damage_reports');
+      }
+
+      if (syncedCount > 0) {
+        showAlert(t('common.success'), t('crisis.offline_reports_synced'));
+      }
+
+      isSyncing = false;
+    };
+
+    void syncPendingDamageReports();
+    window.addEventListener('online', syncPendingDamageReports);
+    return () => window.removeEventListener('online', syncPendingDamageReports);
+  }, [showAlert, t]);
 
   const handleSafeStatus = () => {
     if (contacts.length === 0) {

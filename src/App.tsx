@@ -105,6 +105,7 @@ import {
   createReport as createReportService,
   addReportUpdate,
   deleteReport,
+  cancelReport,
   normalizeAllReports
 } from './services/reportService';
 import { subscribeToSquads, toggleSquadAttendance, createSquad, updateSquad, cancelSquad, deleteSquad } from './services/squadService';
@@ -423,20 +424,16 @@ function AppContent() {
   };
 
   const handleOwnerDeleteReport = async (reportId: string, reportType: 'ambiental' | 'crisis') => {
-    setDeletingReportIds((prev) => {
-      const next = new Set(prev);
-      next.add(reportId);
-      return next;
-    });
+    if (!auth.currentUser) return;
     try {
-      await deleteReport(reportId, reportType);
+      await cancelReport(
+        reportId,
+        reportType,
+        auth.currentUser.uid,
+        userProfile?.alias || auth.currentUser.displayName || 'Usuario EcoWarrior'
+      );
     } catch (e) {
-      setDeletingReportIds((prev) => {
-        const next = new Set(prev);
-        next.delete(reportId);
-        return next;
-      });
-      console.error('Error eliminando reporte:', e);
+      console.error('Error cancelando reporte:', e);
       showAlert(t('common.error'), t('dashboard.delete_error'));
     }
   };
@@ -3385,6 +3382,16 @@ function AppContent() {
                     {user?.uid === isDetailOpen.uid && (
                       <div className="space-y-4 pt-6 border-t border-zinc-100 dark:border-slate-700">
                         <p className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.manage_status')}</p>
+                            <button
+                              onClick={() => {
+                                const postToEdit = isDetailOpen as MarketplacePost;
+                                setIsDetailOpen(null);
+                                handleEditPost(postToEdit);
+                              }}
+                              className="w-full px-4 py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all bg-stormy-teal/10 text-stormy-teal hover:bg-stormy-teal/20"
+                            >
+                              {t('common.edit')}
+                            </button>
                             <div className="flex flex-wrap gap-2">
                               {(['disponible', 'reservado', 'entregado/resuelto', 'vencido'] as const).map((status) => (
                                 <button

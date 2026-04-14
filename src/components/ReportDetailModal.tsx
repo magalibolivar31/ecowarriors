@@ -35,10 +35,13 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
   useEffect(() => {
     const fetchVerifications = async () => {
       try {
-        const q = query(collection(db, 'reports', report.id, 'updates'));
-        const snap = await getDocs(q);
+        const primaryQuery = query(collection(db, 'reports', report.id, 'updates'));
+        const primarySnap = await getDocs(primaryQuery);
+        const sourceSnap = primarySnap.empty
+          ? await getDocs(query(collection(db, 'emergency_reports', report.id, 'updates')))
+          : primarySnap;
         // We subtract 1 because the initial report creation also creates an update
-        const count = Math.max(0, snap.size - 1);
+        const count = Math.max(0, sourceSnap.size - 1);
         setVerificationsCount(count);
       } catch (error) {
         console.error("Error fetching verifications:", error);
