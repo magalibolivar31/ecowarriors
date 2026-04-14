@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ShieldAlert, 
   X, 
@@ -35,6 +35,15 @@ interface CrisisModeProps {
   userSettings: UserSettings | null;
   onUpdateSettings: (settings: Partial<UserSettings>) => Promise<void>;
 }
+
+type PendingDamageReport = {
+  type: ReportType;
+  title: string;
+  description: string;
+  location: ReportLocation;
+  imageBase64?: string | null;
+  createdAt?: string;
+};
 
 export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, onUpdateSettings }) => {
   const { t, showAlert } = useSettings();
@@ -154,6 +163,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const [isManualLocation, setIsManualLocation] = useState(false);
   const [manualCoords, setManualCoords] = useState({ lat: '', lng: '' });
   const isContactInvalid = !newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone;
+  const isSyncingPendingReportsRef = useRef(false);
 
   // Guide step state
   const [activeGuideIndex, setActiveGuideIndex] = useState<number | null>(null);
@@ -199,6 +209,80 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       onUpdateSettings({ trustedContacts: contacts });
     }
   }, [contacts]);
+
+  useEffect(() => {
+    const syncPendingDamageReports = async () => {
+      try {
+        if (isSyncingPendingReportsRef.current || !navigator.onLine || !auth.currentUser) return;
+        const pendingRaw = localStorage.getItem('pending_damage_reports');
+        if (!pendingRaw) return;
+
+        let pendingReports: PendingDamageReport[] = [];
+        try {
+          pendingReports = JSON.parse(pendingRaw);
+        } catch {
+          localStorage.removeItem('pending_damage_reports');
+          return;
+        }
+
+        if (!Array.isArray(pendingReports) || pendingReports.length === 0) {
+          localStorage.removeItem('pending_damage_reports');
+          return;
+        }
+
+        isSyncingPendingReportsRef.current = true;
+        const remaining: PendingDamageReport[] = [];
+        let syncedCount = 0;
+
+        for (const pending of pendingReports) {
+          try {
+            const location = pending.location;
+            if (
+              !location ||
+              typeof location.lat !== 'number' ||
+              typeof location.lng !== 'number' ||
+              !Number.isFinite(location.lat) ||
+              !Number.isFinite(location.lng)
+            ) {
+              continue;
+            }
+
+            await createReport(
+              pending.type === 'ambiental' ? 'ambiental' : 'crisis',
+              pending.title || t('crisis.default_report_title'),
+              pending.description || t('crisis.default_report_desc')
+                .replace('{type}', pending.type === 'crisis' ? t('reports.crisis') : t('reports.environmental'))
+                .replace('{zone}', t('crisis.zone_not_specified')),
+              location,
+              pending.imageBase64 || null
+            );
+            syncedCount += 1;
+          } catch (error) {
+            console.error('Error syncing pending crisis report:', error);
+            remaining.push(pending);
+          }
+        }
+
+        if (remaining.length > 0) {
+          localStorage.setItem('pending_damage_reports', JSON.stringify(remaining));
+        } else {
+          localStorage.removeItem('pending_damage_reports');
+        }
+
+        if (syncedCount > 0) {
+          showAlert(t('common.success'), t('crisis.offline_reports_synced'));
+        }
+      } catch (error) {
+        console.error('Error syncing pending crisis reports:', error);
+      } finally {
+        isSyncingPendingReportsRef.current = false;
+      }
+    };
+
+    void syncPendingDamageReports();
+    window.addEventListener('online', syncPendingDamageReports);
+    return () => window.removeEventListener('online', syncPendingDamageReports);
+  }, [showAlert, t]);
 
   const handleSafeStatus = () => {
     if (contacts.length === 0) {

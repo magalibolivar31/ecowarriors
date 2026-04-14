@@ -82,16 +82,31 @@ describe('userService', () => {
     await expect(updateUserSettings({ onboardingCompleted: true })).rejects.toThrow('User must be authenticated');
   });
 
-  it('updateUserSettings usa updateDoc si ya existe', async () => {
-    firestoreMocks.getDoc.mockResolvedValueOnce({ exists: () => true });
+  it('updateUserSettings usa setDoc con merge de valores si ya existe', async () => {
+    firestoreMocks.getDoc.mockResolvedValueOnce({
+      exists: () => true,
+      data: () => ({
+        uid: 'user-1',
+        onboardingCompleted: true,
+        crisisRemindersEnabled: false,
+        meetingPoint: { place: 'Plaza' },
+        trustedContacts: [{ name: 'A', phone: '123' }],
+      }),
+    });
 
     await updateUserSettings({ onboardingCompleted: true });
 
-    expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', { onboardingCompleted: true });
-    expect(firestoreMocks.setDoc).not.toHaveBeenCalled();
+    expect(firestoreMocks.setDoc).toHaveBeenCalledWith('doc-ref', {
+      uid: 'user-1',
+      onboardingCompleted: true,
+      crisisRemindersEnabled: false,
+      meetingPoint: { place: 'Plaza' },
+      trustedContacts: [{ name: 'A', phone: '123' }],
+      locationPrivacy: false,
+    });
   });
 
-  it('updateUserSettings usa setDoc con defaults si no existe', async () => {
+  it('updateUserSettings usa setDoc con defaults completos si no existe', async () => {
     firestoreMocks.getDoc.mockResolvedValueOnce({ exists: () => false });
 
     await updateUserSettings({ crisisRemindersEnabled: true } as any);
@@ -100,6 +115,9 @@ describe('userService', () => {
       uid: 'user-1',
       onboardingCompleted: false,
       crisisRemindersEnabled: true,
+      meetingPoint: { place: '' },
+      trustedContacts: [],
+      locationPrivacy: false,
     });
   });
 
