@@ -109,7 +109,7 @@ import {
   normalizeAllReports
 } from './services/reportService';
 import { subscribeToSquads, toggleSquadAttendance, createSquad, updateSquad, cancelSquad, deleteSquad } from './services/squadService';
-import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost } from './services/marketplaceService';
+import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost, cancelMarketplacePost } from './services/marketplaceService';
 import { getUserSettings, updateUserSettings, getUserProfile } from './services/userService';
 import { calculateMissions } from './services/missionService';
 import { calculateLevel } from './lib/levelUtils';
@@ -468,7 +468,7 @@ function AppContent() {
       return next;
     });
     try {
-      await deleteMarketplacePost(postId);
+      await cancelMarketplacePost(postId);
     } catch (e) {
       setDeletingPostIds((prev) => {
         const next = new Set(prev);
@@ -3732,7 +3732,12 @@ function AppContent() {
           <button 
             onClick={handleCreateSquad}
             disabled={loading || !sTitle || !sDescription || !sDate || !sTime || !sLocation}
-            className="w-full py-5 sm:py-6 bg-amber-500 text-white rounded-3xl font-black text-lg sm:text-xl shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600 transition-all active:scale-95 disabled:bg-stormy-teal disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed"
+            className={cn(
+              "w-full py-5 sm:py-6 text-white rounded-3xl font-black text-lg sm:text-xl transition-all active:scale-95 disabled:bg-zinc-300 disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed",
+              editingSquadId
+                ? "bg-stormy-teal shadow-xl shadow-stormy-teal/20 hover:bg-stormy-teal/90"
+                : "bg-amber-500 shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600"
+            )}
           >
             {loading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : (editingSquadId ? t('community.squad_save_changes') : t('community.squad_create_btn'))}
           </button>
