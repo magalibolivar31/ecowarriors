@@ -109,7 +109,7 @@ import {
   normalizeAllReports
 } from './services/reportService';
 import { subscribeToSquads, toggleSquadAttendance, createSquad, updateSquad, cancelSquad, deleteSquad } from './services/squadService';
-import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost } from './services/marketplaceService';
+import { subscribeToMarketplace, createMarketplacePost, updatePostStatus, deleteMarketplacePost, normalizeMarketplaceType, isMarketplacePostActive } from './services/marketplaceService';
 import { getUserSettings, updateUserSettings, getUserProfile } from './services/userService';
 import { calculateMissions } from './services/missionService';
 import { calculateLevel } from './lib/levelUtils';
@@ -652,19 +652,6 @@ function AppContent() {
     } catch {
       return language === 'es' ? 'Reciente' : 'Recent';
     }
-  };
-
-  const normalizePostType = (value: unknown): 'doy' | 'recibo' | null => {
-    if (typeof value !== 'string') return null;
-    const normalized = value.trim().toLowerCase();
-    return normalized === 'doy' || normalized === 'recibo' ? normalized : null;
-  };
-
-  const isMarketplacePostActive = (post: MarketplacePost) => {
-    if (post.isActive === false) return false;
-    const normalizedStatus = typeof post.status === 'string' ? post.status.trim().toLowerCase() : '';
-    if (!normalizedStatus) return true;
-    return normalizedStatus === 'activa' || normalizedStatus === 'disponible' || normalizedStatus === 'reservado';
   };
 
   const handleOpenFeedbackForm = () => {
@@ -2631,7 +2618,7 @@ function AppContent() {
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
                         const normalizedDescription = typeof post.description === 'string' ? post.description : '';
                         const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
-                        const normalizedType = normalizePostType(post.type);
+                        const normalizedType = normalizeMarketplaceType(post.type);
                         const searchTerm = searchQuery.toLowerCase();
                         const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
                                             normalizedContent.toLowerCase().includes(searchTerm) ||

@@ -16,48 +16,46 @@ import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
 const LEGACY_POSTS_COLLECTION = 'posts';
+const ACTIVE_MARKETPLACE_STATUSES = new Set(['activa', 'disponible', 'reservado']);
 
 type MarketplaceSubscriptionOptions = {
   includeLegacyPosts?: boolean;
   onError?: (error: unknown) => void;
 };
 
-function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
+export function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
   if (typeof value !== 'string') return null;
   const normalized = value.trim().toLowerCase();
   if (normalized === 'doy' || normalized === 'recibo') return normalized;
   return null;
 }
 
-function isActiveFromStatus(value: unknown): boolean {
-  if (typeof value !== 'string') return true;
-  const normalized = value.trim().toLowerCase();
-  return normalized === 'activa' || normalized === 'disponible' || normalized === 'reservado';
+export function isMarketplacePostActive(post: Pick<MarketplacePost, 'status' | 'isActive'>): boolean {
+  if (post.isActive === false) return false;
+  const normalizedStatus = typeof post.status === 'string' ? post.status.trim().toLowerCase() : '';
+  if (!normalizedStatus) return true;
+  return ACTIVE_MARKETPLACE_STATUSES.has(normalizedStatus);
 }
 
-function normalizeMarketplacePost(snapshotDoc: { id: string; data: () => Record<string, unknown> }): Promise<MarketplacePost> {
-  return (async () => {
-    const rawData = snapshotDoc.data();
-    const rawImages = normalizeMarketplaceImages(rawData);
-    const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
-      .filter((value): value is string => Boolean(value));
-    const normalizedType = normalizeMarketplaceType(rawData.type);
-    const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
-    const normalizedIsActive = typeof rawData.isActive === 'boolean' ? rawData.isActive : isActiveFromStatus(rawData.status);
+async function normalizeMarketplacePost(snapshotDoc: { id: string; data: () => Record<string, unknown> }): Promise<MarketplacePost> {
+  const rawData = snapshotDoc.data();
+  const rawImages = normalizeMarketplaceImages(rawData);
+  const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
+    .filter((value): value is string => Boolean(value));
+  const normalizedType = normalizeMarketplaceType(rawData.type);
+  const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
 
-    return {
-      id: snapshotDoc.id,
-      ...rawData,
-      ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
-      ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
-      ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
-      ...(normalizedType ? { type: normalizedType } : {}),
-      ...(normalizedStatus ? { status: normalizedStatus } : {}),
-      ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
-      ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
-      isActive: normalizedIsActive,
-    } as MarketplacePost;
-  })();
+  return {
+    id: snapshotDoc.id,
+    ...rawData,
+    ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
+    ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
+    ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
+    ...(normalizedType ? { type: normalizedType } : {}),
+    ...(normalizedStatus ? { status: normalizedStatus } : {}),
+    ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+    ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
+  } as MarketplacePost;
 }
 
 function normalizeMarketplaceStatus(
@@ -216,8 +214,13 @@ export function subscribeToMarketplace(
 
   const notify = () => {
     const merged = [...marketplacePosts, ...legacyPosts];
-    const deduped = merged.filter((post, index, arr) => arr.findIndex((p) => p.id === post.id) === index);
-    callback(deduped);
+    const dedupedById = new Map<string, MarketplacePost>();
+    for (const post of merged) {
+      if (!dedupedById.has(post.id)) {
+        dedupedById.set(post.id, post);
+      }
+    }
+    callback(Array.from(dedupedById.values()));
   };
 
   const handleSnapshotError = (error: unknown, collectionName: string) => {
@@ -225,8 +228,11 @@ export function subscribeToMarketplace(
     onError?.(error);
     try {
       handleFirestoreError(error, OperationType.LIST, collectionName);
-    } catch {
-      // Avoid breaking UI subscriptions when telemetry helper rethrows
+    } catch (telemetryError) {
+      console.warn('[marketplace] telemetry helper rethrew while handling subscription error', {
+        collection: collectionName,
+        telemetryError,
+      });
     }
   };
 
@@ -292,6 +298,10 @@ export function subscribeToMarketplace(
     }, (error) => {
       handleSnapshotError(error, LEGACY_POSTS_COLLECTION);
     });
+  }
+
+  if (!includeLegacyPosts) {
+    return marketplaceUnsubscribe;
   }
 
   return () => {
