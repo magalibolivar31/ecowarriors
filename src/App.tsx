@@ -1543,7 +1543,7 @@ function AppContent() {
             />
             <div className="hidden sm:block">
               <h1 className="text-xl font-display font-black tracking-tighter text-stormy-teal leading-none uppercase">ECOWARRIORS</h1>
-              <span className="text-[10px] font-bold text-emerald-action tracking-widest uppercase">{t('nav.resilience')}</span>
+              <span className="text-[10px] font-bold text-stormy-teal tracking-widest uppercase">{t('nav.resilience')}</span>
             </div>
           </div>
 
@@ -1572,7 +1572,7 @@ function AppContent() {
             <div className="flex items-center gap-3 pl-2">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-black text-zinc-900 leading-none uppercase tracking-tighter">{userProfile?.alias || t('common.ecowarriors')}</p>
-                <p className="text-[10px] font-bold text-emerald-action uppercase tracking-widest">
+                <p className="text-[10px] font-bold text-stormy-teal uppercase tracking-widest">
                   {t('dashboard.level_progress').split(' • ')[0].replace('{level}', String(userProfile?.level || 1))}
                 </p>
               </div>
@@ -1876,7 +1876,7 @@ function AppContent() {
                   <div className="space-y-1">
                   <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('dashboard.weather_in')} {userProfile?.zone || t('dashboard.default_zone')}</p>
                     <h4 className="text-3xl sm:text-5xl font-black text-stormy-teal tracking-tighter">{weather?.temp || '--'}°C</h4>
-                    <p className="text-xs font-bold text-emerald-action uppercase tracking-widest">{getWeatherLabel(weather?.code)}</p>
+                    <p className="text-xs font-bold text-stormy-teal uppercase tracking-widest">{getWeatherLabel(weather?.code)}</p>
                   </div>
                   <div className="text-stormy-teal/10 group-hover:scale-110 transition-transform duration-500">
                     {getWeatherIcon(weather?.code)}
@@ -1941,7 +1941,7 @@ function AppContent() {
                         <span className="text-[10px] font-black text-stormy-teal bg-stormy-teal/5 px-4 py-1.5 rounded-full uppercase tracking-widest border border-stormy-teal/10">
                           {userProfile?.role === 'admin' ? t('dashboard.admin') : t('dashboard.guardian')}
                         </span>
-                        <span className="text-[10px] font-black text-emerald-action bg-emerald-action/5 px-4 py-1.5 rounded-full uppercase tracking-widest border border-emerald-action/10">
+                        <span className="text-[10px] font-black text-stormy-teal bg-emerald-action/5 px-4 py-1.5 rounded-full uppercase tracking-widest border border-emerald-action/10">
                           {t('dashboard.level_progress').split(' • ')[0].replace('{level}', String(userProfile?.level || 1))}
                         </span>
                       </div>
@@ -1952,7 +1952,7 @@ function AppContent() {
                   <div className="space-y-4">
                     <div className="flex justify-between text-[10px] font-black text-zinc-400 uppercase tracking-widest">
                       <span>{t('dashboard.level_progress').replace('{level}', String(userProfile?.level || 1))}</span>
-                      <span className="text-emerald-action font-black">{userProfile?.xp || 0} / {(userProfile?.level || 1) * 100} XP</span>
+                      <span className="text-stormy-teal font-black">{userProfile?.xp || 0} / {(userProfile?.level || 1) * 100} XP</span>
                     </div>
                     <div className="h-4 bg-zinc-100 rounded-full overflow-hidden p-1 shadow-inner">
                       <motion.div 
@@ -2000,9 +2000,9 @@ function AppContent() {
                             <div className="flex-1">
                               <p className="font-black text-zinc-900 uppercase tracking-tighter text-lg">{v.alias}</p>
                               <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-black text-emerald-action uppercase tracking-widest">{t('dashboard.level_progress').split(' • ')[0].replace('{level}', String(v.level || 1))}</span>
+                                <span className="text-[10px] font-black text-[#374151] uppercase tracking-widest">{t('dashboard.level_progress').split(' • ')[0].replace('{level}', String(v.level || 1))}</span>
                                 <div className="w-1 h-1 bg-zinc-200 rounded-full" />
-                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{v.xp || 0} XP</span>
+                                <span className="text-[10px] font-bold text-[#374151] uppercase tracking-widest">{v.xp || 0} XP</span>
                               </div>
                             </div>
                             <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center text-zinc-300 group-hover:bg-maya-blue group-hover:text-white transition-all">
@@ -2188,7 +2188,7 @@ function AppContent() {
                   </div>
                   <div className="flex items-center gap-3 bg-emerald-action/5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full border border-emerald-action/10 shadow-sm self-start md:self-auto">
                     <div className="w-2.5 h-2.5 bg-emerald-action rounded-full animate-pulse" />
-                    <span className="text-[10px] font-black text-emerald-action uppercase tracking-widest">{t('community.context_active')}</span>
+                    <span className="text-[10px] font-black text-stormy-teal uppercase tracking-widest">{t('community.context_active')}</span>
                   </div>
                 </div>
                 
@@ -2218,7 +2218,7 @@ function AppContent() {
                                 <h4 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 tracking-tighter uppercase leading-none">
                                   {t(`mission.title_${mission.id}`)}
                                 </h4>
-                                <span className="text-[10px] font-black text-emerald-action bg-emerald-action/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-emerald-action/10">+{mission.reward} {t('mission.reward_label')}</span>
+                                <span className="text-[10px] font-black text-stormy-teal bg-emerald-action/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-emerald-action/10">+{mission.reward} {t('mission.reward_label')}</span>
                               </div>
                               <p className="text-zinc-600 font-medium text-sm sm:text-lg leading-relaxed">
                                 {t(`mission.desc_${mission.id}`)}
@@ -2245,7 +2245,7 @@ function AppContent() {
                             <button
                               onClick={() => setShowAllMissions(!showAllMissions)}
                               className="w-full py-4 rounded-[2rem] border-2 border-dashed border-emerald-action/30 
-                                         text-emerald-action font-black text-sm uppercase tracking-widest 
+                                         text-stormy-teal font-black text-sm uppercase tracking-widest 
                                          hover:border-emerald-action hover:bg-emerald-action/5 transition-all"
                             >
                               {showAllMissions 
@@ -2270,19 +2270,19 @@ function AppContent() {
                     <h3 className="text-4xl sm:text-5xl font-display font-black tracking-tighter uppercase leading-none text-stormy-teal">{t('community.real_impact')}</h3>
                     <div className="flex items-center gap-4">
                       <div className="w-3 h-3 sm:w-4 sm:h-4 bg-emerald-action rounded-full animate-pulse" />
-                      <p className="text-[10px] sm:text-xs font-black text-emerald-action uppercase tracking-[0.3em]">{t('community.collective_resilience')}</p>
+                      <p className="text-[10px] sm:text-xs font-black text-[#374151] uppercase tracking-[0.3em]">{t('community.collective_resilience')}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16">
                     <div className="space-y-2 sm:space-y-4">
-                      <p className="text-5xl sm:text-7xl font-black text-emerald-action tracking-tighter leading-none">{totalResolved}</p>
+                      <p className="text-5xl sm:text-7xl font-black text-stormy-teal tracking-tighter leading-none">{totalResolved}</p>
                       <p className="text-[10px] sm:text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">{t('community.resolved_spots')}</p>
                       <p className="text-xs sm:text-sm text-zinc-600 font-medium leading-relaxed">
                         {totalResolved === 1 ? t('community.resolved_desc_singular') : t('community.resolved_desc_plural').replace('{count}', String(totalResolved))}
                       </p>
                     </div>
                     <div className="space-y-2 sm:space-y-4">
-                      <p className="text-5xl sm:text-7xl font-black text-maya-blue tracking-tighter leading-none">
+                      <p className="text-5xl sm:text-7xl font-black text-stormy-teal tracking-tighter leading-none">
                         {reports.filter(r => r.isActive).length}
                       </p>
                       <p className="text-[10px] sm:text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">{t('community.active_reports')}</p>
@@ -2575,13 +2575,13 @@ function AppContent() {
                     <div className="flex gap-3">
                       <button 
                         onClick={() => { resetForm(); setEditingPost(null); setPostType('doy'); setIsPostModalOpen(true); }}
-                        className="flex-1 sm:flex-none px-6 py-3 bg-emerald-action/10 text-emerald-action rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-action/20 transition-all"
+                        className="flex-1 sm:flex-none px-6 py-3 bg-emerald-action/10 text-stormy-teal rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-action/20 transition-all"
                       >
                         {t('community.offer')}
                       </button>
                       <button 
                         onClick={() => { resetForm(); setEditingPost(null); setPostType('recibo'); setIsPostModalOpen(true); }}
-                        className="flex-1 sm:flex-none px-6 py-3 bg-maya-blue/10 text-maya-blue rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-maya-blue/20 transition-all"
+                        className="flex-1 sm:flex-none px-6 py-3 bg-maya-blue/10 text-dark-teal rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-maya-blue/20 transition-all"
                       >
                         {t('community.need')}
                       </button>

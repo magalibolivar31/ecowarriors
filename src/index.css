@@ -650,16 +650,19 @@ html:not(.dark) .post-card .text-light,
 html:not(.dark) .post-card .text-gray-300,
 html:not(.dark) .post-card .text-green-300,
 html:not(.dark) .post-card .text-blue-300,
+html:not(.dark) .post-card .text-emerald-action,
 html:not(.dark) .community-card .text-muted,
 html:not(.dark) .community-card .text-light,
 html:not(.dark) .community-card .text-gray-300,
 html:not(.dark) .community-card .text-green-300,
 html:not(.dark) .community-card .text-blue-300,
+html:not(.dark) .community-card .text-emerald-action,
 html:not(.dark) .assistant-card .text-muted,
 html:not(.dark) .assistant-card .text-light,
 html:not(.dark) .assistant-card .text-gray-300,
 html:not(.dark) .assistant-card .text-green-300,
-html:not(.dark) .assistant-card .text-blue-300 {
+html:not(.dark) .assistant-card .text-blue-300,
+html:not(.dark) .assistant-card .text-emerald-action {
   color: #374151 !important;
 }
 
