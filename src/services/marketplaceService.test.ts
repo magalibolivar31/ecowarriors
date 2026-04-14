@@ -281,6 +281,7 @@ describe('marketplaceService', () => {
         id: 'p1',
         type: 'doy',
         status: 'activa',
+        isActive: true,
         title: 'Normalizado',
       },
     ]);
@@ -508,15 +509,17 @@ describe('marketplaceService', () => {
 
   it('subscribeToMarketplace llama handleFirestoreError en error', () => {
     const callback = vi.fn();
+    const onError = vi.fn();
 
     firestoreMocks.onSnapshot.mockImplementationOnce((_q, _onNext, onError) => {
       onError(new Error('marketplace error'));
       return vi.fn();
     });
 
-    subscribeToMarketplace(callback);
+    subscribeToMarketplace(callback, onError);
 
     expect(firebaseMocks.handleFirestoreError).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
     expect(callback).not.toHaveBeenCalled();
   });
 
