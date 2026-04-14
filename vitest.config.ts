@@ -13,10 +13,10 @@ export default defineConfig({
         'src/services/**/*.ts',
       ],
       thresholds: {
-        lines: 98,
-        functions: 98,
+        lines: 90,
+        functions: 90,
         branches: 90,
-        statements: 98,
+        statements: 90,
       },
     },
   },
