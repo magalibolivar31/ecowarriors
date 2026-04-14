@@ -118,7 +118,11 @@ Respond ONLY with this JSON (no markdown, no extra text):
   }
 };
 
-export const validateDonation = async (imagesB64: string[], title: string, tag: string): Promise<{ valid: boolean; reason?: string; retry?: boolean }> => {
+export const validateDonation = async (
+  imagesB64: string[],
+  title: string,
+  tag: string
+): Promise<{ valid: boolean; reason?: string; retry?: boolean; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-3-flash-preview",
@@ -140,11 +144,20 @@ export const validateDonation = async (imagesB64: string[], title: string, tag: 
     return JSON.parse(response.text());
   } catch (error) {
     console.error("Error in validateDonation via Gemini:", error);
-    return { valid: false, reason: "Error de conexión con el servicio de validación.", retry: true };
+    return {
+      valid: true,
+      reason: "No se pudo validar automáticamente la publicación. Se guardará igualmente.",
+      retry: true,
+      serviceUnavailable: true
+    };
   }
 };
 
-export const validateRequest = async (title: string, content: string, tag: string): Promise<{ valid: boolean; reason?: string }> => {
+export const validateRequest = async (
+  title: string,
+  content: string,
+  tag: string
+): Promise<{ valid: boolean; reason?: string; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-3-flash-preview",
@@ -163,7 +176,11 @@ export const validateRequest = async (title: string, content: string, tag: strin
     return JSON.parse(response.text());
   } catch (error) {
     console.error("Error in validateRequest via Gemini:", error);
-    return { valid: false, reason: "Error de conexión con el servicio de validación." };
+    return {
+      valid: true,
+      reason: "No se pudo validar automáticamente la publicación. Se guardará igualmente.",
+      serviceUnavailable: true
+    };
   }
 };
 
