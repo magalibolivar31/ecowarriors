@@ -6,7 +6,7 @@ import {
   deleteDoc,
   serverTimestamp, 
   query, 
-  orderBy, 
+  orderBy,
   onSnapshot
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
@@ -15,12 +15,47 @@ import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
+const LEGACY_POSTS_COLLECTION = 'posts';
+const ACTIVE_MARKETPLACE_STATUSES = new Set(['activa', 'disponible', 'reservado']);
 
-function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
+type MarketplaceSubscriptionOptions = {
+  includeLegacyPosts?: boolean;
+  onError?: (error: unknown) => void;
+};
+
+export function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
   if (typeof value !== 'string') return null;
   const normalized = value.trim().toLowerCase();
   if (normalized === 'doy' || normalized === 'recibo') return normalized;
   return null;
+}
+
+export function isMarketplacePostActive(post: Pick<MarketplacePost, 'status' | 'isActive'>): boolean {
+  if (post.isActive === false) return false;
+  const normalizedStatus = typeof post.status === 'string' ? post.status.trim().toLowerCase() : '';
+  if (!normalizedStatus) return true;
+  return ACTIVE_MARKETPLACE_STATUSES.has(normalizedStatus);
+}
+
+async function normalizeMarketplacePost(snapshotDoc: { id: string; data: () => Record<string, unknown> }): Promise<MarketplacePost> {
+  const rawData = snapshotDoc.data();
+  const rawImages = normalizeMarketplaceImages(rawData);
+  const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
+    .filter((value): value is string => Boolean(value));
+  const normalizedType = normalizeMarketplaceType(rawData.type);
+  const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
+
+  return {
+    id: snapshotDoc.id,
+    ...rawData,
+    ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
+    ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
+    ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
+    ...(normalizedType ? { type: normalizedType } : {}),
+    ...(normalizedStatus ? { status: normalizedStatus } : {}),
+    ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+    ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
+  } as MarketplacePost;
 }
 
 function normalizeMarketplaceStatus(
@@ -130,9 +165,18 @@ export async function createMarketplacePost(
       isActive: status === 'activa',
     };
 
+    console.info('[marketplace] creating post', {
+      collection: MARKETPLACE_COLLECTION,
+      uid,
+      type: normalizedType,
+      hasImage: Boolean(firstImage),
+      status,
+    });
     const docRef = await addDoc(collection(db, MARKETPLACE_COLLECTION), cleanFirestoreData(postData));
+    console.info('[marketplace] post created', { collection: MARKETPLACE_COLLECTION, postId: docRef.id });
     return docRef.id;
   } catch (error) {
+    console.error('[marketplace] create failed', { collection: MARKETPLACE_COLLECTION, error });
     handleFirestoreError(error, OperationType.CREATE, MARKETPLACE_COLLECTION);
     throw error;
   }
@@ -157,50 +201,113 @@ export async function updatePostStatus(
   }
 }
 
-export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => void) {
+export function subscribeToMarketplace(
+  callback: (posts: MarketplacePost[]) => void,
+  options: MarketplaceSubscriptionOptions = {},
+) {
+  const { includeLegacyPosts = false, onError } = options;
   const q = query(collection(db, MARKETPLACE_COLLECTION), orderBy('createdAt', 'desc'));
+  const legacyQuery = query(collection(db, LEGACY_POSTS_COLLECTION), orderBy('createdAt', 'desc'));
   let latestSnapshotRequest = 0;
+  let marketplacePosts: MarketplacePost[] = [];
+  let legacyPosts: MarketplacePost[] = [];
 
-  return onSnapshot(q, (snapshot) => {
+  const notify = () => {
+    const merged = [...marketplacePosts, ...legacyPosts];
+    const dedupedById = new Map<string, MarketplacePost>();
+    for (const post of merged) {
+      if (!dedupedById.has(post.id)) {
+        dedupedById.set(post.id, post);
+      }
+    }
+    callback(Array.from(dedupedById.values()));
+  };
+
+  const handleSnapshotError = (error: unknown, collectionName: string) => {
+    console.error('[marketplace] subscription failed', { collection: collectionName, error });
+    onError?.(error);
+    try {
+      handleFirestoreError(error, OperationType.LIST, collectionName);
+    } catch (telemetryError) {
+      console.warn('[marketplace] telemetry helper rethrew while handling subscription error', {
+        collection: collectionName,
+        telemetryError,
+      });
+    }
+  };
+
+  const marketplaceUnsubscribe = onSnapshot(q, (snapshot) => {
     const requestId = ++latestSnapshotRequest;
     void (async () => {
       try {
-        const posts = await Promise.all(snapshot.docs.map(async (snapshotDoc) => {
-          const rawData = snapshotDoc.data() as Record<string, unknown>;
-          const rawImages = normalizeMarketplaceImages(rawData);
-          const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
-            .filter((value): value is string => Boolean(value));
-          const normalizedType = normalizeMarketplaceType(rawData.type);
-          const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
-
-          return {
+        const posts = await Promise.all(
+          snapshot.docs.map((snapshotDoc) => normalizeMarketplacePost({
             id: snapshotDoc.id,
-            ...rawData,
-            ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
-            ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
-            ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
-            ...(normalizedType ? { type: normalizedType } : {}),
-            ...(normalizedStatus ? { status: normalizedStatus } : {}),
-            ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
-            ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
-          } as MarketplacePost;
-        }));
+            data: () => snapshotDoc.data() as Record<string, unknown>,
+          })),
+        );
 
         if (requestId !== latestSnapshotRequest) return;
-        callback(posts);
+        marketplacePosts = posts;
+        console.info('[marketplace] snapshot loaded', {
+          collection: MARKETPLACE_COLLECTION,
+          count: marketplacePosts.length,
+        });
+        notify();
       } catch (error) {
         if (requestId !== latestSnapshotRequest) return;
-        handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+        handleSnapshotError(error, MARKETPLACE_COLLECTION);
         const fallbackPosts = snapshot.docs.map((snapshotDoc) => ({
           id: snapshotDoc.id,
           ...(snapshotDoc.data() as Record<string, unknown>),
         } as MarketplacePost));
-        callback(fallbackPosts);
+        marketplacePosts = fallbackPosts;
+        notify();
       }
     })();
   }, (error) => {
-    handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+    handleSnapshotError(error, MARKETPLACE_COLLECTION);
   });
+
+  let legacyUnsubscribe: (() => void) | undefined;
+  if (includeLegacyPosts) {
+    legacyUnsubscribe = onSnapshot(legacyQuery, (snapshot) => {
+      void (async () => {
+        try {
+          const posts = await Promise.all(
+            snapshot.docs.map((snapshotDoc) => normalizeMarketplacePost({
+              id: snapshotDoc.id,
+              data: () => snapshotDoc.data() as Record<string, unknown>,
+            })),
+          );
+          legacyPosts = posts;
+          console.info('[marketplace] legacy snapshot loaded', {
+            collection: LEGACY_POSTS_COLLECTION,
+            count: legacyPosts.length,
+          });
+          notify();
+        } catch (error) {
+          handleSnapshotError(error, LEGACY_POSTS_COLLECTION);
+          legacyPosts = snapshot.docs.map((snapshotDoc) => ({
+            id: snapshotDoc.id,
+            ...(snapshotDoc.data() as Record<string, unknown>),
+          } as MarketplacePost));
+          notify();
+        }
+      })();
+    }, (error) => {
+      handleSnapshotError(error, LEGACY_POSTS_COLLECTION);
+    });
+  }
+
+  if (!includeLegacyPosts) {
+    return marketplaceUnsubscribe;
+  }
+
+  return () => {
+    marketplaceUnsubscribe();
+    legacyUnsubscribe?.();
+  };
 }
 
 /**
