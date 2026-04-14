@@ -2803,18 +2803,18 @@ function AppContent() {
                             </div>
                           </div>
                           <div className="p-6">
-                            <span className="text-[9px] font-black text-stormy-teal dark:text-maya-blue bg-stormy-teal/5 dark:bg-maya-blue/20 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
+                            <span className="text-[9px] font-black text-[#126B69] dark:text-slate-100 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
                             <h4 className="font-display font-black text-stormy-teal dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
-                            <p className="text-zinc-500 dark:text-slate-300 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
+                            <p className="text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
                             <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
                                 <div className="flex flex-col">
-                                  <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
-                                  <span className="text-[9px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                                  <span className="text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
+                                  <span className="text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1 text-emerald-action font-black text-[9px] uppercase tracking-widest group-hover:translate-x-1 transition-transform">
+                              <div className="flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-[#024153] group-hover:text-[#6EB57D]">
                                 {t('marketplace.details')}
                                 <ChevronRight className="w-3 h-3" />
                               </div>
@@ -3532,12 +3532,12 @@ function AppContent() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <h2 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{isDetailOpen.title}</h2>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-slate-100 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.category || isDetailOpen.tag}</span>
-                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type === 'doy' ? t('community.offer') : t('community.need')}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-[#126B69] dark:text-slate-100 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.category || isDetailOpen.tag}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-[#374151] dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type === 'doy' ? t('community.offer') : t('community.need')}</span>
                       </div>
                     </div>
 
-                    <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-lg sm:text-xl font-medium">{isDetailOpen.description || isDetailOpen.content}</p>
+                    <p className="text-[#1F2937] dark:text-slate-200 leading-relaxed text-lg sm:text-xl font-medium">{isDetailOpen.description || isDetailOpen.content}</p>
 
                     {user?.uid === isDetailOpen.uid && (
                       <div className="space-y-4 pt-6 border-t border-zinc-100 dark:border-slate-700">
