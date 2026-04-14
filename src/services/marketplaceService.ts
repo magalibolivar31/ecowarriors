@@ -16,6 +16,7 @@ import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
+const MIN_BASE64_IMAGE_LENGTH = 64;
 
 function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
   if (typeof value !== 'string') return null;
@@ -53,9 +54,12 @@ function getBase64Payload(image: string): string | null {
   if (!trimmed) return null;
   if (trimmed.startsWith('data:image/')) {
     const cleaned = trimmed.split(',')[1]?.trim() ?? '';
-    return cleaned || null;
+    if (!cleaned) {
+      throw new Error('Invalid marketplace image data URL');
+    }
+    return cleaned;
   }
-  if (/^[A-Za-z0-9+/=]+$/.test(trimmed) && trimmed.length > 64) {
+  if (/^[A-Za-z0-9+/=]+$/.test(trimmed) && trimmed.length > MIN_BASE64_IMAGE_LENGTH) {
     return trimmed;
   }
   return null;

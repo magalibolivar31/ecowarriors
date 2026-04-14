@@ -157,6 +157,19 @@ describe('marketplaceService', () => {
     );
   });
 
+  it('createMarketplacePost rechaza data URL inválida', async () => {
+    await expect(
+      createMarketplacePost(
+        'doy',
+        'Título',
+        'Contenido',
+        'otros',
+        ['data:image/jpeg;base64,'],
+        'contacto',
+      ),
+    ).rejects.toThrow('Invalid marketplace image data URL');
+  });
+
   it('updatePostStatus actualiza estado', async () => {
     await updatePostStatus('post-1', 'reservado');
     expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', { status: 'reservado' });
