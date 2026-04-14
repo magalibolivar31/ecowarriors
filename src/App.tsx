@@ -3709,8 +3709,8 @@ function AppContent() {
 
             <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-900/30">
               <div className="flex items-center gap-3">
-                <Users className="w-5 h-5 text-zinc-800 dark:text-emerald-200" />
-                <span className="font-bold text-zinc-800 dark:text-emerald-200">
+                <Users className="w-5 h-5 text-stormy-teal dark:text-emerald-200" />
+                <span className="font-bold text-stormy-teal dark:text-emerald-200">
                   {selectedSquadForDetail.attendees.length} {selectedSquadForDetail.maxParticipants ? `/ ${selectedSquadForDetail.maxParticipants}` : ''} {t('community.squad_attendees')}
                 </span>
               </div>
