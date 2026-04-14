@@ -7,10 +7,9 @@ import {
   serverTimestamp, 
   query, 
   orderBy, 
-  onSnapshot,
-  Timestamp
+  onSnapshot
 } from 'firebase/firestore';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { db, auth, handleFirestoreError, OperationType, cleanFirestoreData, storage } from '../firebase';
 import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
@@ -26,17 +25,12 @@ function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
 
 function normalizeMarketplaceStatus(
   value: unknown
-): 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido' | null {
+): 'activa' | 'resuelta' | 'cerrada' | null {
   if (typeof value !== 'string') return null;
   const normalized = value.trim().toLowerCase();
-  if (
-    normalized === 'disponible'
-    || normalized === 'reservado'
-    || normalized === 'entregado/resuelto'
-    || normalized === 'vencido'
-  ) {
-    return normalized;
-  }
+  if (normalized === 'activa' || normalized === 'disponible' || normalized === 'reservado') return 'activa';
+  if (normalized === 'resuelta' || normalized === 'entregado/resuelto') return 'resuelta';
+  if (normalized === 'cerrada' || normalized === 'vencido') return 'cerrada';
   return null;
 }
 
@@ -79,6 +73,19 @@ async function resolveMarketplaceImageUrl(image: string): Promise<string | null>
   }
 }
 
+async function uploadMarketplaceImage(image: string, uid: string): Promise<string | null> {
+  if (!image || !image.startsWith('data:image/')) return null;
+  const mimeTypeSeparatorIndex = image.indexOf(';');
+  if (mimeTypeSeparatorIndex === -1) return null;
+  const mimeType = image.slice('data:'.length, mimeTypeSeparatorIndex);
+  const extension = mimeType.split('/')[1] || 'jpg';
+  const safeExtension = extension.replace(/[^a-zA-Z0-9]/g, '') || 'jpg';
+  const imagePath = `marketplace/${uid}/${Date.now()}.${safeExtension}`;
+  const storageRef = ref(storage, imagePath);
+  await uploadString(storageRef, image, 'data_url');
+  return getDownloadURL(storageRef);
+}
+
 export async function createMarketplacePost(
   type: 'doy' | 'recibo',
   title: string,
@@ -90,6 +97,7 @@ export async function createMarketplacePost(
   if (!auth.currentUser) throw new Error('User must be authenticated');
 
   const uid = auth.currentUser.uid;
+  const userName = auth.currentUser.displayName || 'Usuario EcoWarrior';
   
   try {
     const normalizedType = normalizeMarketplaceType(type);
@@ -98,16 +106,28 @@ export async function createMarketplacePost(
     }
 
     const normalizedImages = normalizeMarketplaceImagePayload(images);
+    const firstImage = normalizedImages[0] ?? '';
+    const uploadedImageUrl = await uploadMarketplaceImage(firstImage, uid);
+    const resolvedImageUrl = uploadedImageUrl ?? (await resolveMarketplaceImageUrl(firstImage));
+    const status = 'activa' as const;
+    const sanitizedTag = tag ? sanitizeText(tag) : 'otros';
     const postData = {
       uid,
+      userId: uid,
+      userName,
       type: normalizedType,
       title: sanitizeText(title),
+      description: sanitizeText(content),
       content: sanitizeText(content),
-      tag,
-      images: normalizedImages,
-      contact: sanitizeText(contact),
-      status: 'disponible',
-      createdAt: serverTimestamp()
+      category: sanitizedTag,
+      tag: sanitizedTag,
+      images: resolvedImageUrl ? [resolvedImageUrl] : [],
+      imageUrl: resolvedImageUrl ?? null,
+      contact: contact ? sanitizeText(contact) : null,
+      status,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      isActive: status === 'activa',
     };
 
     const docRef = await addDoc(collection(db, MARKETPLACE_COLLECTION), cleanFirestoreData(postData));
@@ -120,13 +140,17 @@ export async function createMarketplacePost(
 
 export async function updatePostStatus(
   postId: string, 
-  status: 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido'
+  status: 'activa' | 'resuelta' | 'cerrada'
 ): Promise<void> {
   if (!auth.currentUser) throw new Error('User must be authenticated');
   
   try {
     const postRef = doc(db, MARKETPLACE_COLLECTION, postId);
-    await updateDoc(postRef, { status });
+    await updateDoc(postRef, cleanFirestoreData({
+      status,
+      isActive: status === 'activa',
+      updatedAt: serverTimestamp(),
+    }));
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
     throw error;
@@ -152,9 +176,13 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
           return {
             id: snapshotDoc.id,
             ...rawData,
+            ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
+            ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
+            ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
             ...(normalizedType ? { type: normalizedType } : {}),
             ...(normalizedStatus ? { status: normalizedStatus } : {}),
             ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+            ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
           } as MarketplacePost;
         }));
 
@@ -192,9 +220,7 @@ export async function deleteMarketplacePost(postId: string): Promise<void> {
  */
 export async function cancelMarketplacePost(postId: string): Promise<void> {
   try {
-    await updateDoc(doc(db, MARKETPLACE_COLLECTION, postId), {
-      status: 'vencido'
-    });
+    await updatePostStatus(postId, 'cerrada');
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
     throw error;

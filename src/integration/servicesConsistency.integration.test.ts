@@ -8,6 +8,12 @@ const firestoreMocks = vi.hoisted(() => ({
   serverTimestamp: vi.fn(() => 'ts'),
 }));
 
+const storageMocks = vi.hoisted(() => ({
+  ref: vi.fn(),
+  getDownloadURL: vi.fn(async () => 'https://cdn.test/image.jpg'),
+  uploadString: vi.fn(),
+}));
+
 const firebaseMocks = vi.hoisted(() => ({
   db: {},
   auth: {
@@ -24,6 +30,7 @@ const firebaseMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('firebase/firestore', () => firestoreMocks);
+vi.mock('firebase/storage', () => storageMocks);
 vi.mock('../firebase', () => firebaseMocks);
 
 import { createPost } from '../services/communityService';
@@ -86,7 +93,9 @@ describe('integración: consistencia entre servicios', () => {
       expect.objectContaining({
         title: 'Título',
         content: 'Contenido',
+        description: 'Contenido',
         contact: '+54 11 1111',
+        status: 'activa',
       }),
     );
     expect(payloads[1]).toEqual(

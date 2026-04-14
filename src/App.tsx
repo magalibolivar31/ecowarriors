@@ -389,13 +389,17 @@ function AppContent() {
   const currentUserId = auth.currentUser?.uid;
 
   const [showAllMissions, setShowAllMissions] = useState(false);
-  const [marketplaceStatusFilter, setMarketplaceStatusFilter] = useState<'todos' | 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido'>('todos');
+  const [marketplaceTypeFilter, setMarketplaceTypeFilter] = useState<'todos' | 'doy' | 'recibo'>('todos');
   const [editingPost, setEditingPost] = useState<MarketplacePost | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
   const [deletingReportIds, setDeletingReportIds] = useState<Set<string>>(new Set());
   const [deletingPostIds, setDeletingPostIds] = useState<Set<string>>(new Set());
 
   const validateField = (name: string, value: string) => {
+    if (name === 'contact' && !value.trim()) {
+      setFieldErrors(prev => ({ ...prev, [name]: null }));
+      return null;
+    }
     const errorKey = getValidationErrorKey(name, value);
     const error = errorKey ? t(errorKey) : null;
 
@@ -623,6 +627,7 @@ function AppContent() {
 
   // Form States
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
@@ -636,13 +641,23 @@ function AppContent() {
   const [descriptionError, setDescriptionError] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
+  const formatMarketplaceDate = (value: unknown) => {
+    if (!value || typeof value !== 'object' || !('toDate' in value) || typeof value.toDate !== 'function') {
+      return language === 'es' ? 'Reciente' : 'Recent';
+    }
+    try {
+      return format(value.toDate(), 'dd MMM yyyy', { locale: language === 'es' ? es : enUS });
+    } catch {
+      return language === 'es' ? 'Reciente' : 'Recent';
+    }
+  };
+
   const handleOpenFeedbackForm = () => {
     window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
     setIsFeedbackModalOpen(false);
   };
 
   // Search & Filter
-  const [filterType, setFilterType] = useState<PostType | null>(null);
   const [filterTag, setFilterTag] = useState<Tag | null>(null);
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
@@ -1011,17 +1026,17 @@ function AppContent() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const limit = activeTab === 'REPORTES' ? 1 : 5;
-    const currentCount = selectedImages.length;
-    const remaining = limit - currentCount;
-    const filesArray = (Array.from(files) as File[]).slice(0, remaining);
-    filesArray.forEach((file: File) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImages(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
-    });
+    const file = files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError(language === 'es' ? 'Seleccioná un archivo de imagen válido.' : 'Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImages([reader.result as string]);
+    };
+    reader.readAsDataURL(file);
   };
 
   const resetForm = () => {
@@ -1117,14 +1132,16 @@ function AppContent() {
   const handleEditPost = (post: MarketplacePost) => {
     setEditingPost(post);
     setTitle(post.title);
-    setDescription(post.content);
-    setTag(post.tag as Tag);
+    setDescription(post.description || post.content || '');
+    setTag((post.category || post.tag || 'otros') as Tag);
+    setContact(post.contact || '');
+    setSelectedImages(post.imageUrl ? [post.imageUrl] : (post.images?.[0] ? [post.images[0]] : []));
     setPostType(post.type);
     setIsPostModalOpen(true);
   };
 
   const handleCreatePost = async () => {
-    if (!title || !tag || !auth.currentUser) return;
+    if (!title || !description || !auth.currentUser) return;
     if (!postType) {
       setError('Tipo de publicación inválido.');
       return;
@@ -1132,30 +1149,30 @@ function AppContent() {
 
     const titleError = validateField('title', title);
     const descError = validateField('description', description);
-    const contactError = validateField('contact', contact);
-    if (titleError || descError || contactError) return;
+    if (titleError || descError) return;
 
     setLoading(true);
+    setImageUploading(Boolean(selectedImages[0] && selectedImages[0].startsWith('data:image/')));
     setError(null);
     try {
       const sanitizedTitle = sanitizeText(title);
       const sanitizedDescription = sanitizeText(description);
       const sanitizedContact = sanitizeText(contact);
+      const normalizedCategory = tag || 'otros';
 
       if (editingPost) {
-        await updateDoc(doc(db, 'marketplace', editingPost.id), {
+        await updateDoc(doc(db, 'marketplace', editingPost.id), cleanFirestoreData({
           title: sanitizedTitle,
+          description: sanitizedDescription,
           content: sanitizedDescription,
-          tag: tag,
-        });
+          category: normalizedCategory,
+          tag: normalizedCategory,
+          contact: sanitizedContact || null,
+          updatedAt: serverTimestamp(),
+        }));
         setEditingPost(null);
       } else {
-        if (postType === 'doy') {
-          if (selectedImages.length === 0) {
-            setError(t('reports.error_no_image'));
-            setLoading(false);
-            return;
-          }
+        if (postType === 'doy' && selectedImages.length > 0) {
           const imagesB64 = selectedImages.map(img => img.split(',')[1]);
           const validation = await validateDonation(imagesB64, sanitizedTitle, tag);
           if (!validation.valid) {
@@ -1176,10 +1193,11 @@ function AppContent() {
           postType,
           sanitizedTitle,
           sanitizedDescription,
-          tag,
+          normalizedCategory,
           selectedImages,
           sanitizedContact
         );
+        showAlert(t('common.success'), language === 'es' ? 'Publicación creada correctamente.' : 'Post published successfully.');
       }
 
       setIsPostModalOpen(false);
@@ -1189,6 +1207,7 @@ function AppContent() {
       setError(err instanceof Error ? err.message : 'Error al guardar la publicación.');
     } finally {
       setLoading(false);
+      setImageUploading(false);
     }
   };
 
@@ -2476,13 +2495,13 @@ function AppContent() {
                     </div>
                     <div className="flex gap-3">
                       <button 
-                        onClick={() => { setPostType('doy'); setIsPostModalOpen(true); }}
+                        onClick={() => { resetForm(); setEditingPost(null); setPostType('doy'); setIsPostModalOpen(true); }}
                         className="flex-1 sm:flex-none px-6 py-3 bg-emerald-action/10 text-emerald-action rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-action/20 transition-all"
                       >
                         {t('community.offer')}
                       </button>
                       <button 
-                        onClick={() => { setPostType('recibo'); setIsPostModalOpen(true); }}
+                        onClick={() => { resetForm(); setEditingPost(null); setPostType('recibo'); setIsPostModalOpen(true); }}
                         className="flex-1 sm:flex-none px-6 py-3 bg-maya-blue/10 text-maya-blue rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-maya-blue/20 transition-all"
                       >
                         {t('community.need')}
@@ -2541,31 +2560,29 @@ function AppContent() {
                         onKeyDown={(e) => e.key === 'Enter' && setIsFilterDropdownOpen(!isFilterDropdownOpen)}
                         className={cn(
                           "p-4 bg-white border border-zinc-100 rounded-2xl hover:bg-zinc-50 shadow-sm transition-all cursor-pointer",
-                          marketplaceStatusFilter !== 'todos' && "border-emerald-action/30 bg-emerald-action/5"
+                          marketplaceTypeFilter !== 'todos' && "border-emerald-action/30 bg-emerald-action/5"
                         )}
                       >
-                        <Filter className={cn("w-5 h-5", marketplaceStatusFilter !== 'todos' ? "text-emerald-action" : "text-zinc-500")} />
+                        <Filter className={cn("w-5 h-5", marketplaceTypeFilter !== 'todos' ? "text-emerald-action" : "text-zinc-500")} />
                       </div>
                       {isFilterDropdownOpen && (
                         <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-zinc-100 py-2 z-50 overflow-hidden">
-                          {(['todos', 'disponible', 'reservado', 'entregado/resuelto', 'vencido'] as const).map(status => (
+                          {(['todos', 'doy', 'recibo'] as const).map(type => (
                             <button
-                              key={status}
+                              key={type}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setMarketplaceStatusFilter(status);
+                                setMarketplaceTypeFilter(type);
                                 setIsFilterDropdownOpen(false);
                               }}
                               className={cn(
                                 "w-full px-5 py-3 text-left text-xs font-black uppercase tracking-widest transition-colors",
-                                marketplaceStatusFilter === status ? "bg-emerald-action text-white" : "text-zinc-500 hover:bg-zinc-50"
+                                marketplaceTypeFilter === type ? "bg-emerald-action text-white" : "text-zinc-500 hover:bg-zinc-50"
                               )}
                             >
-                              {status === 'todos' ? t('community.status_all') : 
-                               status === 'disponible' ? t('community.status_available') :
-                               status === 'reservado' ? t('community.status_reserved') :
-                               status === 'entregado/resuelto' ? t('community.status_delivered') :
-                               t('community.status_expired')}
+                              {type === 'todos' ? t('community.status_all') : 
+                               type === 'doy' ? t('community.offer') :
+                               t('community.need')}
                             </button>
                           ))}
                         </div>
@@ -2578,13 +2595,17 @@ function AppContent() {
                       const filteredPosts = posts.filter(post => {
                         const normalizedTitle = typeof post.title === 'string' ? post.title : '';
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
+                        const normalizedDescription = typeof post.description === 'string' ? post.description : '';
+                        const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
                         const searchTerm = searchQuery.toLowerCase();
                         const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
-                                            normalizedContent.toLowerCase().includes(searchTerm);
-                        const matchesStatus = marketplaceStatusFilter === 'todos'
+                                            normalizedContent.toLowerCase().includes(searchTerm) ||
+                                            normalizedDescription.toLowerCase().includes(searchTerm) ||
+                                            normalizedCategory.toLowerCase().includes(searchTerm);
+                        const matchesType = marketplaceTypeFilter === 'todos'
                           ? true
-                          : post.status === marketplaceStatusFilter;
-                        return matchesSearch && matchesStatus && post.isActive !== false;
+                          : post.type === marketplaceTypeFilter;
+                        return matchesSearch && matchesType && post.isActive !== false;
                       });
 
                       const visiblePosts = filteredPosts.filter((post) => !deletingPostIds.has(post.id));
@@ -2616,8 +2637,8 @@ function AppContent() {
                           className="bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
                         >
                           <div className="aspect-square relative bg-zinc-50 overflow-hidden">
-                            {post.images && post.images[0] ? (
-                              <img src={post.images[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                            {(post.imageUrl || (post.images && post.images[0])) ? (
+                              <img src={post.imageUrl || post.images?.[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg">
                                 <Heart className="w-16 h-16 text-stormy-teal/10 dark:text-white/5" />
@@ -2643,10 +2664,10 @@ function AppContent() {
                             )}
 
                             {/* Botón USUARIO NORMAL (baja lógica, gris) */}
-                            {!isAdmin &&
-                             post.uid === user.uid &&
-                             (post.status === 'disponible' || post.status === 'reservado') && (
-                              <button
+                             {!isAdmin &&
+                             post.uid === user?.uid &&
+                             post.status === 'activa' && (
+                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   showConfirm(
@@ -2672,13 +2693,16 @@ function AppContent() {
                             </div>
                           </div>
                           <div className="p-6">
-                            <span className="text-[9px] font-black text-stormy-teal dark:text-maya-blue bg-stormy-teal/5 dark:bg-maya-blue/20 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.tag}`)}</span>
+                            <span className="text-[9px] font-black text-stormy-teal dark:text-maya-blue bg-stormy-teal/5 dark:bg-maya-blue/20 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
                             <h4 className="font-display font-black text-stormy-teal dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
-                            <p className="text-zinc-500 dark:text-slate-300 text-xs line-clamp-2 leading-relaxed font-medium">{post.content || t('community.no_description')}</p>
+                            <p className="text-zinc-500 dark:text-slate-300 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
                             <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
-                                <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{t('community.active_neighbor')}</span>
+                                <div className="flex flex-col">
+                                  <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
+                                  <span className="text-[9px] font-bold text-zinc-300 dark:text-slate-500 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                                </div>
                               </div>
                               <div className="flex items-center gap-1 text-emerald-action font-black text-[9px] uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                                 {t('marketplace.details')}
@@ -3172,7 +3196,7 @@ function AppContent() {
         <div className="space-y-6 p-1 sm:p-2">
           {postType === 'doy' && (
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.post_photos_label')}</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.post_photos_label')} ({language === 'es' ? 'opcional' : 'optional'})</label>
               <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                 {selectedImages.map((img, i) => (
                   <div key={i} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 relative">
@@ -3182,13 +3206,13 @@ function AppContent() {
                     </button>
                   </div>
                 ))}
-                {selectedImages.length < 5 && (
+                {selectedImages.length < 1 && (
                   <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-dashed border-zinc-200 dark:border-slate-700 flex items-center justify-center text-zinc-300 dark:text-slate-600 hover:bg-zinc-50">
                     <Plus className="w-8 h-8" />
                   </button>
                 )}
               </div>
-              <input type="file" ref={fileInputRef} className="hidden" accept="image/*" multiple onChange={handleFileChange} />
+              <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
             </div>
           )}
  
@@ -3274,11 +3298,11 @@ function AppContent() {
           {error && <p className="text-sm text-red-500 font-bold">{error}</p>}
  
           <button 
-            disabled={loading || !title || (postType === 'doy' && selectedImages.length === 0) || (postType === 'recibo' && !description)}
+            disabled={loading || !title || !description || !postType}
             onClick={handleCreatePost}
             className="w-full py-5 bg-emerald-600 text-white rounded-2xl font-black shadow-xl hover:bg-emerald-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : t('community.post_publish')}
+            {loading || imageUploading ? <Loader2 className="w-6 h-6 animate-spin" /> : t('community.post_publish')}
           </button>
         </div>
       </Modal>
@@ -3292,9 +3316,9 @@ function AppContent() {
               className="bg-white sm:rounded-[3rem] w-full max-w-2xl overflow-hidden flex flex-col h-full sm:h-auto sm:max-h-[90vh] shadow-2xl"
             >
               <div className="relative w-full bg-zinc-100 shrink-0" style={{ maxHeight: '40%' }}>
-                {('images' in isDetailOpen && isDetailOpen.images && isDetailOpen.images[0]) ? (
+                {('images' in isDetailOpen && (isDetailOpen.imageUrl || (isDetailOpen.images && isDetailOpen.images[0]))) ? (
                   <img 
-                    src={isDetailOpen.images[0]} 
+                    src={isDetailOpen.imageUrl || isDetailOpen.images?.[0]} 
                     className="w-full h-full object-cover max-h-56 sm:max-h-72" 
                     referrerPolicy="no-referrer"
                   />
@@ -3372,12 +3396,12 @@ function AppContent() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <h2 className="text-2xl sm:text-3xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tight">{isDetailOpen.title}</h2>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-slate-100 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.tag}</span>
-                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-slate-100 text-[9px] font-bold uppercase tracking-widest">#{isDetailOpen.category || isDetailOpen.tag}</span>
+                        <span className="px-3 py-1.5 rounded-full bg-zinc-100 text-zinc-600 dark:text-slate-300 text-[9px] font-bold uppercase tracking-widest">{isDetailOpen.type === 'doy' ? t('community.offer') : t('community.need')}</span>
                       </div>
                     </div>
 
-                    <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-lg sm:text-xl font-medium">{isDetailOpen.content}</p>
+                    <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-lg sm:text-xl font-medium">{isDetailOpen.description || isDetailOpen.content}</p>
 
                     {user?.uid === isDetailOpen.uid && (
                       <div className="space-y-4 pt-6 border-t border-zinc-100 dark:border-slate-700">
@@ -3393,7 +3417,7 @@ function AppContent() {
                               {t('common.edit')}
                             </button>
                             <div className="flex flex-wrap gap-2">
-                              {(['disponible', 'reservado', 'entregado/resuelto', 'vencido'] as const).map((status) => (
+                              {(['activa', 'resuelta', 'cerrada'] as const).map((status) => (
                                 <button
                                   key={status}
                                   onClick={async () => {
@@ -3411,10 +3435,11 @@ function AppContent() {
                                       : "bg-zinc-100 text-zinc-500 dark:text-slate-400 hover:bg-zinc-200"
                                   )}
                                 >
-                                  {status === 'disponible' ? t('community.status_available') :
-                                   status === 'reservado' ? t('community.status_reserved') :
-                                   status === 'entregado/resuelto' ? t('community.status_delivered') :
-                                   t('community.status_expired')}
+                                  {status === 'activa'
+                                    ? t('community.status_available')
+                                    : status === 'resuelta'
+                                      ? t('community.status_delivered')
+                                      : t('community.status_expired')}
                                 </button>
                               ))}
                             </div>
