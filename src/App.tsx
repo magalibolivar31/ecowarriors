@@ -1026,21 +1026,17 @@ function AppContent() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const limit = activeTab === 'REPORTES' ? 1 : 1;
-    const currentCount = selectedImages.length;
-    const remaining = limit - currentCount;
-    const filesArray = (Array.from(files) as File[]).slice(0, remaining);
-    filesArray.forEach((file: File) => {
-      if (!file.type.startsWith('image/')) {
-        setError(language === 'es' ? 'Seleccioná un archivo de imagen válido.' : 'Please select a valid image file.');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImages(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
-    });
+    const file = files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError(language === 'es' ? 'Seleccioná un archivo de imagen válido.' : 'Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImages([reader.result as string]);
+    };
+    reader.readAsDataURL(file);
   };
 
   const resetForm = () => {
@@ -1145,7 +1141,7 @@ function AppContent() {
   };
 
   const handleCreatePost = async () => {
-    if (!title || !auth.currentUser) return;
+    if (!title || !description || !auth.currentUser) return;
     if (!postType) {
       setError('Tipo de publicación inválido.');
       return;

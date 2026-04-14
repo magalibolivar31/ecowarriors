@@ -75,7 +75,12 @@ async function resolveMarketplaceImageUrl(image: string): Promise<string | null>
 
 async function uploadMarketplaceImage(image: string, uid: string): Promise<string | null> {
   if (!image || !image.startsWith('data:image/')) return null;
-  const imagePath = `marketplace/${uid}/${Date.now()}.jpg`;
+  const mimeTypeSeparatorIndex = image.indexOf(';');
+  if (mimeTypeSeparatorIndex === -1) return null;
+  const mimeType = image.slice('data:'.length, mimeTypeSeparatorIndex);
+  const extension = mimeType.split('/')[1] || 'jpg';
+  const safeExtension = extension.replace(/[^a-zA-Z0-9]/g, '') || 'jpg';
+  const imagePath = `marketplace/${uid}/${Date.now()}.${safeExtension}`;
   const storageRef = ref(storage, imagePath);
   await uploadString(storageRef, image, 'data_url');
   return getDownloadURL(storageRef);
@@ -105,6 +110,7 @@ export async function createMarketplacePost(
     const uploadedImageUrl = await uploadMarketplaceImage(firstImage, uid);
     const resolvedImageUrl = uploadedImageUrl ?? (await resolveMarketplaceImageUrl(firstImage));
     const status = 'activa' as const;
+    const sanitizedTag = tag ? sanitizeText(tag) : 'otros';
     const postData = {
       uid,
       userId: uid,
@@ -113,8 +119,8 @@ export async function createMarketplacePost(
       title: sanitizeText(title),
       description: sanitizeText(content),
       content: sanitizeText(content),
-      category: tag ? sanitizeText(tag) : null,
-      tag,
+      category: sanitizedTag,
+      tag: sanitizedTag,
       images: resolvedImageUrl ? [resolvedImageUrl] : [],
       imageUrl: resolvedImageUrl ?? null,
       contact: contact ? sanitizeText(contact) : null,
