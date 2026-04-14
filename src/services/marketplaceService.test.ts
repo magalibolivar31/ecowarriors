@@ -15,6 +15,7 @@ const firestoreMocks = vi.hoisted(() => ({
 const storageMocks = vi.hoisted(() => ({
   ref: vi.fn(),
   getDownloadURL: vi.fn(),
+  uploadString: vi.fn(),
 }));
 
 const firebaseMocks = vi.hoisted(() => ({
@@ -69,6 +70,7 @@ describe('marketplaceService', () => {
     firestoreMocks.orderBy.mockReturnValue('order-by-ref');
     storageMocks.ref.mockImplementation((_storage, path) => `ref:${path}`);
     storageMocks.getDownloadURL.mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
+    storageMocks.uploadString.mockResolvedValue(undefined);
   });
 
   it('createMarketplacePost requiere usuario', async () => {
@@ -98,9 +100,12 @@ describe('marketplaceService', () => {
       content: 'Contenido',
       tag: 'otros',
       images: ['img1'],
+      imageUrl: 'https://cdn.test/ref:img1',
       contact: '+54 11 1111 1111',
-      status: 'disponible',
+      status: 'activa',
       createdAt: 'ts',
+      updatedAt: 'ts',
+      isActive: true,
     });
   });
 
@@ -116,27 +121,38 @@ describe('marketplaceService', () => {
       'contacto',
     );
 
-    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', {
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', expect.objectContaining({
       uid: 'user-1',
       type: 'doy',
       title: 'Título',
       content: 'Contenido',
+      description: 'Contenido',
       tag: 'otros',
-      images: ['img1', 'img2'],
+      images: ['https://cdn.test/ref:img1'],
       contact: 'contacto',
-      status: 'disponible',
+      status: 'activa',
       createdAt: 'ts',
-    });
+      updatedAt: 'ts',
+      isActive: true,
+    }));
   });
 
   it('updatePostStatus actualiza estado', async () => {
-    await updatePostStatus('post-1', 'reservado');
-    expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', { status: 'reservado' });
+    await updatePostStatus('post-1', 'resuelta');
+    expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', {
+      status: 'resuelta',
+      isActive: false,
+      updatedAt: 'ts',
+    });
   });
 
   it('cancelMarketplacePost marca vencido', async () => {
     await cancelMarketplacePost('post-1');
-    expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', { status: 'vencido' });
+    expect(firestoreMocks.updateDoc).toHaveBeenCalledWith('doc-ref', {
+      status: 'cerrada',
+      isActive: false,
+      updatedAt: 'ts',
+    });
   });
 
   it('deleteMarketplacePost elimina documento', async () => {
@@ -239,8 +255,8 @@ describe('marketplaceService', () => {
             id: 'p1',
             data: () => ({
               type: 'DOY',
-              status: 'Disponible',
-              title: 'Normalizado',
+               status: 'Disponible',
+               title: 'Normalizado',
             }),
           },
         ],
@@ -258,7 +274,7 @@ describe('marketplaceService', () => {
       {
         id: 'p1',
         type: 'doy',
-        status: 'disponible',
+        status: 'activa',
         title: 'Normalizado',
       },
     ]);
@@ -510,12 +526,12 @@ describe('marketplaceService', () => {
 
   it('updatePostStatus requiere usuario autenticado', async () => {
     firebaseMocks.auth.currentUser = null;
-    await expect(updatePostStatus('post-1', 'reservado')).rejects.toThrow('User must be authenticated');
+    await expect(updatePostStatus('post-1', 'resuelta')).rejects.toThrow('User must be authenticated');
   });
 
   it('updatePostStatus propaga error de Firestore', async () => {
     firestoreMocks.updateDoc.mockRejectedValueOnce(new Error('update error'));
-    await expect(updatePostStatus('post-1', 'reservado')).rejects.toThrow('update error');
+    await expect(updatePostStatus('post-1', 'resuelta')).rejects.toThrow('update error');
     expect(firebaseMocks.handleFirestoreError).toHaveBeenCalled();
   });
 

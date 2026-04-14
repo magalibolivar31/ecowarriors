@@ -52,7 +52,7 @@ service cloud.firestore {
       return data.keys().hasAll(['uid', 'type', 'title', 'content', 'tag', 'status', 'createdAt']) &&
              data.uid is string &&
              data.type in ['doy', 'recibo'] &&
-             data.status in ['disponible', 'reservado', 'entregado/resuelto', 'vencido'];
+             data.status in ['disponible', 'reservado', 'entregado/resuelto', 'vencido', 'activa', 'resuelta', 'cerrada'];
     }
 
     function isValidUserSettings(data) {

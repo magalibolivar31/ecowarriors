@@ -53,19 +53,25 @@ export interface Squad {
   maxParticipants?: number;
 }
 
-export type PostStatus = 'disponible' | 'reservado' | 'entregado/resuelto' | 'vencido';
+export type PostStatus = 'activa' | 'resuelta' | 'cerrada';
 
 export interface MarketplacePost {
   id: string;
   uid: string;
+  userId?: string;
+  userName?: string | null;
   type: 'doy' | 'recibo';
   title: string;
   content: string;
+  description?: string | null;
   tag: string;
+  category?: string | null;
   images: string[];
-  contact: string;
+  imageUrl?: string | null;
+  contact: string | null;
   status: PostStatus;
   createdAt: Timestamp;
+  updatedAt?: Timestamp;
   isActive?: boolean;
 }
 
