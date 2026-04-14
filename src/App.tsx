@@ -369,6 +369,8 @@ function AppContent() {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [posts, setPosts] = useState<MarketplacePost[]>([]);
+  const [marketplaceLoaded, setMarketplaceLoaded] = useState(false);
+  const [marketplaceLoadError, setMarketplaceLoadError] = useState<string | null>(null);
   const [crewEvents, setCrewEvents] = useState<Squad[]>([]);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const [isVolunteer, setIsVolunteer] = useState(false);
@@ -652,6 +654,19 @@ function AppContent() {
     }
   };
 
+  const normalizePostType = (value: unknown): 'doy' | 'recibo' | null => {
+    if (typeof value !== 'string') return null;
+    const normalized = value.trim().toLowerCase();
+    return normalized === 'doy' || normalized === 'recibo' ? normalized : null;
+  };
+
+  const isMarketplacePostActive = (post: MarketplacePost) => {
+    if (post.isActive === false) return false;
+    const normalizedStatus = typeof post.status === 'string' ? post.status.trim().toLowerCase() : '';
+    if (!normalizedStatus) return true;
+    return normalizedStatus === 'activa' || normalizedStatus === 'disponible' || normalizedStatus === 'reservado';
+  };
+
   const handleOpenFeedbackForm = () => {
     window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
     setIsFeedbackModalOpen(false);
@@ -932,8 +947,19 @@ function AppContent() {
         checkV();
 
         // Listen to marketplace posts
+        setMarketplaceLoaded(false);
+        setMarketplaceLoadError(null);
         unsubPosts = subscribeToMarketplace((marketplacePosts) => {
           setPosts(marketplacePosts);
+          setMarketplaceLoaded(true);
+          setMarketplaceLoadError(null);
+        }, {
+          includeLegacyPosts: true,
+          onError: (snapshotError) => {
+            const message = snapshotError instanceof Error ? snapshotError.message : String(snapshotError);
+            setMarketplaceLoaded(true);
+            setMarketplaceLoadError(message || 'No se pudieron cargar las publicaciones.');
+          },
         });
 
         // Listen to squads
@@ -958,6 +984,8 @@ function AppContent() {
       } else {
         setCheckingVolunteer(false);
         setPosts([]);
+        setMarketplaceLoaded(false);
+        setMarketplaceLoadError(null);
         setCrewEvents([]);
         setReports([]);
         setReportsReady(false);
@@ -1197,6 +1225,12 @@ function AppContent() {
           selectedImages,
           sanitizedContact
         );
+        console.info('[marketplace] create post submitted', {
+          collection: 'marketplace',
+          type: postType,
+          category: normalizedCategory,
+          uid: auth.currentUser?.uid,
+        });
         showAlert(t('common.success'), language === 'es' ? 'Publicación creada correctamente.' : 'Post published successfully.');
       }
 
@@ -2597,6 +2631,7 @@ function AppContent() {
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
                         const normalizedDescription = typeof post.description === 'string' ? post.description : '';
                         const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
+                        const normalizedType = normalizePostType(post.type);
                         const searchTerm = searchQuery.toLowerCase();
                         const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
                                             normalizedContent.toLowerCase().includes(searchTerm) ||
@@ -2604,11 +2639,33 @@ function AppContent() {
                                             normalizedCategory.toLowerCase().includes(searchTerm);
                         const matchesType = marketplaceTypeFilter === 'todos'
                           ? true
-                          : post.type === marketplaceTypeFilter;
-                        return matchesSearch && matchesType && post.isActive !== false;
+                          : normalizedType === marketplaceTypeFilter;
+                        return matchesSearch && matchesType && isMarketplacePostActive(post);
                       });
 
                       const visiblePosts = filteredPosts.filter((post) => !deletingPostIds.has(post.id));
+
+                      if (!marketplaceLoaded && !marketplaceLoadError) {
+                        return (
+                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
+                            <Loader2 className="w-8 h-8 animate-spin text-stormy-teal/40 mx-auto mb-4" />
+                            <p className="text-zinc-400 font-black uppercase tracking-widest text-xs">
+                              {language === 'es' ? 'Cargando publicaciones...' : 'Loading posts...'}
+                            </p>
+                          </div>
+                        );
+                      }
+
+                      if (marketplaceLoadError) {
+                        return (
+                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-red-100">
+                            <p className="text-red-600 font-black uppercase tracking-widest text-xs">
+                              {language === 'es' ? 'Error al cargar publicaciones' : 'Failed to load posts'}
+                            </p>
+                            <p className="text-red-400 text-[11px] mt-2 break-all px-4">{marketplaceLoadError}</p>
+                          </div>
+                        );
+                      }
 
                       if (visiblePosts.length === 0) {
                         return (
