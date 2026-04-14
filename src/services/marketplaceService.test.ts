@@ -95,11 +95,15 @@ describe('marketplaceService', () => {
     expect(id).toBe('post-1');
     expect(firestoreMocks.addDoc).toHaveBeenCalledWith('collection-ref', {
       uid: 'user-1',
+      userId: 'user-1',
+      userName: 'Usuario EcoWarrior',
       type: 'doy',
       title: 'Título',
+      description: 'Contenido',
       content: 'Contenido',
+      category: 'otros',
       tag: 'otros',
-      images: ['img1'],
+      images: ['https://cdn.test/ref:img1'],
       imageUrl: 'https://cdn.test/ref:img1',
       contact: '+54 11 1111 1111',
       status: 'activa',
@@ -228,18 +232,20 @@ describe('marketplaceService', () => {
       {
         id: 'p1',
         title: 'Con imagen',
+        imageUrl: 'https://cdn.test/ref:marketplace/a.jpg',
         images: ['https://cdn.test/ref:marketplace/a.jpg', 'https://img.test/x.jpg'],
       },
       {
         id: 'p2',
         title: 'Con imageUrl',
-        imageUrl: '/marketplace/b.jpg',
+        imageUrl: 'https://cdn.test/ref:marketplace/b.jpg',
         images: ['https://cdn.test/ref:marketplace/b.jpg'],
       },
       {
         id: 'p3',
         title: 'Con image',
         image: { url: 'marketplace/c.jpg' },
+        imageUrl: 'https://cdn.test/ref:marketplace/c.jpg',
         images: ['https://cdn.test/ref:marketplace/c.jpg'],
       },
     ]);
@@ -310,6 +316,7 @@ describe('marketplaceService', () => {
       {
         id: 'p1',
         title: 'Con imagen inválida',
+        imageUrl: 'https://img.test/ok.jpg',
         images: ['https://img.test/ok.jpg'],
       },
     ]);
@@ -359,6 +366,7 @@ describe('marketplaceService', () => {
       {
         id: 'p1',
         title: 'Con imagen vacía',
+        imageUrl: 'https://img.test/ok.jpg',
         images: ['https://img.test/ok.jpg'],
       },
     ]);
