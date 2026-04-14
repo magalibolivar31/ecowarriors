@@ -123,6 +123,7 @@ import {
   requestNotificationPermission
 } from './services/notificationService';
 import { Mission, getMissionIconTextClass } from './constants/missions';
+import { SUCCESS_ANIMATION_DURATION_MS } from './constants/feedback';
 import { Report, ReportUpdate, Squad, MarketplacePost, UserSettings, ReportType } from './types';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
@@ -635,11 +636,13 @@ function AppContent() {
   const [tag, setTag] = useState<Tag>('otros');
   const [contact, setContact] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [postCreationSuccess, setPostCreationSuccess] = useState(false);
   const [isConfirmingLocation, setIsConfirmingLocation] = useState(false);
   const [isAutoLocation, setIsAutoLocation] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState<ReportAnalysis | null>(null);
   const [descriptionError, setDescriptionError] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const postSuccessTimeoutRef = useRef<number | null>(null);
 
   const formatMarketplaceDate = (value: unknown) => {
     if (!value || typeof value !== 'object' || !('toDate' in value) || typeof value.toDate !== 'function') {
@@ -1040,6 +1043,10 @@ function AppContent() {
   };
 
   const resetForm = () => {
+    if (postSuccessTimeoutRef.current) {
+      window.clearTimeout(postSuccessTimeoutRef.current);
+      postSuccessTimeoutRef.current = null;
+    }
     setDescription('');
     setLocation('');
     setSelectedImages([]);
@@ -1047,6 +1054,7 @@ function AppContent() {
     setTag('otros');
     setContact('');
     setError(null);
+    setPostCreationSuccess(false);
     setLoading(false);
     // Reset volunteer form too
     setVName('');
@@ -1057,6 +1065,14 @@ function AppContent() {
     setVNotes('');
     setFieldErrors({});
   };
+
+  useEffect(() => {
+    return () => {
+      if (postSuccessTimeoutRef.current) {
+        window.clearTimeout(postSuccessTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCreateReport = async () => {
     if (!selectedImages[0] || !description || !location || !auth.currentUser) return;
@@ -1210,7 +1226,16 @@ function AppContent() {
           selectedImages,
           sanitizedContact
         );
-        showAlert(t('common.success'), language === 'es' ? 'Publicación creada correctamente.' : 'Post published successfully.');
+        setPostCreationSuccess(true);
+        if (postSuccessTimeoutRef.current) {
+          window.clearTimeout(postSuccessTimeoutRef.current);
+        }
+        postSuccessTimeoutRef.current = window.setTimeout(() => {
+          postSuccessTimeoutRef.current = null;
+          setIsPostModalOpen(false);
+          resetForm();
+        }, SUCCESS_ANIMATION_DURATION_MS);
+        return;
       }
 
       setIsPostModalOpen(false);
@@ -3213,7 +3238,34 @@ function AppContent() {
         )}
       </AnimatePresence>
 
-      <Modal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} title={postType === 'doy' ? t('community.post_type_offer') : t('community.post_type_need')}>
+      <Modal isOpen={isPostModalOpen} onClose={() => { setIsPostModalOpen(false); resetForm(); }} title={postType === 'doy' ? t('community.post_type_offer') : t('community.post_type_need')}>
+        {postCreationSuccess ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className="py-10 sm:py-14 px-4 sm:px-6 flex flex-col items-center justify-center text-center space-y-5"
+          >
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 360, damping: 24, delay: 0.08 }}
+              className="relative w-20 h-20 rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-action/20"
+            >
+              <div className="absolute inset-0 rounded-full bg-emerald-action/20 motion-safe:animate-ping" />
+              <div className="absolute inset-1 rounded-full bg-emerald-action" />
+              <CheckCircle2 className="relative w-10 h-10" />
+            </motion.div>
+            <div className="space-y-2">
+              <h3 className="text-2xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tighter">
+                {t('common.success')}
+              </h3>
+              <p className="text-zinc-600 dark:text-slate-400 font-medium">
+                {t('community.post_create_success')}
+              </p>
+            </div>
+          </motion.div>
+        ) : (
         <div className="space-y-6 p-1 sm:p-2">
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{t('community.post_photos_label')} ({t('community.optional_label')})</label>
@@ -3324,6 +3376,7 @@ function AppContent() {
             {loading || imageUploading ? <Loader2 className="w-6 h-6 animate-spin" /> : t('community.post_publish')}
           </button>
         </div>
+        )}
       </Modal>
 
       {/* Detail View */}

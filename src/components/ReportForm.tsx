@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Camera, MapPin, Loader2, X, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { analyzeReport } from '../services/geminiService';
 import { createReport } from '../services/reportService';
 import { ReportType, ReportLocation } from '../types';
 import { cn } from '../lib/utils';
+import { SUCCESS_ANIMATION_DURATION_MS } from '../constants/feedback';
 
 import { useSettings } from '../contexts/SettingsContext';
 
@@ -27,6 +28,15 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
   const [analysis, setAnalysis] = useState<any>(null);
   const [isConfirming, setIsConfirming] = useState(false);
   const [success, setSuccess] = useState(false);
+  const successTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        window.clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const validateField = (name: string, value: string) => {
     let error: string | null = null;
@@ -139,9 +149,13 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     try {
       await createReport(type, title, description, location, image, analysis);
       setSuccess(true);
-      setTimeout(() => {
+      if (successTimeoutRef.current) {
+        window.clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = window.setTimeout(() => {
+        successTimeoutRef.current = null;
         onSuccess();
-      }, 2000);
+      }, SUCCESS_ANIMATION_DURATION_MS);
     } catch (err: any) {
       console.error("Error creating report:", err);
       setError(t('reports.create_error'));
@@ -152,19 +166,31 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
 
   if (success) {
     return (
-      <div className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-6 sm:p-12 flex flex-col items-center justify-center text-center space-y-6 animate-[fadeIn_0.3s_ease-out]">
-        <div className="w-20 h-20 bg-emerald-action rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-action/20">
-          <CheckCircle2 className="w-10 h-10" />
-        </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.24, ease: 'easeOut' }}
+        className="bg-white sm:rounded-[3rem] shadow-2xl w-full max-w-[min(100vw,42rem)] p-6 sm:p-12 flex flex-col items-center justify-center text-center space-y-6"
+      >
+        <motion.div
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 360, damping: 24, delay: 0.08 }}
+          className="relative w-20 h-20 rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-action/20"
+        >
+          <div className="absolute inset-0 rounded-full bg-emerald-action/20 motion-safe:animate-ping" />
+          <div className="absolute inset-1 rounded-full bg-emerald-action" />
+          <CheckCircle2 className="relative w-10 h-10" />
+        </motion.div>
         <div className="space-y-2">
           <h3 className="text-2xl font-display font-black text-zinc-900 dark:text-white uppercase tracking-tighter">
             {t('common.success')}
           </h3>
           <p className="text-zinc-600 dark:text-slate-400 font-medium">
-            {t('reports.create_success')}
+            {t('reports.sent_success')}
           </p>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
