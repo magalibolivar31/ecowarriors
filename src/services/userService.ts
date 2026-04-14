@@ -48,16 +48,24 @@ export async function updateUserSettings(settings: Partial<UserSettings>): Promi
   try {
     const docRef = doc(db, USER_SETTINGS_COLLECTION, auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      await updateDoc(docRef, settings);
-    } else {
-      await setDoc(docRef, {
-        uid: auth.currentUser.uid,
-        onboardingCompleted: false,
-        ...settings
-      });
-    }
+    const baseSettings: UserSettings = {
+      uid: auth.currentUser.uid,
+      onboardingCompleted: false,
+      crisisRemindersEnabled: true,
+      meetingPoint: { place: '' },
+      trustedContacts: [],
+      locationPrivacy: false
+    };
+    const existingSettings = docSnap.exists()
+      ? (docSnap.data() as Partial<UserSettings>)
+      : {};
+
+    await setDoc(docRef, {
+      ...baseSettings,
+      ...existingSettings,
+      ...settings,
+      uid: auth.currentUser.uid
+    });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${USER_SETTINGS_COLLECTION}/${auth.currentUser?.uid}`);
     throw error;
