@@ -1128,6 +1128,10 @@ function AppContent() {
 
   const handleCreatePost = async () => {
     if (!title || !tag || !auth.currentUser) return;
+    if (!postType) {
+      setError('Tipo de publicación inválido.');
+      return;
+    }
 
     const titleError = validateField('title', title);
     const descError = validateField('description', description);
@@ -1184,7 +1188,8 @@ function AppContent() {
       setIsPostModalOpen(false);
       resetForm();
     } catch (err) {
-      setError("Error al validar la publicación.");
+      console.error('Error creating marketplace post:', err);
+      setError(err instanceof Error ? err.message : 'Error al guardar la publicación.');
     } finally {
       setLoading(false);
     }
