@@ -444,6 +444,14 @@ function AppContent() {
   };
 
   // Handlers para marketplace
+  const removeFromDeletingPostIds = (postId: string) => {
+    setDeletingPostIds((prev) => {
+      const next = new Set(prev);
+      next.delete(postId);
+      return next;
+    });
+  };
+
   const handleDeletePost = async (postId: string) => {
     setDeletingPostIds((prev) => {
       const next = new Set(prev);
@@ -452,13 +460,11 @@ function AppContent() {
     });
     try {
       await deleteMarketplacePost(postId);
+      removeFromDeletingPostIds(postId);
     } catch (e) {
-      setDeletingPostIds((prev) => {
-        const next = new Set(prev);
-        next.delete(postId);
-        return next;
-      });
+      removeFromDeletingPostIds(postId);
       console.error('Error eliminando post:', e);
+      showAlert(t('common.error'), t('marketplace.delete_error'));
     }
   };
 
@@ -470,13 +476,11 @@ function AppContent() {
     });
     try {
       await cancelMarketplacePost(postId);
+      removeFromDeletingPostIds(postId);
     } catch (e) {
-      setDeletingPostIds((prev) => {
-        const next = new Set(prev);
-        next.delete(postId);
-        return next;
-      });
-      console.error('Error eliminando post:', e);
+      removeFromDeletingPostIds(postId);
+      console.error('Error retirando post:', e);
+      showAlert(t('common.error'), t('marketplace.cancel_error'));
     }
   };
 
