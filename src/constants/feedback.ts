@@ -1,0 +1,1 @@
+export const SUCCESS_ANIMATION_DURATION_MS = 1400;
