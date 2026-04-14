@@ -2581,7 +2581,7 @@ function AppContent() {
                       </button>
                       <button 
                         onClick={() => { resetForm(); setEditingPost(null); setPostType('recibo'); setIsPostModalOpen(true); }}
-                        className="flex-1 sm:flex-none px-6 py-3 bg-maya-blue/10 text-[#0F4C81] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-maya-blue/20 transition-all"
+                        className="flex-1 sm:flex-none px-6 py-3 bg-maya-blue/10 text-dark-teal rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-maya-blue/20 transition-all"
                       >
                         {t('community.need')}
                       </button>
