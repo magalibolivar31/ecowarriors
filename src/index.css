@@ -615,6 +615,54 @@ html:not(.dark) .border-rose-900\/30 {
   color: var(--text-secondary) !important;
 }
 
+/* Community accessibility: enforce strong contrast in light mode on white cards. */
+html:not(.dark) .post-card,
+html:not(.dark) .community-card,
+html:not(.dark) .assistant-card {
+  background-color: #ffffff !important;
+}
+
+html:not(.dark) .post-card .post-card-title,
+html:not(.dark) .post-card .post-card-description,
+html:not(.dark) .community-card .community-card-title,
+html:not(.dark) .community-card .community-card-description,
+html:not(.dark) .assistant-card .assistant-card-title {
+  color: #1F2937 !important;
+}
+
+html:not(.dark) .post-card .post-card-metadata,
+html:not(.dark) .community-card .community-card-metadata,
+html:not(.dark) .assistant-card .assistant-card-metadata {
+  color: #374151 !important;
+}
+
+html:not(.dark) .post-card .post-card-tag {
+  background-color: #E5E7EB !important;
+  color: #1F2937 !important;
+}
+
+html:not(.dark) .post-card .post-card-details {
+  color: #126B69 !important;
+}
+
+html:not(.dark) .post-card .text-muted,
+html:not(.dark) .post-card .text-light,
+html:not(.dark) .post-card .text-gray-300,
+html:not(.dark) .post-card .text-green-300,
+html:not(.dark) .post-card .text-blue-300,
+html:not(.dark) .community-card .text-muted,
+html:not(.dark) .community-card .text-light,
+html:not(.dark) .community-card .text-gray-300,
+html:not(.dark) .community-card .text-green-300,
+html:not(.dark) .community-card .text-blue-300,
+html:not(.dark) .assistant-card .text-muted,
+html:not(.dark) .assistant-card .text-light,
+html:not(.dark) .assistant-card .text-gray-300,
+html:not(.dark) .assistant-card .text-green-300,
+html:not(.dark) .assistant-card .text-blue-300 {
+  color: #374151 !important;
+}
+
 /* Accessibility guardrail: avoid pastel/light blue-green text as readable foreground. */
 html:not(.dark) .text-maya-blue,
 html:not(.dark) .text-soft-maya-blue,
