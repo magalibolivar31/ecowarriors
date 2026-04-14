@@ -2717,8 +2717,8 @@ function AppContent() {
                             <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
                               <MessageSquare className="w-10 h-10 text-stormy-teal/10" />
                             </div>
-                            <p className="text-zinc-400 font-black uppercase tracking-widest text-xs">{t('community.no_posts')}</p>
-                            <p className="text-zinc-500 text-[11px] mt-2">{t('community.no_posts_desc')}</p>
+                            <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('community.no_posts')}</p>
+                            <p className="text-[#374151] text-[11px] mt-2">{t('community.no_posts_desc')}</p>
                           </div>
                         );
                       }
@@ -2726,8 +2726,8 @@ function AppContent() {
                       if (filteredPosts.length === 0) {
                         return (
                           <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
-                            <p className="text-zinc-500 font-black uppercase tracking-widest text-xs">{t('marketplace.no_posts')}</p>
-                            <p className="text-zinc-500 text-[11px] mt-2">{t('marketplace.no_posts_desc')}</p>
+                            <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('marketplace.no_posts')}</p>
+                            <p className="text-[#374151] text-[11px] mt-2">{t('marketplace.no_posts_desc')}</p>
                           </div>
                         );
                       }
@@ -2744,7 +2744,7 @@ function AppContent() {
                           exit={{ opacity: 0, y: -18, scale: 0.9 }}
                           transition={{ duration: 0.22, ease: 'easeOut' }}
                           onClick={() => setIsDetailOpen(post)}
-                          className="bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
+                          className="post-card bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
                         >
                           <div className="aspect-square relative bg-zinc-50 overflow-hidden">
                             {(post.imageUrl || (post.images && post.images[0])) ? (
@@ -2803,18 +2803,18 @@ function AppContent() {
                             </div>
                           </div>
                           <div className="p-6">
-                            <span className="text-[9px] font-black text-[#126B69] dark:text-slate-100 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
-                            <h4 className="font-display font-black text-stormy-teal dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
-                            <p className="text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
+                            <span className="post-card-tag text-[9px] font-black text-[#1F2937] dark:text-slate-100 bg-zinc-200 dark:bg-emerald-900/40 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
+                            <h4 className="post-card-title font-display font-black text-[#1F2937] dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
+                            <p className="post-card-description text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
                             <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
                                 <div className="flex flex-col">
-                                  <span className="text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
-                                  <span className="text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                                  <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
+                                  <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-[#024153] group-hover:text-[#6EB57D]">
+                              <div className="post-card-details flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-[#024153] group-hover:text-[#126B69]">
                                 {t('marketplace.details')}
                                 <ChevronRight className="w-3 h-3" />
                               </div>
@@ -2854,7 +2854,7 @@ function AppContent() {
                       })
                       .length === 0 ? (
                       <div className="bg-white border-2 border-dashed border-zinc-50 rounded-[2rem] p-10 text-center">
-                        <p className="text-zinc-400 font-bold text-[10px] uppercase tracking-widest">{t('community.no_events')}</p>
+                        <p className="text-[#374151] font-bold text-[10px] uppercase tracking-widest">{t('community.no_events')}</p>
                       </div>
                     ) : (
                       crewEvents
@@ -2870,12 +2870,12 @@ function AppContent() {
                             key={event.id} 
                             whileHover={{ scale: 1.01 }}
                             onClick={() => setSelectedSquadForDetail(event)}
-                            className="bg-white rounded-[2rem] border border-zinc-100 dark:border-slate-600 shadow-sm overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                            className="community-card bg-white rounded-[2rem] border border-zinc-100 dark:border-slate-600 shadow-sm overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
                           >
                             <div className="p-6 space-y-5">
                               <div className="space-y-2">
                                 <div className="flex justify-between items-start gap-4">
-                                  <h4 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight leading-tight group-hover:text-stormy-teal transition-colors uppercase">{event.title}</h4>
+                                  <h4 className="community-card-title text-lg font-black text-[#1F2937] dark:text-white tracking-tight leading-tight group-hover:text-stormy-teal transition-colors uppercase">{event.title}</h4>
                                   <div className="flex items-center gap-1">
                                     {auth.currentUser?.uid === event.createdBy && (
                                       <div className="flex gap-1">
@@ -2902,18 +2902,18 @@ function AppContent() {
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-4 border-t border-zinc-50 dark:border-slate-700">
-                                  <div className="flex items-center gap-2 text-zinc-600 dark:text-slate-300">
+                                  <div className="community-card-metadata flex items-center gap-2 text-[#374151] dark:text-slate-300">
                                     <Calendar className="w-3.5 h-3.5 text-stormy-teal dark:text-slate-100" />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">{format(new Date(event.date), "d MMM", { locale: language === 'es' ? es : enUS })}</span>
                                   </div>
-                                  <div className="flex items-center gap-2 text-zinc-600 dark:text-slate-300">
+                                  <div className="community-card-metadata flex items-center gap-2 text-[#374151] dark:text-slate-300">
                                     <Clock className="w-3.5 h-3.5 text-stormy-teal dark:text-slate-100" />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">{event.time}</span>
                                   </div>
                                 </div>
                               </div>
                               
-                              <p className="text-zinc-700 dark:text-slate-200 text-xs line-clamp-2 font-medium leading-relaxed">{event.description}</p>
+                              <p className="community-card-description text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 font-medium leading-relaxed">{event.description}</p>
                               
                               <button 
                                 onClick={() => toggleAttendance(event.id, !!isAttending, event.title)}
@@ -3485,7 +3485,7 @@ function AppContent() {
                       <div className="bg-zinc-50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
                         <Calendar className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
                         <div>
-                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{t('community.date_label')}</p>
+                          <p className="text-[10px] font-bold text-[#374151] uppercase tracking-widest mb-1">{t('community.date_label')}</p>
                           <p className="font-black text-zinc-800 dark:text-slate-200 text-sm sm:text-base">
                             {isDetailOpen.date ? format(new Date(isDetailOpen.date), language === 'es' ? "d 'de' MMMM" : "MMMM d", { locale: language === 'es' ? es : enUS }) : 'Próximamente'}
                           </p>
@@ -3494,20 +3494,20 @@ function AppContent() {
                       <div className="bg-zinc-50 p-5 sm:p-6 rounded-3xl flex items-center gap-4">
                         <MapPin className="w-7 h-7 sm:w-8 sm:h-8 text-amber-500" />
                         <div>
-                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{t('community.location_label')}</p>
+                          <p className="text-[10px] font-bold text-[#374151] uppercase tracking-widest mb-1">{t('community.location_label')}</p>
                           <p className="font-black text-zinc-800 dark:text-slate-200 text-sm sm:text-base truncate">{isDetailOpen.location}</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="space-y-3">
-                      <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.description_label')}</p>
+                      <p className="text-[10px] font-black text-[#374151] uppercase tracking-widest">{t('community.description_label')}</p>
                       <p className="text-zinc-600 dark:text-slate-400 leading-relaxed text-base sm:text-lg font-medium">{isDetailOpen.description}</p>
                     </div>
 
                     <div className="bg-zinc-50 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
                       <div className="text-center sm:text-left">
-                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">{t('community.participants_label')}</p>
+                        <p className="text-[10px] font-bold text-[#374151] uppercase tracking-widest mb-1">{t('community.participants_label')}</p>
                         <p className="text-2xl sm:text-3xl font-display font-black text-stormy-teal">{isDetailOpen.attendees.length} {t('community.neighbors_label')}</p>
                       </div>
                       <button
@@ -3541,7 +3541,7 @@ function AppContent() {
 
                     {user?.uid === isDetailOpen.uid && (
                       <div className="space-y-4 pt-6 border-t border-zinc-100 dark:border-slate-700">
-                        <p className="text-[10px] font-black text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.manage_status')}</p>
+                        <p className="text-[10px] font-black text-[#374151] dark:text-slate-500 uppercase tracking-widest">{t('community.manage_status')}</p>
                             <button
                               onClick={() => {
                                 const postToEdit = isDetailOpen as MarketplacePost;
@@ -3651,7 +3651,7 @@ function AppContent() {
               </div>
             ) : (
               squadAttendeesProfiles.map((profile, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
+                <div key={i} className="assistant-card flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
                   <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 overflow-hidden flex items-center justify-center text-emerald-700 dark:text-slate-100 font-black text-lg">
                     {profile.photoURL ? (
                       <img src={profile.photoURL} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -3660,8 +3660,8 @@ function AppContent() {
                     )}
                   </div>
                   <div>
-                    <h5 className="font-black text-zinc-900 dark:text-white uppercase tracking-tight">{profile.alias}</h5>
-                    <p className="text-[10px] font-bold text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{profile.role === 'admin' ? t('common.admin') : t('common.ecowarrior')}</p>
+                    <h5 className="assistant-card-title font-black text-[#1F2937] dark:text-white uppercase tracking-tight">{profile.alias}</h5>
+                    <p className="assistant-card-metadata text-[10px] font-bold text-[#374151] dark:text-slate-500 uppercase tracking-widest">{profile.role === 'admin' ? t('common.admin') : t('common.ecowarrior')}</p>
                   </div>
                 </div>
               ))
