@@ -146,6 +146,7 @@ describe('reportService', () => {
 
     expect(id).toBe('report-2');
     expect(storageMocks.uploadString).toHaveBeenCalledTimes(1);
+    expect(storageMocks.uploadString).toHaveBeenCalledWith('storage-ref', 'abc123', 'base64');
     expect(storageMocks.getDownloadURL).toHaveBeenCalledTimes(1);
   });
 
@@ -306,6 +307,7 @@ describe('reportService', () => {
     await addReportUpdate('r1', 'Con foto', 'Abierto (en seguimiento)', 'data:image/jpeg;base64,xyz');
 
     expect(storageMocks.uploadString).toHaveBeenCalledTimes(1);
+    expect(storageMocks.uploadString).toHaveBeenCalledWith('storage-ref', 'xyz', 'base64');
     expect(storageMocks.getDownloadURL).toHaveBeenCalledTimes(1);
   });
 

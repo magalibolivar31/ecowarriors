@@ -861,6 +861,8 @@ function AppContent() {
             if (card.imageUrl && card.imageUrl.startsWith('https://firebasestorage.googleapis.com')) {
               // Already a full URL
               return card;
+            } else if (card.imageUrl && card.imageUrl.startsWith('data:image/')) {
+              return card;
             } else if (card.imageUrl) {
               try {
                 const url = await getDownloadURL(ref(storage, card.imageUrl));

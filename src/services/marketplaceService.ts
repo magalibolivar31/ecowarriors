@@ -10,7 +10,7 @@ import {
   onSnapshot,
   Timestamp
 } from 'firebase/firestore';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { db, auth, handleFirestoreError, OperationType, cleanFirestoreData, storage } from '../firebase';
 import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
@@ -45,6 +45,29 @@ function normalizeMarketplaceImagePayload(images: string[]): string[] {
     .filter((image): image is string => typeof image === 'string')
     .map((image) => image.trim())
     .filter(Boolean);
+}
+
+function getBase64Payload(image: string): string | null {
+  if (!image) return null;
+  const trimmed = image.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith('data:image/')) {
+    const cleaned = trimmed.split(',')[1]?.trim() ?? '';
+    return cleaned || null;
+  }
+  if (/^[A-Za-z0-9+/=]+$/.test(trimmed) && trimmed.length > 64) {
+    return trimmed;
+  }
+  return null;
+}
+
+async function uploadMarketplaceImage(image: string, uid: string, index: number): Promise<string> {
+  const base64clean = getBase64Payload(image);
+  if (!base64clean) return image;
+  const storagePath = `marketplace/${uid}/${Date.now()}_${index}.jpg`;
+  const storageRef = ref(storage, storagePath);
+  await uploadString(storageRef, base64clean, 'base64');
+  return await getDownloadURL(storageRef);
 }
 
 function normalizeMarketplaceImages(data: Record<string, unknown>): string[] {
@@ -98,13 +121,16 @@ export async function createMarketplacePost(
     }
 
     const normalizedImages = normalizeMarketplaceImagePayload(images);
+    const uploadedImages = await Promise.all(
+      normalizedImages.map((image, index) => uploadMarketplaceImage(image, uid, index)),
+    );
     const postData = {
       uid,
       type: normalizedType,
       title: sanitizeText(title),
       content: sanitizeText(content),
       tag,
-      images: normalizedImages,
+      images: uploadedImages,
       contact: sanitizeText(contact),
       status: 'disponible',
       createdAt: serverTimestamp()

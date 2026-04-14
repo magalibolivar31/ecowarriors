@@ -14,6 +14,7 @@ const firestoreMocks = vi.hoisted(() => ({
 
 const storageMocks = vi.hoisted(() => ({
   ref: vi.fn(),
+  uploadString: vi.fn(),
   getDownloadURL: vi.fn(),
 }));
 
@@ -68,6 +69,7 @@ describe('marketplaceService', () => {
     firestoreMocks.query.mockReturnValue('query-ref');
     firestoreMocks.orderBy.mockReturnValue('order-by-ref');
     storageMocks.ref.mockImplementation((_storage, path) => `ref:${path}`);
+    storageMocks.uploadString.mockResolvedValue(undefined);
     storageMocks.getDownloadURL.mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
   });
 
@@ -127,6 +129,32 @@ describe('marketplaceService', () => {
       status: 'disponible',
       createdAt: 'ts',
     });
+  });
+
+  it('createMarketplacePost sube imágenes base64 y guarda URLs en Firestore', async () => {
+    firestoreMocks.addDoc.mockResolvedValueOnce({ id: 'post-3' });
+
+    await createMarketplacePost(
+      'doy',
+      'Título',
+      'Contenido',
+      'otros',
+      ['data:image/jpeg;base64,abc123'],
+      'contacto',
+    );
+
+    expect(storageMocks.uploadString).toHaveBeenCalledTimes(1);
+    expect(storageMocks.uploadString).toHaveBeenCalledWith(
+      expect.stringContaining('ref:marketplace/user-1/'),
+      'abc123',
+      'base64',
+    );
+    expect(firestoreMocks.addDoc).toHaveBeenCalledWith(
+      'collection-ref',
+      expect.objectContaining({
+        images: [expect.stringMatching(/^https:\/\/cdn\.test\/ref:marketplace\/user-1\//)],
+      }),
+    );
   });
 
   it('updatePostStatus actualiza estado', async () => {

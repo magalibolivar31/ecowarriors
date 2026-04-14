@@ -107,8 +107,12 @@ export async function normalizeAllReports(): Promise<void> {
  * Uploads a base64 image to Firebase Storage and returns the download URL.
  */
 async function uploadImage(base64: string, path: string): Promise<string> {
+  const base64clean = base64.includes(',') ? base64.split(',')[1] ?? '' : base64;
+  if (!base64clean) {
+    throw new Error('Invalid base64 image payload');
+  }
   const storageRef = ref(storage, path);
-  await uploadString(storageRef, base64, 'data_url');
+  await uploadString(storageRef, base64clean, 'base64');
   return await getDownloadURL(storageRef);
 }
 
