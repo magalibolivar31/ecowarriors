@@ -2814,7 +2814,7 @@ function AppContent() {
                                   <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
                                 </div>
                               </div>
-                              <div className="post-card-details flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-[#024153] group-hover:text-[#126B69]">
+                              <div className="post-card-details flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-zinc-100">
                                 {t('marketplace.details')}
                                 <ChevronRight className="w-3 h-3" />
                               </div>
