@@ -10,7 +10,7 @@ import {
   onSnapshot
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { db, auth, handleFirestoreError, OperationType, cleanFirestoreData, storage } from '../firebase';
+import { db, auth, handleFirestoreError, OperationType, storage } from '../firebase';
 import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
 
@@ -32,6 +32,12 @@ function normalizeMarketplaceStatus(
   if (normalized === 'resuelta' || normalized === 'entregado/resuelto') return 'resuelta';
   if (normalized === 'cerrada' || normalized === 'vencido') return 'cerrada';
   return null;
+}
+
+function normalizeMarketplaceIsActive(value: unknown, status: 'activa' | 'resuelta' | 'cerrada' | null): boolean {
+  if (typeof value === 'boolean') return value;
+  if (status) return status === 'activa';
+  return true;
 }
 
 function normalizeMarketplaceImagePayload(images: string[]): string[] {
@@ -130,10 +136,14 @@ export async function createMarketplacePost(
       isActive: status === 'activa',
     };
 
-    const docRef = await addDoc(collection(db, MARKETPLACE_COLLECTION), cleanFirestoreData(postData));
+    const docRef = await addDoc(collection(db, MARKETPLACE_COLLECTION), postData);
     return docRef.id;
   } catch (error) {
-    handleFirestoreError(error, OperationType.CREATE, MARKETPLACE_COLLECTION);
+    try {
+      handleFirestoreError(error, OperationType.CREATE, MARKETPLACE_COLLECTION);
+    } catch {
+      // no-op: preserve original error for UI
+    }
     throw error;
   }
 }
@@ -146,18 +156,25 @@ export async function updatePostStatus(
   
   try {
     const postRef = doc(db, MARKETPLACE_COLLECTION, postId);
-    await updateDoc(postRef, cleanFirestoreData({
+    await updateDoc(postRef, {
       status,
       isActive: status === 'activa',
       updatedAt: serverTimestamp(),
-    }));
+    });
   } catch (error) {
-    handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    try {
+      handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    } catch {
+      // no-op: preserve original error for UI
+    }
     throw error;
   }
 }
 
-export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => void) {
+export function subscribeToMarketplace(
+  callback: (posts: MarketplacePost[]) => void,
+  onError?: (message: string) => void,
+) {
   const q = query(collection(db, MARKETPLACE_COLLECTION), orderBy('createdAt', 'desc'));
   let latestSnapshotRequest = 0;
 
@@ -172,6 +189,7 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
             .filter((value): value is string => Boolean(value));
           const normalizedType = normalizeMarketplaceType(rawData.type);
           const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
+          const normalizedIsActive = normalizeMarketplaceIsActive(rawData.isActive, normalizedStatus);
 
           return {
             id: snapshotDoc.id,
@@ -181,6 +199,9 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
             ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
             ...(normalizedType ? { type: normalizedType } : {}),
             ...(normalizedStatus ? { status: normalizedStatus } : {}),
+            ...((normalizedStatus || rawData.isActive === false || rawData.isActive === true)
+              ? { isActive: normalizedIsActive }
+              : {}),
             ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
             ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
           } as MarketplacePost;
@@ -190,7 +211,13 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
         callback(posts);
       } catch (error) {
         if (requestId !== latestSnapshotRequest) return;
-        handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+        let message = 'Error loading marketplace posts.';
+        try {
+          handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+        } catch (loggedError) {
+          message = loggedError instanceof Error ? loggedError.message : String(loggedError);
+        }
+        onError?.(message);
         const fallbackPosts = snapshot.docs.map((snapshotDoc) => ({
           id: snapshotDoc.id,
           ...(snapshotDoc.data() as Record<string, unknown>),
@@ -199,7 +226,13 @@ export function subscribeToMarketplace(callback: (posts: MarketplacePost[]) => v
       }
     })();
   }, (error) => {
-    handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+    let message = 'Error loading marketplace posts.';
+    try {
+      handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
+    } catch (loggedError) {
+      message = loggedError instanceof Error ? loggedError.message : String(loggedError);
+    }
+    onError?.(message);
   });
 }
 
@@ -210,7 +243,11 @@ export async function deleteMarketplacePost(postId: string): Promise<void> {
   try {
     await deleteDoc(doc(db, MARKETPLACE_COLLECTION, postId));
   } catch (error) {
-    handleFirestoreError(error, OperationType.DELETE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    try {
+      handleFirestoreError(error, OperationType.DELETE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    } catch {
+      // no-op: preserve original error for UI
+    }
     throw error;
   }
 }
@@ -222,7 +259,11 @@ export async function cancelMarketplacePost(postId: string): Promise<void> {
   try {
     await updatePostStatus(postId, 'cerrada');
   } catch (error) {
-    handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    try {
+      handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
+    } catch {
+      // no-op: preserve original error for UI
+    }
     throw error;
   }
 }

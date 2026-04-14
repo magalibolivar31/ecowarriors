@@ -607,7 +607,8 @@ function AppContent() {
   const [postType, setPostType] = useState<PostType | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState<MarketplacePost | Squad | null>(null);
   const [reportFilter, setReportFilter] = useState<'abiertos' | 'resueltos' | 'mios'>('abiertos');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [reportSearchQuery, setReportSearchQuery] = useState('');
+  const [marketplaceSearchQuery, setMarketplaceSearchQuery] = useState('');
 
   // Squad Form State
   const [sTitle, setSTitle] = useState('');
@@ -637,6 +638,8 @@ function AppContent() {
   const [contact, setContact] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [postCreationSuccess, setPostCreationSuccess] = useState(false);
+  const [postsLoading, setPostsLoading] = useState(false);
+  const [postsError, setPostsError] = useState<string | null>(null);
   const [isConfirmingLocation, setIsConfirmingLocation] = useState(false);
   const [isAutoLocation, setIsAutoLocation] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState<ReportAnalysis | null>(null);
@@ -655,6 +658,18 @@ function AppContent() {
     }
   };
 
+  const getMarketplaceTimestamp = (value: unknown) => {
+    if (value && typeof value === 'object' && 'toDate' in value && typeof value.toDate === 'function') {
+      try {
+        return value.toDate().getTime();
+      } catch {
+        return 0;
+      }
+    }
+    if (value instanceof Date) return value.getTime();
+    return 0;
+  };
+
   const handleOpenFeedbackForm = () => {
     window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
     setIsFeedbackModalOpen(false);
@@ -669,8 +684,8 @@ function AppContent() {
   const filteredReports = useMemo(() => {
     return reports.filter(r => {
       const matchesSearch =
-        (r.title?.toLowerCase() ?? '').includes(searchQuery?.toLowerCase() ?? '') ||
-        (r.description?.toLowerCase() ?? '').includes(searchQuery?.toLowerCase() ?? '');
+        (r.title?.toLowerCase() ?? '').includes(reportSearchQuery?.toLowerCase() ?? '') ||
+        (r.description?.toLowerCase() ?? '').includes(reportSearchQuery?.toLowerCase() ?? '');
       if (!matchesSearch) return false;
 
       if (reportFilter === 'abiertos') {
@@ -697,7 +712,7 @@ function AppContent() {
       if (r.isActive === false && !isAdmin) return false;
       return true;
     });
-  }, [reports, reportFilter, searchQuery, user, isAdmin]);
+  }, [reports, reportFilter, reportSearchQuery, user, isAdmin]);
   const visibleReports = useMemo(
     () => filteredReports.filter((report) => !deletingReportIds.has(report.id)),
     [filteredReports, deletingReportIds],
@@ -935,9 +950,19 @@ function AppContent() {
         checkV();
 
         // Listen to marketplace posts
-        unsubPosts = subscribeToMarketplace((marketplacePosts) => {
-          setPosts(marketplacePosts);
-        });
+        setPostsLoading(true);
+        setPostsError(null);
+        unsubPosts = subscribeToMarketplace(
+          (marketplacePosts) => {
+            setPosts(marketplacePosts);
+            setPostsLoading(false);
+            setPostsError(null);
+          },
+          (message) => {
+            setPostsLoading(false);
+            setPostsError(message || t('community.load_posts_error'));
+          },
+        );
 
         // Listen to squads
         unsubEvents = subscribeToSquads((squads) => {
@@ -961,6 +986,8 @@ function AppContent() {
       } else {
         setCheckingVolunteer(false);
         setPosts([]);
+        setPostsLoading(false);
+        setPostsError(null);
         setCrewEvents([]);
         setReports([]);
         setReportsReady(false);
@@ -1146,13 +1173,14 @@ function AppContent() {
   };
 
   const handleEditPost = (post: MarketplacePost) => {
+    const normalizedType = typeof post.type === 'string' && post.type.toLowerCase() === 'doy' ? 'doy' : 'recibo';
     setEditingPost(post);
     setTitle(post.title);
     setDescription(post.description || post.content || '');
     setTag((post.category || post.tag || 'otros') as Tag);
     setContact(post.contact || '');
     setSelectedImages(post.imageUrl ? [post.imageUrl] : (post.images?.[0] ? [post.images[0]] : []));
-    setPostType(post.type);
+    setPostType(normalizedType);
     setIsPostModalOpen(true);
   };
 
@@ -1177,15 +1205,16 @@ function AppContent() {
       const normalizedCategory = tag || 'otros';
 
       if (editingPost) {
-        await updateDoc(doc(db, 'marketplace', editingPost.id), cleanFirestoreData({
+        await updateDoc(doc(db, 'marketplace', editingPost.id), {
           title: sanitizedTitle,
           description: sanitizedDescription,
           content: sanitizedDescription,
           category: normalizedCategory,
           tag: normalizedCategory,
+          type: postType,
           contact: sanitizedContact || null,
           updatedAt: serverTimestamp(),
-        }));
+        });
         setEditingPost(null);
       } else {
         if (postType === 'doy' && selectedImages.length > 0) {
@@ -2006,7 +2035,7 @@ function AppContent() {
                               <div className="flex items-center gap-3">
                                 <span className="text-[10px] font-black text-stormy-teal dark:text-slate-200 uppercase tracking-widest">{crew.attendees.length} {t('community.participants')}</span>
                                 <div className="w-1 h-1 bg-zinc-200 rounded-full" />
-                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{crew.location}</span>
+                                <span className="text-[10px] font-bold text-zinc-600 dark:text-slate-300 uppercase tracking-widest">{crew.location}</span>
                               </div>
                             </div>
                           </div>
@@ -2425,8 +2454,8 @@ function AppContent() {
                     <input 
                       type="text" 
                       placeholder={t('reports.search_placeholder')}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      value={reportSearchQuery}
+                      onChange={(e) => setReportSearchQuery(e.target.value)}
                       className="theme-input w-full pl-11 pr-4 py-3 rounded-2xl border shadow-sm outline-none focus:ring-2 focus:ring-emerald-action transition-all font-medium text-sm"
                     />
                   </div>
@@ -2586,8 +2615,8 @@ function AppContent() {
                         type="text" 
                         placeholder={t('community.search_board')}
                         className="w-full pl-14 pr-6 py-4 bg-white border border-zinc-100 rounded-2xl focus:ring-4 focus:ring-stormy-teal/5 outline-none shadow-sm font-medium text-sm"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        value={marketplaceSearchQuery}
+                        onChange={(e) => setMarketplaceSearchQuery(e.target.value)}
                       />
                     </div>
                     <div className="relative">
@@ -2630,20 +2659,46 @@ function AppContent() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     {(() => {
-                      const activePosts = posts.filter((post) => post.isActive !== false && !deletingPostIds.has(post.id));
+                      if (postsLoading) {
+                        return (
+                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
+                            <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
+                              <Loader2 className="w-8 h-8 text-stormy-teal animate-spin" />
+                            </div>
+                            <p className="text-zinc-500 font-black uppercase tracking-widest text-xs">{t('common.loading')}</p>
+                          </div>
+                        );
+                      }
+
+                      if (postsError) {
+                        return (
+                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-red-100">
+                            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                              <AlertTriangle className="w-8 h-8 text-red-500" />
+                            </div>
+                            <p className="text-red-600 font-black uppercase tracking-widest text-xs">{t('common.error')}</p>
+                            <p className="text-zinc-600 text-[11px] mt-2">{t('community.load_posts_error')}</p>
+                          </div>
+                        );
+                      }
+
+                      const activePosts = [...posts]
+                        .filter((post) => post.isActive !== false && !deletingPostIds.has(post.id))
+                        .sort((a, b) => getMarketplaceTimestamp(b.createdAt) - getMarketplaceTimestamp(a.createdAt));
                       const filteredPosts = activePosts.filter(post => {
                         const normalizedTitle = typeof post.title === 'string' ? post.title : '';
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
                         const normalizedDescription = typeof post.description === 'string' ? post.description : '';
                         const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
-                        const searchTerm = searchQuery.toLowerCase();
+                        const normalizedType = typeof post.type === 'string' ? post.type.trim().toLowerCase() : '';
+                        const searchTerm = marketplaceSearchQuery.trim().toLowerCase();
                         const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
                                             normalizedContent.toLowerCase().includes(searchTerm) ||
                                             normalizedDescription.toLowerCase().includes(searchTerm) ||
                                             normalizedCategory.toLowerCase().includes(searchTerm);
                         const matchesType = marketplaceTypeFilter === 'todos'
                           ? true
-                          : post.type === marketplaceTypeFilter;
+                          : normalizedType === marketplaceTypeFilter;
                         return matchesSearch && matchesType;
                       });
 
