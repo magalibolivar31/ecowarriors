@@ -3143,7 +3143,7 @@ function AppContent() {
           <button 
             type="submit"
             disabled={isSubmittingVolunteer}
-            className="w-full py-6 bg-emerald-600 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-emerald-100 dark:shadow-none hover:bg-emerald-700 transition-all disabled:opacity-50 flex items-center justify-center gap-3 active:scale-95"
+            className="w-full py-6 bg-emerald-600 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-emerald-100 dark:shadow-none hover:bg-emerald-700 transition-all disabled:bg-stormy-teal disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed flex items-center justify-center gap-3 active:scale-95"
           >
             {isSubmittingVolunteer ? <Loader2 className="w-8 h-8 animate-spin" /> : (
               <>
@@ -3300,7 +3300,7 @@ function AppContent() {
           <button 
             disabled={loading || !title || !description || !postType}
             onClick={handleCreatePost}
-            className="w-full py-5 bg-emerald-600 text-white rounded-2xl font-black shadow-xl hover:bg-emerald-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-5 bg-emerald-600 text-white rounded-2xl font-black shadow-xl hover:bg-emerald-700 transition-all disabled:bg-stormy-teal disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading || imageUploading ? <Loader2 className="w-6 h-6 animate-spin" /> : t('community.post_publish')}
           </button>
@@ -3732,7 +3732,7 @@ function AppContent() {
           <button 
             onClick={handleCreateSquad}
             disabled={loading || !sTitle || !sDescription || !sDate || !sTime || !sLocation}
-            className="w-full py-5 sm:py-6 bg-amber-500 text-white rounded-3xl font-black text-lg sm:text-xl shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600 transition-all active:scale-95 disabled:opacity-50"
+            className="w-full py-5 sm:py-6 bg-amber-500 text-white rounded-3xl font-black text-lg sm:text-xl shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600 transition-all active:scale-95 disabled:bg-stormy-teal disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed"
           >
             {loading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : (editingSquadId ? t('community.squad_save_changes') : t('community.squad_create_btn'))}
           </button>
