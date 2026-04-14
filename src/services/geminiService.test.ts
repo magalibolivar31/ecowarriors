@@ -130,17 +130,19 @@ describe('geminiService', () => {
   it('validateDonation devuelve fallback en error', async () => {
     geminiMocks.generateContent.mockRejectedValueOnce(new Error('fail'));
     await expect(validateDonation(['a'], 'Título', 'ropa')).resolves.toEqual({
-      valid: false,
-      reason: 'Error de conexión con el servicio de validación.',
+      valid: true,
+      reason: 'No se pudo validar automáticamente la publicación. Se guardará igualmente.',
       retry: true,
+      serviceUnavailable: true,
     });
   });
 
   it('validateRequest devuelve fallback en error', async () => {
     geminiMocks.generateContent.mockRejectedValueOnce(new Error('fail'));
     await expect(validateRequest('T', 'C', 'otros')).resolves.toEqual({
-      valid: false,
-      reason: 'Error de conexión con el servicio de validación.',
+      valid: true,
+      reason: 'No se pudo validar automáticamente la publicación. Se guardará igualmente.',
+      serviceUnavailable: true,
     });
   });
 

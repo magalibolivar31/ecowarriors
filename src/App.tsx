@@ -1173,12 +1173,18 @@ function AppContent() {
         setEditingPost(null);
       } else {
         if (postType === 'doy' && selectedImages.length > 0) {
-          const imagesB64 = selectedImages.map(img => img.split(',')[1]);
+          const imagesB64 = selectedImages
+            .filter((img) => img.startsWith('data:image/'))
+            .map(img => img.split(',')[1])
+            .filter(Boolean);
           const validation = await validateDonation(imagesB64, sanitizedTitle, tag);
           if (!validation.valid) {
             setError(validation.retry ? "IA incierta. Sube una foto más clara." : "Imagen no coincide con descripción.");
             setLoading(false);
             return;
+          }
+          if (validation.serviceUnavailable && validation.reason) {
+            showAlert(t('common.confirm'), validation.reason);
           }
         } else {
           const validation = await validateRequest(sanitizedTitle, sanitizedDescription, tag);
@@ -1186,6 +1192,9 @@ function AppContent() {
             setError(`No se puede publicar: ${validation.reason}`);
             setLoading(false);
             return;
+          }
+          if (validation.serviceUnavailable && validation.reason) {
+            showAlert(t('common.confirm'), validation.reason);
           }
         }
         
@@ -1966,7 +1975,7 @@ function AppContent() {
                             <div>
                               <p className="font-black text-zinc-900 uppercase tracking-tighter text-lg sm:text-xl leading-none mb-1">{crew.title}</p>
                               <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-black text-emerald-action uppercase tracking-widest">{crew.attendees.length} {t('community.participants')}</span>
+                                <span className="text-[10px] font-black text-stormy-teal dark:text-slate-200 uppercase tracking-widest">{crew.attendees.length} {t('community.participants')}</span>
                                 <div className="w-1 h-1 bg-zinc-200 rounded-full" />
                                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{crew.location}</span>
                               </div>
@@ -2592,7 +2601,8 @@ function AppContent() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     {(() => {
-                      const filteredPosts = posts.filter(post => {
+                      const activePosts = posts.filter((post) => post.isActive !== false && !deletingPostIds.has(post.id));
+                      const filteredPosts = activePosts.filter(post => {
                         const normalizedTitle = typeof post.title === 'string' ? post.title : '';
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
                         const normalizedDescription = typeof post.description === 'string' ? post.description : '';
@@ -2605,26 +2615,33 @@ function AppContent() {
                         const matchesType = marketplaceTypeFilter === 'todos'
                           ? true
                           : post.type === marketplaceTypeFilter;
-                        return matchesSearch && matchesType && post.isActive !== false;
+                        return matchesSearch && matchesType;
                       });
 
-                      const visiblePosts = filteredPosts.filter((post) => !deletingPostIds.has(post.id));
-
-                      if (visiblePosts.length === 0) {
+                      if (activePosts.length === 0) {
                         return (
                           <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
                             <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
                               <MessageSquare className="w-10 h-10 text-stormy-teal/10" />
                             </div>
                             <p className="text-zinc-400 font-black uppercase tracking-widest text-xs">{t('community.no_posts')}</p>
-                            <p className="text-zinc-300 text-[11px] mt-2">{t('community.no_posts_desc')}</p>
+                            <p className="text-zinc-500 text-[11px] mt-2">{t('community.no_posts_desc')}</p>
+                          </div>
+                        );
+                      }
+
+                      if (filteredPosts.length === 0) {
+                        return (
+                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
+                            <p className="text-zinc-500 font-black uppercase tracking-widest text-xs">{t('marketplace.no_posts')}</p>
+                            <p className="text-zinc-500 text-[11px] mt-2">{t('marketplace.no_posts_desc')}</p>
                           </div>
                         );
                       }
 
                       return (
                         <AnimatePresence>
-                          {visiblePosts.map(post => (
+                          {filteredPosts.map(post => (
                         <motion.div 
                           layoutId={post.id}
                           key={post.id}
@@ -2701,7 +2718,7 @@ function AppContent() {
                                 <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
                                 <div className="flex flex-col">
                                   <span className="text-[9px] font-bold text-zinc-400 dark:text-slate-400 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
-                                  <span className="text-[9px] font-bold text-zinc-300 dark:text-slate-500 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                                  <span className="text-[9px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
                                 </div>
                               </div>
                               <div className="flex items-center gap-1 text-emerald-action font-black text-[9px] uppercase tracking-widest group-hover:translate-x-1 transition-transform">
@@ -3194,27 +3211,25 @@ function AppContent() {
 
       <Modal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} title={postType === 'doy' ? t('community.post_type_offer') : t('community.post_type_need')}>
         <div className="space-y-6 p-1 sm:p-2">
-          {postType === 'doy' && (
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.post_photos_label')} ({language === 'es' ? 'opcional' : 'optional'})</label>
-              <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                {selectedImages.map((img, i) => (
-                  <div key={i} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 relative">
-                    <img src={img} className="w-full h-full object-cover" />
-                    <button onClick={() => setSelectedImages(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 bg-black/50 p-1 rounded-full">
-                      <X className="w-3 h-3 text-white" />
-                    </button>
-                  </div>
-                ))}
-                {selectedImages.length < 1 && (
-                  <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-dashed border-zinc-200 dark:border-slate-700 flex items-center justify-center text-zinc-300 dark:text-slate-600 hover:bg-zinc-50">
-                    <Plus className="w-8 h-8" />
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{t('community.post_photos_label')} ({language === 'es' ? 'opcional' : 'optional'})</label>
+            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+              {selectedImages.map((img, i) => (
+                <div key={i} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 relative">
+                  <img src={img} className="w-full h-full object-cover" />
+                  <button onClick={() => setSelectedImages(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 bg-black/50 p-1 rounded-full">
+                    <X className="w-3 h-3 text-white" />
                   </button>
-                )}
-              </div>
-              <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+                </div>
+              ))}
+              {selectedImages.length < 1 && (
+                <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-dashed border-zinc-200 dark:border-slate-700 flex items-center justify-center text-zinc-400 dark:text-slate-500 hover:bg-zinc-50">
+                  <Plus className="w-8 h-8" />
+                </button>
+              )}
             </div>
-          )}
+            <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+          </div>
  
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-zinc-400 dark:text-slate-500 uppercase tracking-widest">{t('community.post_title_label')}</label>
@@ -3270,8 +3285,8 @@ function AppContent() {
               ) : <div />}
               <span className={cn(
                 "text-[10px] font-bold",
-                description.length < 10 || description.length > 500 ? "text-amber-500" : "text-zinc-400"
-              )}>
+                  description.length < 10 || description.length > 500 ? "text-amber-600" : "text-zinc-500"
+                )}>
                 {description.length}/500
               </span>
             </div>
@@ -3557,17 +3572,17 @@ function AppContent() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
-                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.date_label')}</span>
+                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{t('community.date_label')}</span>
                 <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.date}</span>
               </div>
               <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
-                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.squad_time_label')}</span>
+                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{t('community.squad_time_label')}</span>
                 <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.time}</span>
               </div>
             </div>
 
             <div className="p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 flex flex-col gap-1">
-              <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{t('community.location_label')}</span>
+              <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{t('community.location_label')}</span>
               <span className="font-bold text-zinc-800 dark:text-slate-100">{selectedSquadForDetail.location}</span>
             </div>
 
@@ -3580,8 +3595,8 @@ function AppContent() {
               </div>
               <span className={cn(
                 "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                selectedSquadForDetail.status === 'próxima' ? "bg-amber-100 text-amber-600" : 
-                selectedSquadForDetail.status === 'finalizada' ? "bg-zinc-100 text-zinc-600" : "bg-red-100 text-red-600"
+                selectedSquadForDetail.status === 'próxima' ? "bg-amber-100 text-amber-800" : 
+                selectedSquadForDetail.status === 'finalizada' ? "bg-zinc-100 text-zinc-700" : "bg-red-100 text-red-700"
               )}>
                 {selectedSquadForDetail.status === 'próxima' ? t('community.squad_status_upcoming') :
                  selectedSquadForDetail.status === 'finalizada' ? t('community.squad_status_finished') :
@@ -3597,7 +3612,7 @@ function AppContent() {
               className={cn(
                 "w-full py-5 rounded-[2rem] font-black uppercase tracking-widest transition-all shadow-xl",
                 selectedSquadForDetail.attendees.includes(auth.currentUser?.uid || '')
-                  ? "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                  ? "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
                   : "bg-emerald-action text-white hover:bg-emerald-action/90 shadow-emerald-action/10"
               )}
             >
