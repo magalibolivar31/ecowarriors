@@ -40,6 +40,15 @@ function normalizeMarketplaceIsActive(value: unknown, status: 'activa' | 'resuel
   return true;
 }
 
+function reportMarketplaceError(error: unknown, operation: OperationType, path: string): string {
+  try {
+    handleFirestoreError(error, operation, path);
+  } catch (loggedError) {
+    return loggedError instanceof Error ? loggedError.message : String(loggedError);
+  }
+  return error instanceof Error ? error.message : String(error);
+}
+
 function normalizeMarketplaceImagePayload(images: string[]): string[] {
   return images
     .filter((image): image is string => typeof image === 'string')
@@ -139,11 +148,7 @@ export async function createMarketplacePost(
     const docRef = await addDoc(collection(db, MARKETPLACE_COLLECTION), postData);
     return docRef.id;
   } catch (error) {
-    try {
-      handleFirestoreError(error, OperationType.CREATE, MARKETPLACE_COLLECTION);
-    } catch {
-      // no-op: preserve original error for UI
-    }
+    reportMarketplaceError(error, OperationType.CREATE, MARKETPLACE_COLLECTION);
     throw error;
   }
 }
@@ -162,11 +167,7 @@ export async function updatePostStatus(
       updatedAt: serverTimestamp(),
     });
   } catch (error) {
-    try {
-      handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
-    } catch {
-      // no-op: preserve original error for UI
-    }
+    reportMarketplaceError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
     throw error;
   }
 }
@@ -211,12 +212,7 @@ export function subscribeToMarketplace(
         callback(posts);
       } catch (error) {
         if (requestId !== latestSnapshotRequest) return;
-        let message = 'Error loading marketplace posts.';
-        try {
-          handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
-        } catch (loggedError) {
-          message = loggedError instanceof Error ? loggedError.message : String(loggedError);
-        }
+        const message = reportMarketplaceError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
         onError?.(message);
         const fallbackPosts = snapshot.docs.map((snapshotDoc) => ({
           id: snapshotDoc.id,
@@ -226,12 +222,7 @@ export function subscribeToMarketplace(
       }
     })();
   }, (error) => {
-    let message = 'Error loading marketplace posts.';
-    try {
-      handleFirestoreError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
-    } catch (loggedError) {
-      message = loggedError instanceof Error ? loggedError.message : String(loggedError);
-    }
+    const message = reportMarketplaceError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
     onError?.(message);
   });
 }
@@ -243,11 +234,7 @@ export async function deleteMarketplacePost(postId: string): Promise<void> {
   try {
     await deleteDoc(doc(db, MARKETPLACE_COLLECTION, postId));
   } catch (error) {
-    try {
-      handleFirestoreError(error, OperationType.DELETE, `${MARKETPLACE_COLLECTION}/${postId}`);
-    } catch {
-      // no-op: preserve original error for UI
-    }
+    reportMarketplaceError(error, OperationType.DELETE, `${MARKETPLACE_COLLECTION}/${postId}`);
     throw error;
   }
 }
@@ -259,11 +246,7 @@ export async function cancelMarketplacePost(postId: string): Promise<void> {
   try {
     await updatePostStatus(postId, 'cerrada');
   } catch (error) {
-    try {
-      handleFirestoreError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
-    } catch {
-      // no-op: preserve original error for UI
-    }
+    reportMarketplaceError(error, OperationType.UPDATE, `${MARKETPLACE_COLLECTION}/${postId}`);
     throw error;
   }
 }

@@ -670,6 +670,18 @@ function AppContent() {
     return 0;
   };
 
+  const normalizeMarketplaceType = (value: unknown): 'doy' | 'recibo' => {
+    if (typeof value === 'string' && value.trim().toLowerCase() === 'doy') return 'doy';
+    return 'recibo';
+  };
+
+  const activeMarketplacePosts = useMemo(
+    () => [...posts]
+      .filter((post) => post.isActive !== false && !deletingPostIds.has(post.id))
+      .sort((a, b) => getMarketplaceTimestamp(b.createdAt) - getMarketplaceTimestamp(a.createdAt)),
+    [posts, deletingPostIds],
+  );
+
   const handleOpenFeedbackForm = () => {
     window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
     setIsFeedbackModalOpen(false);
@@ -1173,7 +1185,7 @@ function AppContent() {
   };
 
   const handleEditPost = (post: MarketplacePost) => {
-    const normalizedType = typeof post.type === 'string' && post.type.toLowerCase() === 'doy' ? 'doy' : 'recibo';
+    const normalizedType = normalizeMarketplaceType(post.type);
     setEditingPost(post);
     setTitle(post.title);
     setDescription(post.description || post.content || '');
@@ -2682,15 +2694,12 @@ function AppContent() {
                         );
                       }
 
-                      const activePosts = [...posts]
-                        .filter((post) => post.isActive !== false && !deletingPostIds.has(post.id))
-                        .sort((a, b) => getMarketplaceTimestamp(b.createdAt) - getMarketplaceTimestamp(a.createdAt));
-                      const filteredPosts = activePosts.filter(post => {
+                      const filteredPosts = activeMarketplacePosts.filter(post => {
                         const normalizedTitle = typeof post.title === 'string' ? post.title : '';
                         const normalizedContent = typeof post.content === 'string' ? post.content : '';
                         const normalizedDescription = typeof post.description === 'string' ? post.description : '';
                         const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
-                        const normalizedType = typeof post.type === 'string' ? post.type.trim().toLowerCase() : '';
+                        const normalizedType = normalizeMarketplaceType(post.type);
                         const searchTerm = marketplaceSearchQuery.trim().toLowerCase();
                         const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
                                             normalizedContent.toLowerCase().includes(searchTerm) ||
@@ -2702,7 +2711,7 @@ function AppContent() {
                         return matchesSearch && matchesType;
                       });
 
-                      if (activePosts.length === 0) {
+                      if (activeMarketplacePosts.length === 0) {
                         return (
                           <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
                             <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
