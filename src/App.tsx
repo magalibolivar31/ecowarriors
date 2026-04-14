@@ -1175,8 +1175,12 @@ function AppContent() {
         if (postType === 'doy' && selectedImages.length > 0) {
           const imagesB64 = selectedImages
             .filter((img) => img.startsWith('data:image/'))
-            .map(img => img.split(',')[1])
-            .filter(Boolean);
+            .map((img) => {
+              const commaIndex = img.indexOf(',');
+              if (commaIndex === -1) return null;
+              return img.slice(commaIndex + 1);
+            })
+            .filter((b64): b64 is string => typeof b64 === 'string' && b64.length > 0);
           const validation = await validateDonation(imagesB64, sanitizedTitle, tag);
           if (!validation.valid) {
             setError(validation.retry ? "IA incierta. Sube una foto más clara." : "Imagen no coincide con descripción.");
@@ -3212,7 +3216,7 @@ function AppContent() {
       <Modal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} title={postType === 'doy' ? t('community.post_type_offer') : t('community.post_type_need')}>
         <div className="space-y-6 p-1 sm:p-2">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{t('community.post_photos_label')} ({language === 'es' ? 'opcional' : 'optional'})</label>
+            <label className="text-[10px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-widest">{t('community.post_photos_label')} ({t('community.optional_label')})</label>
             <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
               {selectedImages.map((img, i) => (
                 <div key={i} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 relative">
