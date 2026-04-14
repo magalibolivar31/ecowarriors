@@ -3733,7 +3733,7 @@ function AppContent() {
             onClick={handleCreateSquad}
             disabled={loading || !sTitle || !sDescription || !sDate || !sTime || !sLocation}
             className={cn(
-              "w-full py-5 sm:py-6 text-white rounded-3xl font-black text-lg sm:text-xl transition-all active:scale-95 disabled:bg-zinc-300 disabled:text-white disabled:opacity-100 disabled:cursor-not-allowed",
+              "w-full py-5 sm:py-6 text-white rounded-3xl font-black text-lg sm:text-xl transition-all active:scale-95 disabled:bg-zinc-500 disabled:text-zinc-100 disabled:opacity-100 disabled:cursor-not-allowed",
               editingSquadId
                 ? "bg-stormy-teal shadow-xl shadow-stormy-teal/20 hover:bg-stormy-teal/90"
                 : "bg-amber-500 shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600"
