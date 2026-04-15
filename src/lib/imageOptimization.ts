@@ -1,4 +1,5 @@
 const IMAGE_PRIORITY_ATTR = 'data-image-priority';
+let optimizationObserver: MutationObserver | null = null;
 
 function optimizeImage(img: HTMLImageElement) {
   const isHighPriority = img.getAttribute(IMAGE_PRIORITY_ATTR) === 'high';
@@ -17,11 +18,17 @@ function optimizeImage(img: HTMLImageElement) {
 }
 
 export function initializeImageOptimization() {
-  document.querySelectorAll('img').forEach((img) => {
-    optimizeImage(img);
-  });
+  if (optimizationObserver) {
+    return;
+  }
 
-  const observer = new MutationObserver((mutations) => {
+  const optimizeExistingImages = () => {
+    document.querySelectorAll('img').forEach((img) => {
+      optimizeImage(img);
+    });
+  };
+
+  optimizationObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
         if (!(node instanceof HTMLElement)) return;
@@ -36,5 +43,6 @@ export function initializeImageOptimization() {
     });
   });
 
-  observer.observe(document.body, {childList: true, subtree: true});
+  optimizationObserver.observe(document.body, {childList: true, subtree: true});
+  requestAnimationFrame(optimizeExistingImages);
 }

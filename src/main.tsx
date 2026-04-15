@@ -6,8 +6,6 @@ import 'leaflet/dist/leaflet.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import { initializeImageOptimization } from './lib/imageOptimization';
 
-initializeImageOptimization();
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
@@ -15,3 +13,5 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>,
 );
+
+initializeImageOptimization();
