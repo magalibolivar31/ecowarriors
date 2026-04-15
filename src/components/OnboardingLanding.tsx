@@ -238,7 +238,6 @@ export const OnboardingLanding: React.FC = () => {
                 className="h-full w-full object-contain"
                 loading="eager"
                 decoding="async"
-                fetchPriority="high"
                 data-image-priority="high"
               />
             </div>

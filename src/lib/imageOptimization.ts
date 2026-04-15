@@ -28,21 +28,34 @@ export function initializeImageOptimization() {
     });
   };
 
-  optimizationObserver = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
+  const startObserver = () => {
+    if (optimizationObserver || !document.body) {
+      return;
+    }
 
-        if (node.tagName === 'IMG') {
-          optimizeImage(node as HTMLImageElement);
-          return;
-        }
+    optimizationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) return;
 
-        node.querySelectorAll('img').forEach((img) => optimizeImage(img));
+          if (node.tagName === 'IMG') {
+            optimizeImage(node as HTMLImageElement);
+            return;
+          }
+
+          node.querySelectorAll('img').forEach((img) => optimizeImage(img));
+        });
       });
     });
-  });
 
-  optimizationObserver.observe(document.body, {childList: true, subtree: true});
-  requestAnimationFrame(optimizeExistingImages);
+    optimizationObserver.observe(document.body, {childList: true, subtree: true});
+    requestAnimationFrame(optimizeExistingImages);
+  };
+
+  if (document.readyState === 'loading' || !document.body) {
+    window.addEventListener('DOMContentLoaded', startObserver, {once: true});
+    return;
+  }
+
+  startObserver();
 }
