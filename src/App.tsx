@@ -64,6 +64,7 @@ import {
   Line
 } from 'recharts';
 import { cn, sanitizeText } from './lib/utils';
+import { initializeImageOptimization } from './lib/imageOptimization';
 import { analyzeReport, validateDonation, validateRequest, ReportAnalysis } from './services/geminiService';
 import { CollaborativeMap, MapReport } from './components/CollaborativeMap';
 import { RoccoChat } from './components/RoccoChat';
@@ -395,6 +396,10 @@ function AppContent() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
   const [deletingReportIds, setDeletingReportIds] = useState<Set<string>>(new Set());
   const [deletingPostIds, setDeletingPostIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    initializeImageOptimization();
+  }, []);
 
   const validateField = (name: string, value: string) => {
     if (name === 'contact' && !value.trim()) {

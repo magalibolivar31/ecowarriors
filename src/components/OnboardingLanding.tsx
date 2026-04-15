@@ -238,6 +238,7 @@ export const OnboardingLanding: React.FC = () => {
                 className="h-full w-full object-contain"
                 loading="eager"
                 decoding="async"
+                data-image-priority="high"
               />
             </div>
             <span className={cn(
