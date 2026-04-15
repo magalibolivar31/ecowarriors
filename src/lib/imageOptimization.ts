@@ -35,6 +35,11 @@ export function initializeImageOptimization() {
 
     optimizationObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.target instanceof HTMLImageElement) {
+          optimizeImage(mutation.target);
+          return;
+        }
+
         mutation.addedNodes.forEach((node) => {
           if (!(node instanceof HTMLElement)) return;
 
@@ -48,7 +53,12 @@ export function initializeImageOptimization() {
       });
     });
 
-    optimizationObserver.observe(document.body, {childList: true, subtree: true});
+    optimizationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['src', IMAGE_PRIORITY_ATTR],
+    });
     requestAnimationFrame(optimizeExistingImages);
   };
 

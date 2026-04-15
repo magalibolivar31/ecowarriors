@@ -1580,6 +1580,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     localStorage.setItem('app_lang', language);
+    document.documentElement.lang = language;
   }, [language]);
 
   useEffect(() => {
