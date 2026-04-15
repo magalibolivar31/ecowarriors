@@ -4,6 +4,9 @@ import App from './App.tsx';
 import './index.css';
 import 'leaflet/dist/leaflet.css';
 import ErrorBoundary from './components/ErrorBoundary';
+import { initializeImageOptimization } from './lib/imageOptimization';
+
+initializeImageOptimization();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
