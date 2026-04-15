@@ -28,6 +28,23 @@ export function initializeImageOptimization() {
     });
   };
 
+  const pendingImages = new Set<HTMLImageElement>();
+  let pendingFrame: number | null = null;
+
+  const enqueueImageOptimization = (img: HTMLImageElement) => {
+    pendingImages.add(img);
+
+    if (pendingFrame !== null) {
+      return;
+    }
+
+    pendingFrame = window.requestAnimationFrame(() => {
+      pendingImages.forEach((image) => optimizeImage(image));
+      pendingImages.clear();
+      pendingFrame = null;
+    });
+  };
+
   const startObserver = () => {
     if (optimizationObserver || !document.body) {
       return;
@@ -36,7 +53,7 @@ export function initializeImageOptimization() {
     optimizationObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.target instanceof HTMLImageElement) {
-          optimizeImage(mutation.target);
+          enqueueImageOptimization(mutation.target);
           return;
         }
 
@@ -44,11 +61,11 @@ export function initializeImageOptimization() {
           if (!(node instanceof HTMLElement)) return;
 
           if (node.tagName === 'IMG') {
-            optimizeImage(node as HTMLImageElement);
+            enqueueImageOptimization(node as HTMLImageElement);
             return;
           }
 
-          node.querySelectorAll('img').forEach((img) => optimizeImage(img));
+          node.querySelectorAll('img').forEach((img) => enqueueImageOptimization(img));
         });
       });
     });
@@ -59,7 +76,7 @@ export function initializeImageOptimization() {
       attributes: true,
       attributeFilter: ['src', IMAGE_PRIORITY_ATTR],
     });
-    requestAnimationFrame(optimizeExistingImages);
+    optimizeExistingImages();
   };
 
   if (document.readyState === 'loading' || !document.body) {
