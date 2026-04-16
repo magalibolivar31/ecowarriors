@@ -837,7 +837,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     className="flex flex-col items-center justify-center p-8 bg-white/10 rounded-3xl border-2 border-dashed border-white/30 cursor-pointer hover:bg-white/20 transition-all overflow-hidden aspect-video"
                   >
                     {selectedImage ? (
-                      <img src={selectedImage || undefined} className="absolute inset-0 w-full h-full object-cover" />
+                      <img src={selectedImage || undefined} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <>
                         <Camera className="w-10 h-10 mb-2 text-yellow-400" />

@@ -47,11 +47,13 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     >
       <div className="relative aspect-video overflow-hidden bg-zinc-100">
         {report.initialImageUrl ? (
-          <img 
-            src={report.initialImageUrl} 
-            alt={report.title} 
-            referrerPolicy="no-referrer"
+          <img
+            src={report.initialImageUrl}
+            alt={report.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
           />
         ) : report.type === 'crisis' ? (
           <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 text-red-500 animate-pulse">

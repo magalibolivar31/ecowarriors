@@ -85,10 +85,12 @@ export const ReportDetailModal: React.FC<ReportDetailModalProps> = ({ report, on
         {/* Header */}
         <div className="relative h-48 sm:h-64 shrink-0">
           {report.initialImageUrl ? (
-            <img 
-              src={report.initialImageUrl} 
-              alt={report.title} 
+            <img
+              src={report.initialImageUrl}
+              alt={report.title}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
               referrerPolicy="no-referrer"
             />
           ) : report.type === 'crisis' ? (

@@ -299,7 +299,7 @@ export const ReportMap: React.FC<ReportMapProps> = ({
 
                     <div className="aspect-video rounded-xl overflow-hidden border border-zinc-100 bg-zinc-50">
                       {report.initialImageUrl ? (
-                        <img src={report.initialImageUrl} alt={t('reports.visual_evidence')} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                        <img src={report.initialImageUrl} alt={t('reports.visual_evidence')} referrerPolicy="no-referrer" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center text-zinc-300">
                           <AlertTriangle className="w-6 h-6 mb-1" />

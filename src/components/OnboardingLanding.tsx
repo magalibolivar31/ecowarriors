@@ -345,10 +345,12 @@ export const OnboardingLanding: React.FC = () => {
                 )}
               >
                 {member.image ? (
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
+                  <img
+                    src={member.image}
+                    alt={member.name}
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
@@ -393,7 +395,7 @@ export const OnboardingLanding: React.FC = () => {
               >
                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-stormy-teal/10">
                   {member.image ? (
-                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                   ) : (
                       <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-black text-lg">
                         {member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
@@ -508,6 +510,7 @@ export const OnboardingLanding: React.FC = () => {
                     alt={logo.name}
                     className="max-h-12 md:max-h-14 max-w-full object-contain"
                     loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                 </div>
@@ -551,6 +554,7 @@ export const OnboardingLanding: React.FC = () => {
                     alt={photo.alt}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                 </div>

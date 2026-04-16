@@ -331,7 +331,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                   onClick={handleGoogleSignIn}
                   className="w-full px-6 py-4 bg-white border-2 border-amber-200 dark:border-amber-900/50 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-all flex items-center justify-center gap-3 shadow-sm"
                 >
-                  <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
+                  <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" width="20" height="20" loading="lazy" decoding="async" />
                   {t('auth.login_google')}
                 </button>
               </div>
@@ -560,7 +560,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onClose, initialMode = '
                 disabled={loading}
                 className="w-full py-5 bg-white border-2 border-zinc-100 dark:border-slate-800 text-zinc-700 dark:text-white rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-zinc-50 transition-all flex items-center justify-center gap-4"
               >
-                <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
+                <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" width="20" height="20" loading="lazy" decoding="async" />
                 {t('auth.google_continue')}
               </button>
             </>

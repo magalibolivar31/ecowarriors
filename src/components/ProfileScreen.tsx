@@ -336,10 +336,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
                     <Camera className="w-8 h-8 text-white" />
                   </button>
                 )}
-                <img 
-                  src={profile.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.uid}`} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={profile.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.uid}`}
+                  className="w-full h-full object-cover"
                   alt={profile.alias}
+                  loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
               </motion.div>
@@ -840,7 +842,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
               <div key={report.id} className="bg-white p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 shadow-sm flex flex-col gap-3">
                 <div className="aspect-square rounded-2xl bg-zinc-100 overflow-hidden">
                   {report.initialImageUrl ? (
-                    <img src={report.initialImageUrl} referrerPolicy="no-referrer" className="w-full h-full object-cover" alt={report.type} />
+                    <img src={report.initialImageUrl} alt={report.type} referrerPolicy="no-referrer" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-zinc-300 dark:text-slate-600">
                       <FileText className="w-8 h-8" />

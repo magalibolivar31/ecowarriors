@@ -1544,10 +1544,13 @@ function AppContent() {
       <header className="bg-white border-b border-zinc-100 sticky top-0 z-50 shadow-sm">
         <div className="app-container py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img 
-              src="https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logo%2Fecowarriors.jpg?alt=media&token=1325a27b-84b4-468e-a69e-a97a66b85333" 
-              alt="EcoWarriors" 
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/gemini-drive-1aff6.firebasestorage.app/o/logo%2Fecowarriors.jpg?alt=media&token=1325a27b-84b4-468e-a69e-a97a66b85333"
+              alt="EcoWarriors"
               className="h-10 w-auto rounded-lg"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               referrerPolicy="no-referrer"
             />
             <div className="hidden sm:block">
@@ -1589,7 +1592,7 @@ function AppContent() {
                 onClick={() => setActiveTab('PERFIL')}
                 className="w-10 h-10 rounded-xl overflow-hidden border-2 border-emerald-action/20 hover:border-emerald-action transition-all"
               >
-                <img src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`} alt="Profile" className="w-full h-full object-cover" />
+                <img src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`} alt="Profile" className="w-full h-full object-cover" loading="eager" decoding="async" />
               </button>
             </div>
           </div>
@@ -1689,11 +1692,13 @@ function AppContent() {
 
                             {card.imageUrl && (
                               <div className="absolute right-0 bottom-0 h-[56%] sm:h-[90%] w-full sm:w-1/2 flex items-end justify-end pointer-events-none">
-                                <img 
-                                  src={card.imageUrl} 
-                                  className="h-full w-auto object-contain object-right-bottom transition-transform duration-700 group-hover:scale-105" 
+                                <img
+                                  src={card.imageUrl}
+                                  className="h-full w-auto object-contain object-right-bottom transition-transform duration-700 group-hover:scale-105"
                                   style={{ filter: 'drop-shadow(0px 20px 30px rgba(2,65,83,0.15))' }}
-                                  referrerPolicy="no-referrer" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  referrerPolicy="no-referrer"
                                   alt={card.title}
                                 />
                               </div>
@@ -1932,6 +1937,8 @@ function AppContent() {
                       src={userProfile?.photoURL || user?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.uid || userProfile?.uid || 'ecowarrior'}`}
                       alt={userProfile?.alias || t('dashboard.default_alias')}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -2004,7 +2011,7 @@ function AppContent() {
                         {volunteers.map(v => (
                           <div key={v.id} className="p-6 sm:p-8 flex items-center gap-6 hover:bg-zinc-50 transition-colors group">
                             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-[1.5rem] overflow-hidden border-2 border-zinc-100 group-hover:border-maya-blue transition-all">
-                              <img src={v.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${v.id}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                              <img src={v.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${v.id}`} alt={v.alias} className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                             </div>
                             <div className="flex-1">
                               <p className="font-black text-zinc-900 uppercase tracking-tighter text-lg">{v.alias}</p>
@@ -2757,7 +2764,7 @@ function AppContent() {
                         >
                           <div className="aspect-square relative bg-zinc-50 overflow-hidden">
                             {(post.imageUrl || (post.images && post.images[0])) ? (
-                              <img src={post.imageUrl || post.images?.[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                              <img src={post.imageUrl || post.images?.[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg">
                                 <Heart className="w-16 h-16 text-stormy-teal/10 dark:text-white/5" />
@@ -3345,7 +3352,7 @@ function AppContent() {
             <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
               {selectedImages.map((img, i) => (
                 <div key={i} className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 relative">
-                  <img src={img} className="w-full h-full object-cover" />
+                  <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   <button onClick={() => setSelectedImages(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 bg-black/50 p-1 rounded-full">
                     <X className="w-3 h-3 text-white" />
                   </button>
@@ -3462,9 +3469,12 @@ function AppContent() {
             >
               <div className="relative w-full bg-zinc-100 shrink-0" style={{ maxHeight: '40%' }}>
                 {('images' in isDetailOpen && (isDetailOpen.imageUrl || (isDetailOpen.images && isDetailOpen.images[0]))) ? (
-                  <img 
-                    src={isDetailOpen.imageUrl || isDetailOpen.images?.[0]} 
-                    className="w-full h-full object-cover max-h-56 sm:max-h-72" 
+                  <img
+                    src={isDetailOpen.imageUrl || isDetailOpen.images?.[0]}
+                    alt={'title' in isDetailOpen ? isDetailOpen.title : ''}
+                    className="w-full h-full object-cover max-h-56 sm:max-h-72"
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
@@ -3663,7 +3673,7 @@ function AppContent() {
                 <div key={i} className="assistant-card flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 dark:border-slate-700 shadow-sm">
                   <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 overflow-hidden flex items-center justify-center text-emerald-700 dark:text-slate-100 font-black text-lg">
                     {profile.photoURL ? (
-                      <img src={profile.photoURL} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      <img src={profile.photoURL} alt={profile.alias || ''} className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                     ) : (
                       profile.alias?.charAt(0) || 'U'
                     )}

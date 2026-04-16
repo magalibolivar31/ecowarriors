@@ -297,7 +297,7 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
                               </div>
                             ) : report.initialImageUrl && (
                             <div className="aspect-video rounded-xl overflow-hidden border border-zinc-100 relative group">
-                              <img src={report.initialImageUrl} alt={t('reports.visual_evidence')} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                              <img src={report.initialImageUrl} alt={t('reports.visual_evidence')} className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                               {report.type === 'crisis' && (
                                 <>
                                   <div className="absolute inset-0 bg-dark-teal/30 pointer-events-none" />

@@ -216,7 +216,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
 
                       {update.imageUrl && (
                         <div className="rounded-2xl overflow-hidden border border-zinc-100 aspect-video shadow-inner">
-                          <img src={update.imageUrl || undefined} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                          <img src={update.imageUrl || undefined} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                         </div>
                       )}
 
@@ -251,7 +251,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
                     </p>
                     {report.initialImageUrl && (
                       <div className="rounded-2xl overflow-hidden border border-white/10 aspect-video shadow-inner">
-                        <img src={report.initialImageUrl || undefined} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        <img src={report.initialImageUrl || undefined} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                       </div>
                     )}
                   </div>
@@ -332,7 +332,7 @@ export const ReportTimeline: React.FC<ReportTimelineProps> = ({ report, onClose 
                           className="flex flex-col items-center justify-center p-8 bg-zinc-50 rounded-[2rem] border-4 border-dashed border-zinc-200 cursor-pointer hover:bg-zinc-100 transition-all aspect-video overflow-hidden group"
                         >
                           {newImage ? (
-                            <img src={newImage || undefined} className="absolute inset-0 w-full h-full object-cover" />
+                            <img src={newImage || undefined} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
                           ) : (
                             <>
                               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-zinc-300 shadow-sm group-hover:scale-110 transition-transform mb-4">
