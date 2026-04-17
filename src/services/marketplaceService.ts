@@ -188,54 +188,71 @@ export function subscribeToMarketplace(
   return onSnapshot(q, (snapshot) => {
     const requestId = ++latestSnapshotRequest;
 
-    // --- Synchronous fast path ---
-    // Build posts immediately using only already-resolved URLs (http/https/data:).
-    // This lets the UI render without waiting for any async work.
-    const rawPosts: MarketplacePost[] = snapshot.docs.map((snapshotDoc) => {
-      const rawData = snapshotDoc.data() as Record<string, unknown>;
-      const rawImages = normalizeMarketplaceImages(rawData);
-      const normalizedType = normalizeMarketplaceType(rawData.type);
-      const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
-      const normalizedIsActive = normalizeMarketplaceIsActive(rawData.isActive, normalizedStatus);
+    type DocResult = { post: MarketplacePost; hasStoragePaths: boolean; error?: unknown };
 
-      const resolvedImages = rawImages.filter(
-        (img) => img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:image/'),
-      );
+    // Process each document individually, catching per-document errors.
+    const docResults: DocResult[] = snapshot.docs.map((snapshotDoc): DocResult => {
+      try {
+        const rawData = snapshotDoc.data() as Record<string, unknown>;
+        const rawImages = normalizeMarketplaceImages(rawData);
+        const normalizedType = normalizeMarketplaceType(rawData.type);
+        const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
+        const normalizedIsActive = normalizeMarketplaceIsActive(rawData.isActive, normalizedStatus);
 
-      return {
-        id: snapshotDoc.id,
-        ...rawData,
-        ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
-        ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
-        ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
-        ...(normalizedType ? { type: normalizedType } : {}),
-        ...(normalizedStatus ? { status: normalizedStatus } : {}),
-        ...((normalizedStatus || rawData.isActive === false || rawData.isActive === true)
-          ? { isActive: normalizedIsActive }
-          : {}),
-        ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
-        ...(resolvedImages[0]
-          ? { imageUrl: resolvedImages[0] }
-          : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
-      } as MarketplacePost;
+        const resolvedImages = rawImages.filter(
+          (img) => img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:image/'),
+        );
+
+        const hasStoragePaths = rawImages.some(
+          (img) => !img.startsWith('http') && !img.startsWith('data:'),
+        );
+
+        const post = {
+          id: snapshotDoc.id,
+          ...rawData,
+          ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
+          ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
+          ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
+          ...(normalizedType ? { type: normalizedType } : {}),
+          ...(normalizedStatus ? { status: normalizedStatus } : {}),
+          ...((normalizedStatus || rawData.isActive === false || rawData.isActive === true)
+            ? { isActive: normalizedIsActive }
+            : {}),
+          ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+          ...(resolvedImages[0]
+            ? { imageUrl: resolvedImages[0] }
+            : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
+        } as MarketplacePost;
+
+        return { post, hasStoragePaths };
+      } catch (error) {
+        // Post construction failed — try a minimal fallback from a second data() read.
+        let fallbackPost: MarketplacePost;
+        try {
+          const fallbackData = snapshotDoc.data() as Record<string, unknown>;
+          fallbackPost = { id: snapshotDoc.id, ...fallbackData } as MarketplacePost;
+        } catch {
+          fallbackPost = { id: snapshotDoc.id } as MarketplacePost;
+        }
+        return { post: fallbackPost, hasStoragePaths: false, error };
+      }
     });
 
-    // Deliver synchronously — no async delay
-    callback(rawPosts);
+    const rawPosts = docResults.map((r) => r.post);
+    const storagePathIndices = docResults
+      .map((r, i) => (r.hasStoragePaths ? i : -1))
+      .filter((i) => i !== -1);
+    const errorIndices = docResults
+      .map((r, i) => (r.error !== undefined ? i : -1))
+      .filter((i) => i !== -1);
 
-    // --- Background pass for legacy Storage-path images ---
-    // New posts store https:// URLs directly; this handles any older entries
-    // that still carry a gs:// path or a relative Storage ref.
-    const storagePathIndices = snapshot.docs.reduce<number[]>((acc, snapshotDoc, i) => {
-      const rawImages = normalizeMarketplaceImages(snapshotDoc.data() as Record<string, unknown>);
-      if (rawImages.some((img) => !img.startsWith('http') && !img.startsWith('data:'))) {
-        acc.push(i);
-      }
-      return acc;
-    }, []);
+    // If no async work needed, deliver synchronously.
+    if (storagePathIndices.length === 0 && errorIndices.length === 0) {
+      callback(rawPosts);
+      return;
+    }
 
-    if (storagePathIndices.length === 0) return;
-
+    // --- Async path: resolve legacy Storage-path images and/or report per-doc errors ---
     void (async () => {
       try {
         const updated = [...rawPosts];
@@ -250,10 +267,18 @@ export function subscribeToMarketplace(
             }
           }),
         );
+
+        // Discard stale results silently — a newer snapshot already delivered its data.
         if (requestId !== latestSnapshotRequest) return;
+
+        // Report per-document errors only for the current (non-stale) snapshot.
+        for (const i of errorIndices) {
+          reportMarketplaceError(docResults[i].error, OperationType.LIST, MARKETPLACE_COLLECTION);
+        }
+
         callback(updated);
       } catch (error) {
-        // Synchronous data already delivered; log and move on
+        if (requestId !== latestSnapshotRequest) return;
         reportMarketplaceError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
       }
     })();

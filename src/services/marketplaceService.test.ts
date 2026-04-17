@@ -9,6 +9,7 @@ const firestoreMocks = vi.hoisted(() => ({
   serverTimestamp: vi.fn(() => 'ts'),
   query: vi.fn(),
   orderBy: vi.fn(),
+  limit: vi.fn(),
   onSnapshot: vi.fn(),
 }));
 
@@ -68,6 +69,7 @@ describe('marketplaceService', () => {
     firestoreMocks.doc.mockReturnValue('doc-ref');
     firestoreMocks.query.mockReturnValue('query-ref');
     firestoreMocks.orderBy.mockReturnValue('order-by-ref');
+    firestoreMocks.limit.mockReturnValue('limit-ref');
     storageMocks.ref.mockImplementation((_storage, path) => `ref:${path}`);
     storageMocks.getDownloadURL.mockImplementation(async (storageRef: string) => `https://cdn.test/${storageRef}`);
     storageMocks.uploadString.mockResolvedValue(undefined);

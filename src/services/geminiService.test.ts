@@ -116,7 +116,8 @@ describe('geminiService', () => {
     const result = await analyzeReport('imageb64', 'Descripción detallada', 'CABA');
 
     expect(result.isValid).toBe(false);
-    expect(result.validationError).toContain('No se pudo verificar el reporte automáticamente');
+    expect(result.serviceUnavailable).toBe(true);
+    expect(result.validationError).toBeNull();
   });
 
   it('validateDonation parsea respuesta JSON', async () => {
