@@ -81,6 +81,9 @@ async function resolveMarketplaceImageUrl(image: string): Promise<string | null>
   if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:image/')) {
     return image;
   }
+  // Reject strings that are clearly base64 data, not a Storage path.
+  // A data URL missing its "data:" prefix looks like "image/jpeg;base64,/9j..."
+  if (image.includes(';base64,') || image.includes('base64,') || image.length > 512) return null;
 
   try {
     const normalizedPath = image.startsWith('/') ? image.slice(1) : image;
@@ -92,6 +95,8 @@ async function resolveMarketplaceImageUrl(image: string): Promise<string | null>
 
 async function uploadMarketplaceImage(image: string, uid: string): Promise<string | null> {
   if (!image || !image.startsWith('data:image/')) return null;
+  // Must contain ";base64," to be a valid data URL — reject anything malformed
+  if (!image.includes(';base64,')) return null;
   const mimeTypeSeparatorIndex = image.indexOf(';');
   if (mimeTypeSeparatorIndex === -1) return null;
   const mimeType = image.slice('data:'.length, mimeTypeSeparatorIndex);
