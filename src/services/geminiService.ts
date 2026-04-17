@@ -18,7 +18,7 @@ export interface ReportAnalysis {
 export const analyzeReport = async (imageB64: string, description: string, location: string): Promise<ReportAnalysis> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -127,7 +127,7 @@ export const validateDonation = async (
 ): Promise<{ valid: boolean; reason?: string; retry?: boolean; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -162,7 +162,7 @@ export const validateRequest = async (
 ): Promise<{ valid: boolean; reason?: string; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -197,7 +197,7 @@ export interface Mission {
 export const generateMissions = async (userContext: string): Promise<Mission[]> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -216,7 +216,7 @@ export const generateMissions = async (userContext: string): Promise<Mission[]> 
 export const getRoccoFeedback = async (behavior: string): Promise<string> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -244,7 +244,7 @@ export interface NewsItem {
 export const summarizeEnvironmentalNews = async (isCrisis: boolean): Promise<NewsItem[]> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -263,7 +263,7 @@ export const summarizeEnvironmentalNews = async (isCrisis: boolean): Promise<New
 export const chatWithRocco = async (messages: { role: string; content: string }[], systemInstruction: string): Promise<{ text: string }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       systemInstruction
     });
 
