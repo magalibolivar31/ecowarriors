@@ -1,12 +1,13 @@
-import { 
-  collection, 
-  addDoc, 
-  updateDoc, 
-  doc, 
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
   deleteDoc,
-  serverTimestamp, 
-  query, 
-  orderBy, 
+  serverTimestamp,
+  query,
+  orderBy,
+  limit,
   onSnapshot
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
@@ -15,6 +16,7 @@ import { MarketplacePost } from '../types';
 import { sanitizeText } from '../lib/utils';
 
 const MARKETPLACE_COLLECTION = 'marketplace';
+const MARKETPLACE_PAGE_SIZE = 50;
 
 function normalizeMarketplaceType(value: unknown): 'doy' | 'recibo' | null {
   if (typeof value !== 'string') return null;
@@ -176,49 +178,83 @@ export function subscribeToMarketplace(
   callback: (posts: MarketplacePost[]) => void,
   onError?: (message: string) => void,
 ) {
-  const q = query(collection(db, MARKETPLACE_COLLECTION), orderBy('createdAt', 'desc'));
+  const q = query(
+    collection(db, MARKETPLACE_COLLECTION),
+    orderBy('createdAt', 'desc'),
+    limit(MARKETPLACE_PAGE_SIZE),
+  );
   let latestSnapshotRequest = 0;
 
   return onSnapshot(q, (snapshot) => {
     const requestId = ++latestSnapshotRequest;
+
+    // --- Synchronous fast path ---
+    // Build posts immediately using only already-resolved URLs (http/https/data:).
+    // This lets the UI render without waiting for any async work.
+    const rawPosts: MarketplacePost[] = snapshot.docs.map((snapshotDoc) => {
+      const rawData = snapshotDoc.data() as Record<string, unknown>;
+      const rawImages = normalizeMarketplaceImages(rawData);
+      const normalizedType = normalizeMarketplaceType(rawData.type);
+      const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
+      const normalizedIsActive = normalizeMarketplaceIsActive(rawData.isActive, normalizedStatus);
+
+      const resolvedImages = rawImages.filter(
+        (img) => img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:image/'),
+      );
+
+      return {
+        id: snapshotDoc.id,
+        ...rawData,
+        ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
+        ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
+        ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
+        ...(normalizedType ? { type: normalizedType } : {}),
+        ...(normalizedStatus ? { status: normalizedStatus } : {}),
+        ...((normalizedStatus || rawData.isActive === false || rawData.isActive === true)
+          ? { isActive: normalizedIsActive }
+          : {}),
+        ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
+        ...(resolvedImages[0]
+          ? { imageUrl: resolvedImages[0] }
+          : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
+      } as MarketplacePost;
+    });
+
+    // Deliver synchronously — no async delay
+    callback(rawPosts);
+
+    // --- Background pass for legacy Storage-path images ---
+    // New posts store https:// URLs directly; this handles any older entries
+    // that still carry a gs:// path or a relative Storage ref.
+    const storagePathIndices = snapshot.docs.reduce<number[]>((acc, snapshotDoc, i) => {
+      const rawImages = normalizeMarketplaceImages(snapshotDoc.data() as Record<string, unknown>);
+      if (rawImages.some((img) => !img.startsWith('http') && !img.startsWith('data:'))) {
+        acc.push(i);
+      }
+      return acc;
+    }, []);
+
+    if (storagePathIndices.length === 0) return;
+
     void (async () => {
       try {
-        const posts = await Promise.all(snapshot.docs.map(async (snapshotDoc) => {
-          const rawData = snapshotDoc.data() as Record<string, unknown>;
-          const rawImages = normalizeMarketplaceImages(rawData);
-          const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
-            .filter((value): value is string => Boolean(value));
-          const normalizedType = normalizeMarketplaceType(rawData.type);
-          const normalizedStatus = normalizeMarketplaceStatus(rawData.status);
-          const normalizedIsActive = normalizeMarketplaceIsActive(rawData.isActive, normalizedStatus);
-
-          return {
-            id: snapshotDoc.id,
-            ...rawData,
-            ...(typeof rawData.description === 'string' ? { description: rawData.description } : {}),
-            ...(typeof rawData.content === 'string' ? {} : (typeof rawData.description === 'string' ? { content: rawData.description } : {})),
-            ...(typeof rawData.category === 'string' ? { category: rawData.category } : (typeof rawData.tag === 'string' ? { category: rawData.tag } : {})),
-            ...(normalizedType ? { type: normalizedType } : {}),
-            ...(normalizedStatus ? { status: normalizedStatus } : {}),
-            ...((normalizedStatus || rawData.isActive === false || rawData.isActive === true)
-              ? { isActive: normalizedIsActive }
-              : {}),
-            ...(rawImages.length > 0 ? { images: resolvedImages } : {}),
-            ...(resolvedImages[0] ? { imageUrl: resolvedImages[0] } : (typeof rawData.imageUrl === 'string' ? { imageUrl: rawData.imageUrl } : {})),
-          } as MarketplacePost;
-        }));
-
+        const updated = [...rawPosts];
+        await Promise.all(
+          storagePathIndices.map(async (i) => {
+            const rawData = snapshot.docs[i].data() as Record<string, unknown>;
+            const rawImages = normalizeMarketplaceImages(rawData);
+            const resolvedImages = (await Promise.all(rawImages.map(resolveMarketplaceImageUrl)))
+              .filter((value): value is string => Boolean(value));
+            if (resolvedImages.length > 0) {
+              updated[i] = { ...updated[i], images: resolvedImages, imageUrl: resolvedImages[0] };
+            }
+          }),
+        );
         if (requestId !== latestSnapshotRequest) return;
-        callback(posts);
+        callback(updated);
       } catch (error) {
-        if (requestId !== latestSnapshotRequest) return;
-        const message = reportMarketplaceError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
-        onError?.(message);
-        const fallbackPosts = snapshot.docs.map((snapshotDoc) => ({
-          id: snapshotDoc.id,
-          ...(snapshotDoc.data() as Record<string, unknown>),
-        } as MarketplacePost));
-        callback(fallbackPosts);
+        // Synchronous data already delivered; log and move on
+        reportMarketplaceError(error, OperationType.LIST, MARKETPLACE_COLLECTION);
       }
     })();
   }, (error) => {

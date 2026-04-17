@@ -647,7 +647,7 @@ function AppContent() {
   const [contact, setContact] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [postCreationSuccess, setPostCreationSuccess] = useState(false);
-  const [postsLoading, setPostsLoading] = useState(false);
+  const [postsLoading, setPostsLoading] = useState(true);
   const [postsError, setPostsError] = useState<string | null>(null);
   const [isConfirmingLocation, setIsConfirmingLocation] = useState(false);
   const [isAutoLocation, setIsAutoLocation] = useState(false);
@@ -690,6 +690,25 @@ function AppContent() {
       .sort((a, b) => getMarketplaceTimestamp(b.createdAt) - getMarketplaceTimestamp(a.createdAt)),
     [posts, deletingPostIds],
   );
+
+  const filteredMarketplacePosts = useMemo(() => {
+    const searchTerm = marketplaceSearchQuery.trim().toLowerCase();
+    if (!searchTerm && marketplaceTypeFilter === 'todos') return activeMarketplacePosts;
+    return activeMarketplacePosts.filter((post) => {
+      const normalizedTitle = typeof post.title === 'string' ? post.title : '';
+      const normalizedContent = typeof post.content === 'string' ? post.content : '';
+      const normalizedDescription = typeof post.description === 'string' ? post.description : '';
+      const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
+      const postType = typeof post.type === 'string' && post.type.trim().toLowerCase() === 'doy' ? 'doy' : 'recibo';
+      const matchesSearch = !searchTerm ||
+        normalizedTitle.toLowerCase().includes(searchTerm) ||
+        normalizedContent.toLowerCase().includes(searchTerm) ||
+        normalizedDescription.toLowerCase().includes(searchTerm) ||
+        normalizedCategory.toLowerCase().includes(searchTerm);
+      const matchesType = marketplaceTypeFilter === 'todos' || postType === marketplaceTypeFilter;
+      return matchesSearch && matchesType;
+    });
+  }, [activeMarketplacePosts, marketplaceSearchQuery, marketplaceTypeFilter]);
 
   const handleOpenFeedbackForm = () => {
     window.open(FEEDBACK_FORM_URL, '_blank', 'noopener,noreferrer');
@@ -1131,13 +1150,13 @@ function AppContent() {
       const base64 = selectedImages[0].split(',')[1];
       const analysis = await analyzeReport(base64, description, location);
       
-      if (!analysis.isValid) {
+      if (!analysis.isValid && !analysis.serviceUnavailable) {
         setError(analysis.validationError || t('reports.analyze_error'));
         setLoading(false);
         return;
       }
 
-      if (!analysis.descriptionMatches) {
+      if (!analysis.descriptionMatches && !analysis.serviceUnavailable) {
         setDescriptionError(true);
         setError(t('reports.image_mismatch'));
         setLoading(false);
@@ -2686,161 +2705,140 @@ function AppContent() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-                    {(() => {
-                      if (postsLoading) {
-                        return (
-                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
-                            <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                              <Loader2 className="w-8 h-8 text-stormy-teal animate-spin" />
-                            </div>
-                            <p className="text-zinc-500 font-black uppercase tracking-widest text-xs">{t('common.loading')}</p>
-                          </div>
-                        );
-                      }
-
-                      if (postsError) {
-                        return (
-                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-red-100">
-                            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                              <AlertTriangle className="w-8 h-8 text-red-500" />
-                            </div>
-                            <p className="text-red-600 font-black uppercase tracking-widest text-xs">{t('common.error')}</p>
-                            <p className="text-zinc-600 text-[11px] mt-2">{t('community.load_posts_error')}</p>
-                          </div>
-                        );
-                      }
-
-                      const filteredPosts = activeMarketplacePosts.filter(post => {
-                        const normalizedTitle = typeof post.title === 'string' ? post.title : '';
-                        const normalizedContent = typeof post.content === 'string' ? post.content : '';
-                        const normalizedDescription = typeof post.description === 'string' ? post.description : '';
-                        const normalizedCategory = typeof post.category === 'string' ? post.category : (typeof post.tag === 'string' ? post.tag : '');
-                        const normalizedType = normalizeMarketplaceType(post.type);
-                        const searchTerm = marketplaceSearchQuery.trim().toLowerCase();
-                        const matchesSearch = normalizedTitle.toLowerCase().includes(searchTerm) || 
-                                            normalizedContent.toLowerCase().includes(searchTerm) ||
-                                            normalizedDescription.toLowerCase().includes(searchTerm) ||
-                                            normalizedCategory.toLowerCase().includes(searchTerm);
-                        const matchesType = marketplaceTypeFilter === 'todos'
-                          ? true
-                          : normalizedType === marketplaceTypeFilter;
-                        return matchesSearch && matchesType;
-                      });
-
-                      if (activeMarketplacePosts.length === 0) {
-                        return (
-                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
-                            <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                              <MessageSquare className="w-10 h-10 text-stormy-teal/10" />
-                            </div>
-                            <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('community.no_posts')}</p>
-                            <p className="text-[#374151] text-[11px] mt-2">{t('community.no_posts_desc')}</p>
-                          </div>
-                        );
-                      }
-
-                      if (filteredPosts.length === 0) {
-                        return (
-                          <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
-                            <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('marketplace.no_posts')}</p>
-                            <p className="text-[#374151] text-[11px] mt-2">{t('marketplace.no_posts_desc')}</p>
-                          </div>
-                        );
-                      }
-
-                      return (
-                        <AnimatePresence>
-                          {filteredPosts.map(post => (
-                        <motion.div 
-                          layoutId={post.id}
-                          key={post.id}
-                          layout
-                          initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -18, scale: 0.9 }}
-                          transition={{ duration: 0.22, ease: 'easeOut' }}
-                          onClick={() => setIsDetailOpen(post)}
-                          className="post-card bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
-                        >
-                          <div className="aspect-square relative bg-zinc-50 overflow-hidden">
-                            {(post.imageUrl || (post.images && post.images[0])) ? (
-                              <img src={post.imageUrl || post.images?.[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg">
-                                <Heart className="w-16 h-16 text-stormy-teal/10 dark:text-white/5" />
-                              </div>
-                            )}
-
-                            {/* Botón ADMIN (eliminar físico, rojo) */}
-                            {isAdmin && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  showConfirm(
-                                    t('common.confirm'),
-                                    t('dashboard.post_delete_confirm'),
-                                    () => handleDeletePost(post.id)
-                                  );
-                                }}
-                                className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg z-10 transition-colors"
-                                title={t('community.delete_post_admin')}
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
-                            )}
-
-                            {/* Botón USUARIO NORMAL (baja lógica, gris) */}
-                             {!isAdmin &&
-                             post.uid === user?.uid &&
-                             post.status === 'activa' && (
-                               <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  showConfirm(
-                                    t('common.confirm'),
-                                    t('dashboard.post_cancel_confirm'),
-                                    () => handleOwnerDeletePost(post.id)
-                                  );
-                                }}
-                                className="absolute top-2 right-2 p-1.5 bg-zinc-400 hover:bg-zinc-500 text-white rounded-full shadow-lg z-10 transition-colors"
-                                title={t('community.withdraw_post')}
-                              >
-                                <X className="w-3 h-3" />
-                              </button>
-                            )}
-
-                            <div className="absolute top-4 left-4 flex gap-2">
-                              <span className={cn(
-                                "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg backdrop-blur-md",
-                                post.type === 'doy' ? "bg-emerald-action text-white" : "bg-maya-blue text-white"
-                              )}>
-                                {post.type === 'doy' ? t('community.offer') : t('community.need')}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="p-6">
-                            <span className="post-card-tag text-[9px] font-black text-[#1F2937] dark:text-slate-100 bg-zinc-200 dark:bg-emerald-900/40 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
-                            <h4 className="post-card-title font-display font-black text-[#1F2937] dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
-                            <p className="post-card-description text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
-                            <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
-                                <div className="flex flex-col">
-                                  <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
-                                  <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                    {postsLoading ? (
+                      <>
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div key={i} className="bg-white rounded-[2rem] overflow-hidden border border-zinc-100 shadow-sm flex flex-col animate-pulse">
+                            <div className="aspect-square bg-zinc-100" />
+                            <div className="p-6 space-y-3">
+                              <div className="h-4 w-16 bg-zinc-100 rounded-full" />
+                              <div className="h-5 w-4/5 bg-zinc-100 rounded-lg" />
+                              <div className="h-3 w-full bg-zinc-100 rounded" />
+                              <div className="h-3 w-3/5 bg-zinc-100 rounded" />
+                              <div className="mt-4 pt-4 border-t border-zinc-50 flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-zinc-100 shrink-0" />
+                                <div className="space-y-1.5 flex-1">
+                                  <div className="h-2.5 w-20 bg-zinc-100 rounded" />
+                                  <div className="h-2.5 w-14 bg-zinc-100 rounded" />
                                 </div>
                               </div>
-                              <div className="post-card-details flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-zinc-100">
-                                {t('marketplace.details')}
-                                <ChevronRight className="w-3 h-3" />
-                              </div>
                             </div>
                           </div>
-                        </motion.div>
-                          ))}
-                        </AnimatePresence>
-                      );
-                    })()}
+                        ))}
+                      </>
+                    ) : postsError ? (
+                      <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-red-100">
+                        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <AlertTriangle className="w-8 h-8 text-red-500" />
+                        </div>
+                        <p className="text-red-600 font-black uppercase tracking-widest text-xs">{t('common.error')}</p>
+                        <p className="text-zinc-600 text-[11px] mt-2">{t('community.load_posts_error')}</p>
+                      </div>
+                    ) : activeMarketplacePosts.length === 0 ? (
+                      <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border-4 border-dashed border-zinc-50">
+                        <div className="w-20 h-20 bg-brand-bg rounded-full flex items-center justify-center mx-auto mb-6">
+                          <MessageSquare className="w-10 h-10 text-stormy-teal/10" />
+                        </div>
+                        <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('community.no_posts')}</p>
+                        <p className="text-[#374151] text-[11px] mt-2">{t('community.no_posts_desc')}</p>
+                      </div>
+                    ) : filteredMarketplacePosts.length === 0 ? (
+                      <div className="col-span-full py-24 sm:py-32 text-center bg-white rounded-[2.5rem] sm:rounded-[3.5rem] border border-zinc-100">
+                        <p className="text-[#374151] font-black uppercase tracking-widest text-xs">{t('marketplace.no_posts')}</p>
+                        <p className="text-[#374151] text-[11px] mt-2">{t('marketplace.no_posts_desc')}</p>
+                      </div>
+                    ) : (
+                      <AnimatePresence>
+                        {filteredMarketplacePosts.map(post => (
+                          <motion.div
+                            layoutId={post.id}
+                            key={post.id}
+                            layout
+                            initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -18, scale: 0.9 }}
+                            transition={{ duration: 0.22, ease: 'easeOut' }}
+                            onClick={() => setIsDetailOpen(post)}
+                            className="post-card bg-white rounded-[2rem] overflow-hidden border border-zinc-100 dark:border-slate-600 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group shadow-sm flex flex-col"
+                          >
+                            <div className="aspect-square relative bg-zinc-50 overflow-hidden">
+                              {(post.imageUrl || (post.images && post.images[0])) ? (
+                                <img src={post.imageUrl || post.images?.[0]} alt={post.title} referrerPolicy="no-referrer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" decoding="async" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-zinc-200 dark:text-slate-700 bg-brand-bg">
+                                  <Heart className="w-16 h-16 text-stormy-teal/10 dark:text-white/5" />
+                                </div>
+                              )}
+
+                              {/* Botón ADMIN (eliminar físico, rojo) */}
+                              {isAdmin && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    showConfirm(
+                                      t('common.confirm'),
+                                      t('dashboard.post_delete_confirm'),
+                                      () => handleDeletePost(post.id)
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg z-10 transition-colors"
+                                  title={t('community.delete_post_admin')}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              )}
+
+                              {/* Botón USUARIO NORMAL (baja lógica, gris) */}
+                              {!isAdmin &&
+                               post.uid === user?.uid &&
+                               post.status === 'activa' && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    showConfirm(
+                                      t('common.confirm'),
+                                      t('dashboard.post_cancel_confirm'),
+                                      () => handleOwnerDeletePost(post.id)
+                                    );
+                                  }}
+                                  className="absolute top-2 right-2 p-1.5 bg-zinc-400 hover:bg-zinc-500 text-white rounded-full shadow-lg z-10 transition-colors"
+                                  title={t('community.withdraw_post')}
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              )}
+
+                              <div className="absolute top-4 left-4 flex gap-2">
+                                <span className={cn(
+                                  "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg backdrop-blur-md",
+                                  post.type === 'doy' ? "bg-emerald-action text-white" : "bg-maya-blue text-white"
+                                )}>
+                                  {post.type === 'doy' ? t('community.offer') : t('community.need')}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="p-6">
+                              <span className="post-card-tag text-[9px] font-black text-[#1F2937] dark:text-slate-100 bg-zinc-200 dark:bg-emerald-900/40 px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">#{t(`community.tag_${post.category || post.tag}`)}</span>
+                              <h4 className="post-card-title font-display font-black text-[#1F2937] dark:text-white text-xl line-clamp-1 mb-2 tracking-tight uppercase">{post.title}</h4>
+                              <p className="post-card-description text-[#1F2937] dark:text-slate-200 text-xs line-clamp-2 leading-relaxed font-medium">{post.description || post.content || t('community.no_description')}</p>
+                              <div className="mt-4 pt-4 border-t border-zinc-50 dark:border-slate-700 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-7 h-7 rounded-full bg-brand-bg border border-zinc-100 dark:border-slate-600" />
+                                  <div className="flex flex-col">
+                                    <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{post.userName || t('community.active_neighbor')}</span>
+                                    <span className="post-card-metadata text-[9px] font-bold text-[#374151] dark:text-slate-300 uppercase tracking-widest">{formatMarketplaceDate(post.createdAt)}</span>
+                                  </div>
+                                </div>
+                                <div className="post-card-details flex items-center gap-1 px-2 py-1 rounded-md text-[#126B69] font-black text-[9px] uppercase tracking-widest transition-all group-hover:translate-x-1 group-hover:bg-zinc-100">
+                                  {t('marketplace.details')}
+                                  <ChevronRight className="w-3 h-3" />
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    )}
                   </div>
                 </div>
 

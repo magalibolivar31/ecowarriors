@@ -12,12 +12,13 @@ export interface ReportAnalysis {
   isValid: boolean;
   validationError: string | null;
   descriptionMatches: boolean;
+  serviceUnavailable?: boolean;
 }
 
 export const analyzeReport = async (imageB64: string, description: string, location: string): Promise<ReportAnalysis> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -107,13 +108,14 @@ Respond ONLY with this JSON (no markdown, no extra text):
     console.error("Gemini API error, using fallback:", error);
     return {
       isValid: false,
-      validationError: "No se pudo verificar el reporte automáticamente. Intentá con una imagen más clara y una descripción detallada del problema.",
-      descriptionMatches: false,
+      validationError: null,
+      descriptionMatches: true,
       categoria: 'Otro',
       subcategorias: [],
       volumenEstimado: 'No especificado',
       nivelUrgencia: 3,
-      analisis: 'Análisis automático no disponible.'
+      analisis: 'Análisis automático no disponible.',
+      serviceUnavailable: true
     };
   }
 };
@@ -125,7 +127,7 @@ export const validateDonation = async (
 ): Promise<{ valid: boolean; reason?: string; retry?: boolean; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -160,7 +162,7 @@ export const validateRequest = async (
 ): Promise<{ valid: boolean; reason?: string; serviceUnavailable?: boolean }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -195,7 +197,7 @@ export interface Mission {
 export const generateMissions = async (userContext: string): Promise<Mission[]> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -214,7 +216,7 @@ export const generateMissions = async (userContext: string): Promise<Mission[]> 
 export const getRoccoFeedback = async (behavior: string): Promise<string> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -242,7 +244,7 @@ export interface NewsItem {
 export const summarizeEnvironmentalNews = async (isCrisis: boolean): Promise<NewsItem[]> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
@@ -261,7 +263,7 @@ export const summarizeEnvironmentalNews = async (isCrisis: boolean): Promise<New
 export const chatWithRocco = async (messages: { role: string; content: string }[], systemInstruction: string): Promise<{ text: string }> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       systemInstruction
     });
 
