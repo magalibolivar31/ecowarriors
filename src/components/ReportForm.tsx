@@ -113,13 +113,13 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
       const base64 = image.split(',')[1];
       const result = await analyzeReport(base64, description, `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`);
       
-      if (!result.isValid) {
+      if (!result.isValid && !result.serviceUnavailable) {
         setError(result.validationError || t('reports.analysis_error'));
         setLoading(false);
         return;
       }
 
-      if (!result.descriptionMatches) {
+      if (!result.descriptionMatches && !result.serviceUnavailable) {
         setError(t('reports.image_mismatch'));
         setLoading(false);
         return;
