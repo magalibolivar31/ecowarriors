@@ -189,7 +189,8 @@
   color: var(--text-muted) !important;
 }
 
-.dark input::placeholder, .dark textarea::placeholder {
+.dark input:not(.crisis-mode *)::placeholder,
+.dark textarea:not(.crisis-mode *)::placeholder {
   color: var(--text-secondary) !important;
 }
 
@@ -198,12 +199,20 @@
   color: var(--text-primary) !important;
 }
 
-.dark input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
-.dark textarea,
-.dark select {
+.dark input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not(.crisis-mode *),
+.dark textarea:not(.crisis-mode *),
+.dark select:not(.crisis-mode *) {
   background-color: var(--input-bg) !important;
   color: var(--text-primary) !important;
   border-color: var(--border) !important;
+}
+
+.dark .crisis-mode input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+.dark .crisis-mode textarea,
+.dark .crisis-mode select {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
 }
 
 .dark .shadow-sm {
@@ -753,39 +762,6 @@ html:not(.dark) .text-lime-300 {
 /* text-dark-teal (#024153) has no dark mode override — nearly invisible on dark bg */
 .dark .text-dark-teal {
   color: var(--text-accent-info) !important;
-}
-
-/* ===== Crisis Mode: always red-themed, never touched by dark mode overrides ===== */
-
-/* Form elements inside crisis-mode must stay red-themed, not dark-blue */
-.dark .crisis-mode input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
-.dark .crisis-mode textarea,
-.dark .crisis-mode select {
-  background-color: rgba(255, 255, 255, 0.10) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.20) !important;
-}
-
-/* Placeholder text inside crisis-mode */
-.dark .crisis-mode input::placeholder,
-.dark .crisis-mode textarea::placeholder {
-  color: rgba(255, 255, 255, 0.30) !important;
-}
-
-/* option elements inside crisis-mode selects */
-.dark .crisis-mode select option {
-  background-color: #7f1d1d !important; /* red-900 */
-  color: #ffffff !important;
-}
-
-/* All text inside crisis-mode stays white — counter body color override */
-.dark .crisis-mode {
-  color: #ffffff !important;
-}
-
-/* All SVG icons inside crisis-mode stay yellow */
-.dark .crisis-mode svg {
-  color: #FBBF24 !important;
 }
 
 /* Keep highlighted landing brand sections visually fixed across light/dark modes. */
