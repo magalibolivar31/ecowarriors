@@ -3889,10 +3889,17 @@ function AppContent() {
                     finally { setSLocationLoading(false); }
                   }, 500);
                 }}
-                onBlur={(e) => {
-                  validateField('sLocation', e.target.value);
-                  // small delay so click on suggestion registers first
-                  setTimeout(() => setSLocationOpen(false), 150);
+                onBlur={() => {
+                  // Delay so onMouseDown on a suggestion fires first and updates sLocation state,
+                  // then validate against the current state value (not the stale DOM value)
+                  setTimeout(() => {
+                    setSLocationOpen(false);
+                    setSLocation(prev => {
+                      const error = prev.trim() ? null : 'El lugar es requerido';
+                      setFieldErrors(f => ({ ...f, sLocation: error }));
+                      return prev;
+                    });
+                  }, 200);
                 }}
                 onFocus={() => { if (sLocationSuggestions.length > 0) setSLocationOpen(true); }}
                 aria-describedby={fieldErrors.sLocation ? 'squad-location-error' : undefined}
