@@ -136,7 +136,7 @@ import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 // --- Types ---
 
 type Tab = 'DASHBOARD' | 'REPORTES' | 'COMUNIDAD' | 'MAPA' | 'CHATBOT' | 'PERFIL';
-const TABS_WITH_SENSOR: Tab[] = ['REPORTES', 'MAPA', 'COMUNIDAD'];
+const TABS_WITHOUT_FAB: Tab[] = [];
 type Tag = 'ropa' | 'comida' | 'otros';
 type PostType = 'doy' | 'recibo';
 
@@ -3042,22 +3042,22 @@ function AppContent() {
       </div>
     </div>
 
-      {/* Global Floating Action Button: Sensor Activo */}
-      {TABS_WITH_SENSOR.includes(activeTab) && (
+      {/* Global Floating Action Button: Reportar Ahora — hidden only in Crisis Mode (early return above) */}
+      {!TABS_WITHOUT_FAB.includes(activeTab) && (
         <div className="fixed bottom-[calc(var(--mobile-tab-bar-height,5.25rem)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
-          <button 
-            onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-            aria-label={`${t('common.active_sensor')} - ${t('common.report')}`}
-            title={t('common.active_sensor')}
-            className="flex items-center gap-2 bg-emerald-action text-white p-3 rounded-xl font-black shadow-md hover:bg-stormy-teal active:scale-95 transition-colors border border-white/80"
-          >
-            <Camera className="w-5 h-5 lg:w-6 lg:h-6" />
-            <span className="sr-only">{`${t('common.active_sensor')} - ${t('common.report')}`}</span>
-            <div className="text-left leading-none hidden lg:block">
-              <span className="block text-xs tracking-tighter uppercase font-display">{t('common.active_sensor')}</span>
-              <span className="block text-[8px] font-black opacity-70 uppercase tracking-widest">{t('common.report')}</span>
-            </div>
-          </button>
+          <div className="relative">
+            {/* Outer ping ring */}
+            <span className="absolute inset-0 rounded-2xl bg-emerald-action/50 animate-ping pointer-events-none" />
+            <button
+              onClick={() => { resetForm(); setIsReportModalOpen(true); }}
+              aria-label="Reportar ahora"
+              style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}
+              className="relative flex items-center gap-2 bg-emerald-action text-white px-6 py-4 rounded-2xl font-bold text-lg hover:bg-stormy-teal active:scale-95 transition-all border border-white/30"
+            >
+              <span>⚠️</span>
+              <span className="uppercase tracking-wide">REPORTAR AHORA</span>
+            </button>
+          </div>
         </div>
       )}
 
