@@ -4,6 +4,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 // Keys are tried in order. On a 429 (quota exhausted) the next key is used.
 // Any other error is re-thrown immediately without rotating.
 
+const GEMINI_MODEL = "gemini-2.5-flash";
+
 const API_KEYS = [
   import.meta.env.VITE_GEMINI_API_KEY,
   import.meta.env.VITE_GEMINI_API_KEY2,
@@ -119,7 +121,7 @@ Respond ONLY with this JSON (no markdown, no extra text):
 
     const data = await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent([
@@ -172,7 +174,7 @@ export const validateDonation = async (
 
     return await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent([prompt, ...imageParts]);
@@ -204,7 +206,7 @@ export const validateRequest = async (
 
     return await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(prompt);
@@ -235,7 +237,7 @@ export const generateMissions = async (userContext: string): Promise<Mission[]> 
 
     return await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(prompt);
@@ -255,7 +257,7 @@ export const getRoccoFeedback = async (behavior: string): Promise<string> => {
 
     const data = await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(prompt);
@@ -283,7 +285,7 @@ export const summarizeEnvironmentalNews = async (isCrisis: boolean): Promise<New
 
     return await withKeyRotation(async (client) => {
       const model = client.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: GEMINI_MODEL,
         generationConfig: { responseMimeType: "application/json" }
       });
       const result = await model.generateContent(prompt);
@@ -306,7 +308,7 @@ export const chatWithRocco = async (messages: { role: string; content: string }[
     const lastMessage = messages[messages.length - 1].content;
 
     const text = await withKeyRotation(async (client) => {
-      const model = client.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction });
+      const model = client.getGenerativeModel({ model: GEMINI_MODEL, systemInstruction });
       const chat = model.startChat({ history: validHistory });
       const result = await chat.sendMessage(lastMessage);
       return result.response.text();
