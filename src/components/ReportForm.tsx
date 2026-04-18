@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, MapPin, Loader2, X, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Camera, MapPin, Loader2, X, AlertTriangle, CheckCircle2, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { analyzeReport } from '../services/geminiService';
 import { createReport } from '../services/reportService';
@@ -23,6 +23,9 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
   const [image, setImage] = useState<string | null>(null);
   const [location, setLocation] = useState<ReportLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [locationFailed, setLocationFailed] = useState(false);
+  const [addressInput, setAddressInput] = useState('');
+  const [isGeocoding, setIsGeocoding] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({});
@@ -39,11 +42,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     };
   }, []);
 
-  // Auto-detect location when the form opens (silently — no error banner on denial)
+  // Auto-detect location when the form opens; show address fallback if GPS fails
   useEffect(() => {
     setIsLocating(true);
     getCurrentLocation().then((result) => {
-      if (result.coords) setLocation(result.coords);
+      if (result.coords) {
+        setLocation(result.coords);
+        setLocationFailed(false);
+      } else {
+        setLocationFailed(true);
+      }
       setIsLocating(false);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,10 +82,37 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     const result = await getCurrentLocation();
     if (result.coords) {
       setLocation(result.coords);
+      setLocationFailed(false);
     } else {
       setError(t(geoErrorKey(result.error)));
+      setLocationFailed(true);
     }
     setIsLocating(false);
+  };
+
+  const handleGeocode = async () => {
+    const trimmed = addressInput.trim();
+    if (!trimmed) return;
+    setIsGeocoding(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(trimmed)}&format=json&limit=1`,
+        { headers: { 'Accept-Language': 'es', 'User-Agent': 'EcoWarriors/1.0' } },
+      );
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        setError(t('reports.geocode_not_found'));
+      } else {
+        setLocation({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+        setLocationFailed(false);
+        setAddressInput('');
+      }
+    } catch {
+      setError(t('reports.geocode_error'));
+    } finally {
+      setIsGeocoding(false);
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -341,6 +376,26 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                   <MapPin className="w-6 h-6" />
                 </button>
               </div>
+              {locationFailed && !location && !isLocating && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={addressInput}
+                    onChange={(e) => setAddressInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleGeocode())}
+                    placeholder={t('reports.address_placeholder')}
+                    className="flex-1 p-3 bg-zinc-50 rounded-2xl border border-zinc-200 dark:border-slate-700 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-action transition-all text-zinc-900 dark:text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleGeocode}
+                    disabled={isGeocoding || !addressInput.trim()}
+                    className="p-3 bg-emerald-action/10 text-emerald-action rounded-2xl hover:bg-emerald-action/20 transition-colors disabled:opacity-40 flex items-center justify-center"
+                  >
+                    {isGeocoding ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
+                  </button>
+                </div>
+              )}
             </div>
 
             <button
