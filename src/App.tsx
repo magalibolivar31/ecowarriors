@@ -626,6 +626,12 @@ function AppContent() {
   const [sTime, setSTime] = useState('');
   const [sLocation, setSLocation] = useState('');
   const [sMaxParticipants, setSMaxParticipants] = useState<number>(0);
+  // Location autocomplete (Nominatim)
+  const [sLocationSuggestions, setSLocationSuggestions] = useState<{ display_name: string; lat: string; lon: string }[]>([]);
+  const [sLocationCoords, setSLocationCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [sLocationLoading, setSLocationLoading] = useState(false);
+  const [sLocationOpen, setSLocationOpen] = useState(false);
+  const sLocationDebounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Volunteer Form State
   const [vName, setVName] = useState('');
@@ -1381,6 +1387,9 @@ function AppContent() {
     setSTime(squad.time);
     setSLocation(squad.location);
     setSMaxParticipants(squad.maxParticipants || 0);
+    setSLocationSuggestions([]);
+    setSLocationOpen(false);
+    setSLocationCoords(null);
     setIsSquadModalOpen(true);
   };
 
@@ -3851,18 +3860,75 @@ function AppContent() {
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">{t('community.location_label')}</label>
-            <input 
-              type="text" 
-              value={sLocation}
-              onChange={(e) => setSLocation(e.target.value)}
-              onBlur={(e) => validateField('sLocation', e.target.value)}
-              aria-describedby={fieldErrors.sLocation ? 'squad-location-error' : undefined}
-              placeholder={t('community.squad_location_placeholder')}
-              className={cn(
-                "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
-                fieldErrors.sLocation && "border-red-500 focus:ring-red-500"
+            <div className="relative">
+              <input
+                type="text"
+                value={sLocation}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSLocation(val);
+                  setSLocationCoords(null);
+                  if (sLocationDebounceRef.current) clearTimeout(sLocationDebounceRef.current);
+                  if (val.trim().length < 3) { setSLocationSuggestions([]); setSLocationOpen(false); return; }
+                  sLocationDebounceRef.current = setTimeout(async () => {
+                    setSLocationLoading(true);
+                    try {
+                      const res = await fetch(
+                        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(val)}&format=json&limit=5&countrycodes=ar`,
+                        { headers: { 'Accept-Language': 'es', 'User-Agent': 'EcoWarriors/1.0' } }
+                      );
+                      const data = await res.json();
+                      setSLocationSuggestions(Array.isArray(data) ? data : []);
+                      setSLocationOpen(true);
+                    } catch { setSLocationSuggestions([]); setSLocationOpen(true); }
+                    finally { setSLocationLoading(false); }
+                  }, 500);
+                }}
+                onBlur={(e) => {
+                  validateField('sLocation', e.target.value);
+                  // small delay so click on suggestion registers first
+                  setTimeout(() => setSLocationOpen(false), 150);
+                }}
+                onFocus={() => { if (sLocationSuggestions.length > 0) setSLocationOpen(true); }}
+                aria-describedby={fieldErrors.sLocation ? 'squad-location-error' : undefined}
+                placeholder={t('community.squad_location_placeholder')}
+                className={cn(
+                  "w-full p-4 bg-zinc-50 rounded-2xl border border-zinc-100 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 transition-all font-bold text-zinc-900 dark:text-white",
+                  fieldErrors.sLocation && "border-red-500 focus:ring-red-500"
+                )}
+              />
+              {sLocationLoading && (
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                  <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
+                </div>
               )}
-            />
+              {sLocationOpen && (
+                <ul className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-zinc-100 dark:border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                  {sLocationSuggestions.length === 0 ? (
+                    <li className="px-4 py-3 text-sm text-zinc-400 font-medium">No se encontraron resultados</li>
+                  ) : (
+                    sLocationSuggestions.map((s, i) => (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          onMouseDown={() => {
+                            setSLocation(s.display_name);
+                            setSLocationCoords({ lat: parseFloat(s.lat), lng: parseFloat(s.lon) });
+                            setSLocationSuggestions([]);
+                            setSLocationOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-sm font-medium text-zinc-700 dark:text-slate-200 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors border-b border-zinc-50 dark:border-slate-700 last:border-0 line-clamp-2"
+                        >
+                          {s.display_name}
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
+            </div>
+            {/* coords stored silently — not shown to user */}
+            {sLocationCoords && <input type="hidden" value={`${sLocationCoords.lat},${sLocationCoords.lng}`} />}
             {fieldErrors.sLocation && (
               <p id="squad-location-error" className="text-red-500 text-[10px] font-bold mt-1 ml-2">{fieldErrors.sLocation}</p>
             )}
