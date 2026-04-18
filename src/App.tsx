@@ -3042,17 +3042,12 @@ function AppContent() {
     </div>
 
       {/* FAB: Reportar — always visible, hidden only in Crisis Mode (early return above) */}
+      {/* FAB pill — bottom-20 on mobile clears the tab bar, bottom-6 on sm+ desktop */}
       <button
         onClick={() => { resetForm(); setIsReportModalOpen(true); }}
         aria-label="Reportar"
+        className="fixed bottom-20 right-6 sm:bottom-6 z-50 flex items-center gap-2"
         style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '24px',
-          zIndex: 50,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
           backgroundColor: '#1D9E75',
           color: '#ffffff',
           borderRadius: '32px',
@@ -3070,14 +3065,14 @@ function AppContent() {
       {/* Modals */}
       <AnimatePresence>
         {selectedMission && (
-          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-zinc-100 dark:border-slate-700"
+          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              className="bg-white rounded-t-[2rem] sm:rounded-[3rem] shadow-2xl w-full sm:max-w-lg max-h-[90svh] overflow-y-auto flex flex-col border border-zinc-100 dark:border-slate-700"
             >
-              <div className="p-8 space-y-6">
+              <div className="p-6 sm:p-8 space-y-6">
                 <div className="flex items-center justify-between">
                   <div className={cn("p-4 rounded-2xl shadow-lg", selectedMission.color, getMissionIconTextClass(selectedMission.color))}>
                     <selectedMission.icon className="w-8 h-8" />
@@ -3281,12 +3276,12 @@ function AppContent() {
 
       <AnimatePresence>
         {isReportModalOpen && (
-          <div className="fixed inset-0 z-[70] flex items-stretch sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl max-h-[100svh] sm:max-h-[90vh] overflow-y-auto custom-scrollbar bg-white rounded-none sm:rounded-[3rem] shadow-2xl"
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 60 }}
+              className="w-full sm:max-w-xl max-h-[95svh] sm:max-h-[90vh] overflow-y-auto custom-scrollbar bg-white rounded-t-[2rem] sm:rounded-[3rem] shadow-2xl"
             >
               <ReportForm 
                 onClose={() => setIsReportModalOpen(false)} 

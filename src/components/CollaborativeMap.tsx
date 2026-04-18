@@ -213,7 +213,7 @@ export const CollaborativeMap: React.FC<CollaborativeMapProps> = ({ reports, onU
   };
 
   return (
-    <div className="w-full h-full min-h-[250px] sm:min-h-[300px] relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-4 border-white shadow-2xl bg-zinc-100">
+    <div className="w-full h-full min-h-[300px] sm:min-h-[420px] md:min-h-[520px] relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-4 border-white shadow-2xl bg-zinc-100">
       <MapContainer 
         center={DEFAULT_CENTER} 
         zoom={13} 

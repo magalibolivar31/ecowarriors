@@ -124,7 +124,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
 
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex-1 space-y-3">
-            <div className="hidden sm:flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
                 {report.createdAt?.seconds ? format(new Date(report.createdAt.seconds * 1000), "d MMM, yyyy", { locale: dateLocale }) : t('reports.recent')}
               </span>

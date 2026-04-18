@@ -404,7 +404,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       </section>
 
       {/* Metrics Section */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {[
           { label: t('nav.reports'), value: stats.totalReports, icon: FileText, color: 'text-maya-blue', bg: 'bg-maya-blue/10 dark:bg-maya-blue/20' },
           { label: t('reports.resolved'), value: stats.resolvedReports, icon: CheckCircle2, color: 'text-emerald-action', bg: 'bg-emerald-action/10 dark:bg-emerald-action/20' },
@@ -459,7 +459,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
       </section>
 
       {/* Achievements & Missions Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Achievements */}
         <section className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-zinc-100 dark:border-slate-600 shadow-sm space-y-8">
           <div className="flex items-center gap-3">
@@ -467,7 +467,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
             <h3 className="text-lg sm:text-xl font-display font-black theme-text-primary uppercase tracking-tight">{t('profile.achievements')}</h3>
           </div>
           
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {achievements.length > 0 ? (
               achievements.map((achievement, i) => (
                 <div key={i} className="flex flex-col items-center gap-2 group">
@@ -836,7 +836,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onViewMy
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {recentReports.length > 0 ? (
             recentReports.map(report => (
               <div key={report.id} className="bg-white p-4 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-slate-700 shadow-sm flex flex-col gap-3">
