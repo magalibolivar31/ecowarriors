@@ -226,4 +226,11 @@ describe('geminiService', () => {
       text: 'Lo siento, estoy teniendo problemas para procesar tu mensaje. ¡Intentá de nuevo más tarde!',
     });
   });
+
+  it('chatWithRocco devuelve mensaje de quota si todas las keys están agotadas', async () => {
+    const quotaError = Object.assign(new Error('quota exceeded'), { status: 429 });
+    geminiMocks.sendMessage.mockRejectedValue(quotaError);
+    const result = await chatWithRocco([{ role: 'user', content: 'Hola' }], 'system');
+    expect(result.text).toContain('límite de cuota');
+  });
 });
