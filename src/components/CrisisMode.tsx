@@ -372,7 +372,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     setLocationError(null);
     const result = await getCurrentLocation();
     setIsLocating(false);
-    if (result.ok) {
+    if (result.coords) {
       setCurrentCoords(result.coords);
       return result.coords;
     }

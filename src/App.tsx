@@ -1480,7 +1480,7 @@ function AppContent() {
     setLoading(true);
     const result = await getCurrentLocation();
     setLoading(false);
-    if (result.ok) {
+    if (result.coords) {
       const { lat, lng } = result.coords;
       setLocation(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
       setCoords(result.coords);

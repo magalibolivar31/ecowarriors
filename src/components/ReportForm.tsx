@@ -62,7 +62,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     setIsLocating(true);
     setError(null);
     const result = await getCurrentLocation();
-    if (result.ok) {
+    if (result.coords) {
       setLocation(result.coords);
     } else {
       setError(t(geoErrorKey(result.error)));
