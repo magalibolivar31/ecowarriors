@@ -12,6 +12,9 @@ const API_KEYS = [
 
 function isQuotaError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
+  // GoogleGenerativeAIFetchError exposes a numeric `status` property — prefer it.
+  const status = (error as { status?: unknown }).status;
+  if (status === 429) return true;
   const msg = error.message.toLowerCase();
   return (
     msg.includes('429') ||
@@ -312,6 +315,9 @@ export const chatWithRocco = async (messages: { role: string; content: string }[
     return { text };
   } catch (error) {
     console.error("Error in chatWithRocco via Gemini:", error);
+    if (isQuotaError(error)) {
+      return { text: "Mis servidores de IA están al límite de cuota por ahora. ¡Probá de nuevo más tarde o contactá al admin para agregar más keys!" };
+    }
     return { text: "Lo siento, estoy teniendo problemas para procesar tu mensaje. ¡Intentá de nuevo más tarde!" };
   }
 };
