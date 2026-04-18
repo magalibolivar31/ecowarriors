@@ -326,7 +326,7 @@ export const OnboardingLanding: React.FC = () => {
 
           <p className={cn(
             "text-base sm:text-xl md:text-2xl font-medium max-w-2xl mx-auto",
-            darkMode ? "text-white/85" : "text-slate-600"
+            darkMode ? "text-white/90" : "text-slate-700"
           )}>
             {t('landing.hero_subtitle')}
           </p>
@@ -468,7 +468,7 @@ export const OnboardingLanding: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-none">
               {t('landing.edu_title')}
             </h2>
-            <p className="text-xl text-emerald-action/80 dark:text-slate-300 font-medium leading-relaxed">
+            <p className="text-xl text-white/90 font-medium leading-relaxed">
               {t('landing.edu_desc')}
             </p>
           </div>
@@ -479,10 +479,10 @@ export const OnboardingLanding: React.FC = () => {
               { label: t('landing.stat_prevention'), value: '24h', desc: t('landing.stat_prevention_desc') },
               { label: t('landing.stat_impact'), value: '10x', desc: t('landing.stat_impact_desc') },
             ].map((stat) => (
-              <div key={stat.label} className="p-6 bg-white/5 dark:bg-white/10 rounded-3xl border border-white/10 dark:border-white/20">
-                <p className="text-3xl font-black text-emerald-action dark:text-white">{stat.value}</p>
-                <p className="text-xs font-bold uppercase tracking-widest mt-1">{stat.label}</p>
-                <p className="text-[10px] text-emerald-action/60 dark:text-slate-400 mt-2">{stat.desc}</p>
+              <div key={stat.label} className="p-6 bg-white/15 rounded-3xl border border-white/40">
+                <p className="text-3xl font-black text-white">{stat.value}</p>
+                <p className="text-xs font-bold uppercase tracking-widest mt-1 text-white/90">{stat.label}</p>
+                <p className="text-[10px] text-white/70 mt-2">{stat.desc}</p>
               </div>
             ))}
           </div>
