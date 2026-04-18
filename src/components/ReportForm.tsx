@@ -39,6 +39,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     };
   }, []);
 
+  // Auto-detect location when the form opens (silently — no error banner on denial)
+  useEffect(() => {
+    setIsLocating(true);
+    getCurrentLocation().then((result) => {
+      if (result.coords) setLocation(result.coords);
+      setIsLocating(false);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const validateField = (name: string, value: string) => {
     let error: string | null = null;
     
