@@ -215,6 +215,24 @@
   border-color: rgba(255, 255, 255, 0.25) !important;
 }
 
+.dark .crisis-mode input::placeholder,
+.dark .crisis-mode textarea::placeholder {
+  color: rgba(255, 255, 255, 0.30) !important;
+}
+
+.dark .crisis-mode select option {
+  background-color: #7f1d1d !important;
+  color: #ffffff !important;
+}
+
+.dark .crisis-mode {
+  color: #ffffff !important;
+}
+
+.dark .crisis-mode svg {
+  color: #FBBF24 !important;
+}
+
 .dark .shadow-sm {
   box-shadow: 0 10px 24px -20px rgba(0, 0, 0, 0.8), 0 4px 10px -8px rgba(0, 0, 0, 0.6) !important;
 }

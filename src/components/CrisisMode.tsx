@@ -57,21 +57,21 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   ];
 
   const SERVICE_GUIDES = [
-    { 
-      title: t('crisis.electricity_guide'), 
-      icon: <Zap className="w-6 h-6 text-yellow-400" />, 
+    {
+      title: t('crisis.electricity_guide'),
+      icon: <Zap className="w-6 h-6" style={{ color: '#FBBF24' }} />,
       steps: [t('crisis.elec_step1'), t('crisis.elec_step2'), t('crisis.elec_step3')],
       warning: t('crisis.elec_warning')
     },
-    { 
-      title: t('crisis.gas_guide'), 
-      icon: <Flame className="w-6 h-6 text-yellow-400" />, 
+    {
+      title: t('crisis.gas_guide'),
+      icon: <Flame className="w-6 h-6" style={{ color: '#FBBF24' }} />,
       steps: [t('crisis.gas_step1'), t('crisis.gas_step2'), t('crisis.gas_step3')],
       warning: t('crisis.gas_warning')
     },
-    { 
-      title: t('crisis.water_guide'), 
-      icon: <Droplets className="w-6 h-6 text-yellow-400" />, 
+    {
+      title: t('crisis.water_guide'),
+      icon: <Droplets className="w-6 h-6" style={{ color: '#FBBF24' }} />,
       steps: [t('crisis.water_step1'), t('crisis.water_step2'), t('crisis.water_step3')],
       warning: t('crisis.water_warning')
     }
@@ -684,43 +684,43 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
             {/* Grid of secondary actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button 
+              <button
                 onClick={() => setActiveSection('backpack')}
                 className="bg-red-900/60 p-6 rounded-[2rem] flex flex-col items-center gap-3 border border-white/15 shadow-lg shadow-black/20 hover:bg-red-900/70 active:bg-red-950 transition-all"
               >
-                <Backpack className="w-10 h-10 text-yellow-400" />
-                <span className="font-black text-sm uppercase tracking-wider">{t('crisis.backpack')}</span>
+                <Backpack className="w-10 h-10" style={{ color: '#FBBF24' }} />
+                <span className="font-black text-sm uppercase tracking-wider" style={{ color: '#FFFFFF' }}>{t('crisis.backpack')}</span>
               </button>
-              <button 
+              <button
                 onClick={() => setActiveSection('report')}
                 className="bg-red-900/60 p-6 rounded-[2rem] flex flex-col items-center gap-3 border border-white/15 shadow-lg shadow-black/20 hover:bg-red-900/70 active:bg-red-950 transition-all"
               >
-                <AlertTriangle className="w-10 h-10 text-yellow-400" />
-                <span className="font-black text-sm uppercase tracking-wider">{t('crisis.report_damage')}</span>
+                <AlertTriangle className="w-10 h-10" style={{ color: '#FBBF24' }} />
+                <span className="font-black text-sm uppercase tracking-wider" style={{ color: '#FFFFFF' }}>{t('crisis.report_damage')}</span>
               </button>
-              <button 
+              <button
                 onClick={() => setActiveSection('meeting')}
                 className="bg-red-900/60 p-6 rounded-[2rem] flex flex-col items-center gap-3 border border-white/15 shadow-lg shadow-black/20 hover:bg-red-900/70 active:bg-red-950 transition-all"
               >
-                <MapPin className="w-10 h-10 text-yellow-400" />
-                <span className="font-black text-sm uppercase tracking-wider">{t('crisis.meeting_point')}</span>
+                <MapPin className="w-10 h-10" style={{ color: '#FBBF24' }} />
+                <span className="font-black text-sm uppercase tracking-wider" style={{ color: '#FFFFFF' }}>{t('crisis.meeting_point')}</span>
               </button>
-              <button 
+              <button
                 onClick={() => setActiveSection('guide')}
                 className="bg-red-900/60 p-6 rounded-[2rem] flex flex-col items-center gap-3 border border-white/15 shadow-lg shadow-black/20 hover:bg-red-900/70 active:bg-red-950 transition-all"
               >
-                <Zap className="w-10 h-10 text-yellow-400" />
-                <span className="font-black text-sm uppercase tracking-wider">{t('crisis.guide')}</span>
+                <Zap className="w-10 h-10" style={{ color: '#FBBF24' }} />
+                <span className="font-black text-sm uppercase tracking-wider" style={{ color: '#FFFFFF' }}>{t('crisis.guide')}</span>
               </button>
             </div>
 
             {/* Reminders Toggle */}
             <div className="bg-red-900/60 p-5 rounded-3xl border border-white/15 shadow-lg shadow-black/20 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Clock className="w-6 h-6 text-yellow-400" />
+                <Clock className="w-6 h-6" style={{ color: '#FBBF24' }} />
                 <div>
-                  <p className="font-bold text-sm text-white">{t('crisis.preventive_reminders')}</p>
-                  <p className="text-[10px] text-white/70">{t('crisis.reminders_desc')}</p>
+                  <p className="font-bold text-sm" style={{ color: '#FFFFFF' }}>{t('crisis.preventive_reminders')}</p>
+                  <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.7)' }}>{t('crisis.reminders_desc')}</p>
                 </div>
               </div>
               <button 
@@ -778,7 +778,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             <div className="space-y-6">
               {MOCHILA_ITEMS.map((cat, i) => (
                 <div key={i} className="space-y-3">
-                  <h3 className="font-black text-yellow-400 uppercase tracking-widest text-xs">{cat.category}</h3>
+                  <h3 className="font-black uppercase tracking-widest text-xs" style={{ color: '#FBBF24' }}>{cat.category}</h3>
                   <div className="grid gap-2">
                     {cat.items.map((item, j) => (
                       <label key={j} className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl border border-white/5 active:bg-white/20 transition-colors cursor-pointer">
@@ -1044,8 +1044,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               <div className="bg-white/10 p-6 rounded-3xl border border-white/10 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Home className="w-6 h-6 text-yellow-400" />
-                    <h3 className="font-black text-sm uppercase tracking-widest text-white">{t('crisis.safe_place_defined')}</h3>
+                    <Home className="w-6 h-6" style={{ color: '#FBBF24' }} />
+                    <h3 className="font-black text-sm uppercase tracking-widest" style={{ color: '#FFFFFF' }}>{t('crisis.safe_place_defined')}</h3>
                   </div>
                   {isEditingMeeting && (
                     <button onClick={() => setIsEditingMeeting(false)} className="text-xs font-black text-yellow-400">{t('crisis.done')}</button>
@@ -1064,7 +1064,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   </div>
                 ) : (
                   <div className="p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
-                    <p className="text-lg font-black text-white">{meetingPoint.place}</p>
+                    <p className="text-lg font-black" style={{ color: '#FFFFFF' }}>{meetingPoint.place}</p>
                   </div>
                 )}
                 
@@ -1080,8 +1080,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
 
               <div className="bg-white/10 p-6 rounded-3xl border border-white/10 space-y-4">
                 <div className="flex items-center gap-3">
-                  <Users className="w-6 h-6 text-yellow-400" />
-                  <h3 className="font-black text-sm uppercase tracking-widest text-white">{t('crisis.emergency_contacts')}</h3>
+                  <Users className="w-6 h-6" style={{ color: '#FBBF24' }} />
+                  <h3 className="font-black text-sm uppercase tracking-widest" style={{ color: '#FFFFFF' }}>{t('crisis.emergency_contacts')}</h3>
                 </div>
                 <div className="space-y-2">
                   {contacts.map((contact: any, i: number) => {
@@ -1089,8 +1089,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     return (
                     <div key={i} className="flex items-center justify-between p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
                       <div>
-                        <p className="font-black text-white">{contact.name}</p>
-                        <p className="text-xs text-white/70 font-bold">{contact.phone}</p>
+                        <p className="font-black" style={{ color: '#FFFFFF' }}>{contact.name}</p>
+                        <p className="text-xs font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>{contact.phone}</p>
                       </div>
                       <div className="flex gap-2">
                         <button 
@@ -1196,7 +1196,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               <X className="w-5 h-5" /> {t('crisis.back')}
             </button>
             <h2 className="text-3xl font-display font-black uppercase text-white">{t('crisis.cut_guide')}</h2>
-            <p className="text-sm font-bold text-white/85">{t('crisis.cut_guide_desc')}</p>
+            <p className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.85)' }}>{t('crisis.cut_guide_desc')}</p>
             
             <div className="space-y-6">
               {activeGuideIndex === null ? (
@@ -1210,9 +1210,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       <div className="p-3 bg-red-950 rounded-2xl transition-colors border border-yellow-400/30">
                         {guide.icon}
                       </div>
-                      <h3 className="text-xl font-display font-black uppercase tracking-tighter text-white">{guide.title}</h3>
+                      <h3 className="text-xl font-display font-black uppercase tracking-tighter" style={{ color: '#FFFFFF' }}>{guide.title}</h3>
                     </div>
-                    <ChevronRight className="w-6 h-6 text-yellow-400 transition-colors" />
+                    <ChevronRight className="w-6 h-6 transition-colors" style={{ color: '#FBBF24' }} />
                   </button>
                 ))
               ) : (
@@ -1222,7 +1222,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       <div className="p-4 bg-red-950 rounded-2xl">
                         {SERVICE_GUIDES[activeGuideIndex].icon}
                       </div>
-                      <h3 className="text-2xl font-display font-black uppercase tracking-tighter text-white">
+                      <h3 className="text-2xl font-display font-black uppercase tracking-tighter" style={{ color: '#FFFFFF' }}>
                         {SERVICE_GUIDES[activeGuideIndex].title}
                       </h3>
                     </div>
@@ -1243,7 +1243,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     <span className="text-[10px] font-black text-yellow-400 uppercase tracking-[0.3em]">
                       {t('crisis.step_x_of_y').replace('{step}', (guideStep + 1).toString()).replace('{total}', SERVICE_GUIDES[activeGuideIndex].steps.length.toString())}
                     </span>
-                    <p className="text-xl font-bold leading-tight text-white">
+                    <p className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF' }}>
                       {SERVICE_GUIDES[activeGuideIndex].steps[guideStep]}
                     </p>
                   </div>
@@ -1288,9 +1288,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       <footer className="fixed bottom-0 left-0 right-0 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] bg-red-950/95 border-t border-red-700/60 flex items-center justify-between z-50 shadow-[0_-8px_24px_rgba(0,0,0,0.25)]">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-widest">{t('crisis.signal_active')}</span>
+          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#FFFFFF' }}>{t('crisis.signal_active')}</span>
         </div>
-        <div className="text-[10px] font-black uppercase tracking-widest text-white/60">
+        <div className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>
           {t('crisis.version')}
         </div>
       </footer>
