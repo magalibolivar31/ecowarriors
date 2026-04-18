@@ -521,7 +521,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       <header className="p-4 bg-red-900/85 backdrop-blur-sm flex items-center justify-between border-b border-red-600/50 sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="flex items-center gap-3">
           <ShieldAlert className="w-8 h-8 animate-pulse text-yellow-400" />
-          <h1 className="text-xl font-display font-black uppercase tracking-tighter">{t('crisis.title')}</h1>
+          <h1 className="text-xl font-display font-black uppercase tracking-tighter text-white">{t('crisis.title')}</h1>
         </div>
         <button 
           onClick={onClose}
@@ -545,8 +545,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <ShieldAlert className="w-16 h-16 text-yellow-400" />
                 </div>
                 <div className="space-y-4">
-                  <h2 className="text-4xl font-display font-black leading-none">{t('crisis.onboarding_title')}</h2>
-                  <p className="text-lg font-bold opacity-80">{t('crisis.onboarding_desc')}</p>
+                  <h2 className="text-4xl font-display font-black leading-none text-white">{t('crisis.onboarding_title')}</h2>
+                  <p className="text-lg font-bold text-white/85">{t('crisis.onboarding_desc')}</p>
                 </div>
                 <button 
                   onClick={() => setOnboardingStep(1)}
@@ -563,12 +563,12 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <Users className="w-16 h-16 text-yellow-400" />
                 </div>
                 <div className="space-y-4">
-                  <h2 className="text-4xl font-display font-black leading-none">{t('crisis.onboarding_contacts_title')}</h2>
-                  <p className="text-lg font-bold opacity-80">{t('crisis.onboarding_contacts_desc')}</p>
+                  <h2 className="text-4xl font-display font-black leading-none text-white">{t('crisis.onboarding_contacts_title')}</h2>
+                  <p className="text-lg font-bold text-white/85">{t('crisis.onboarding_contacts_desc')}</p>
                 </div>
                 <div className="w-full space-y-4">
                   <div className="space-y-2 text-left">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-70">{t('crisis.contact_name_label')}</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/70">{t('crisis.contact_name_label')}</label>
                     <input 
                       type="text" 
                       value={newContact.name}
@@ -585,7 +585,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     )}
                   </div>
                   <div className="space-y-2 text-left">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-70">{t('crisis.contact_phone_label')}</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/70">{t('crisis.contact_phone_label')}</label>
                     <input 
                       type="tel" 
                       value={newContact.phone}
@@ -625,8 +625,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   <CheckCircle2 className="w-16 h-16 text-yellow-400" />
                 </div>
                 <div className="space-y-4">
-                  <h2 className="text-4xl font-display font-black leading-none">{t('crisis.ready_title')}</h2>
-                  <p className="text-lg font-bold opacity-80">{t('crisis.ready_desc')}</p>
+                  <h2 className="text-4xl font-display font-black leading-none text-white">{t('crisis.ready_title')}</h2>
+                  <p className="text-lg font-bold text-white/85">{t('crisis.ready_desc')}</p>
                 </div>
                 <button 
                   onClick={async () => {
@@ -650,7 +650,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
           >
             {/* Main Action: Estoy a Salvo */}
             <div className="bg-red-900/70 text-white p-6 rounded-[2.5rem] shadow-2xl shadow-black/20 border border-red-700/60">
-              <h2 className="text-2xl font-display font-black mb-1 text-center uppercase">{t('crisis.im_safe_title')}</h2>
+              <h2 className="text-2xl font-display font-black mb-1 text-center uppercase text-white">{t('crisis.im_safe_title')}</h2>
               <p className="text-white/80 mb-6 font-bold text-center text-sm">{t('crisis.im_safe_desc')}</p>
               <div className="space-y-3">
                 <button 
@@ -719,8 +719,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               <div className="flex items-center gap-3">
                 <Clock className="w-6 h-6 text-yellow-400" />
                 <div>
-                  <p className="font-bold text-sm">{t('crisis.preventive_reminders')}</p>
-                  <p className="text-[10px] opacity-70">{t('crisis.reminders_desc')}</p>
+                  <p className="font-bold text-sm text-white">{t('crisis.preventive_reminders')}</p>
+                  <p className="text-[10px] text-white/70">{t('crisis.reminders_desc')}</p>
                 </div>
               </div>
               <button 
@@ -746,8 +746,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               <div className="flex items-center gap-4">
                 <Phone className="w-8 h-8" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-1">{t('crisis.emergency_label')}</p>
-                  <p className="text-3xl font-display font-black leading-none">911</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-1 text-white/70">{t('crisis.emergency_label')}</p>
+                  <p className="text-3xl font-display font-black leading-none text-white">911</p>
                 </div>
               </div>
                 <button 
@@ -758,7 +758,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </button>
             </div>
             {!isMobileDevice() && !emergencyDialing && (
-              <p className="text-[10px] text-center font-bold opacity-60 uppercase tracking-widest">
+              <p className="text-[10px] text-center font-bold text-white/60 uppercase tracking-widest">
                 {t('crisis.desktop_call_hint') || 'Función de llamada directa disponible solo en móviles'}
               </p>
             )}
@@ -774,7 +774,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             <button onClick={() => setActiveSection('main')} className="flex items-center gap-2 font-bold text-yellow-400">
               <X className="w-5 h-5" /> {t('crisis.back')}
             </button>
-            <h2 className="text-3xl font-display font-black uppercase">{t('crisis.backpack')}</h2>
+            <h2 className="text-3xl font-display font-black uppercase text-white">{t('crisis.backpack')}</h2>
             <div className="space-y-6">
               {MOCHILA_ITEMS.map((cat, i) => (
                 <div key={i} className="space-y-3">
@@ -788,7 +788,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                           onChange={() => toggleItem(item)}
                           className="w-6 h-6 rounded-lg border-red-400 text-red-600 focus:ring-red-500 bg-white/20" 
                         />
-                        <span className={`font-bold text-sm ${checkedItems.includes(item) ? 'line-through opacity-50' : ''}`}>{item}</span>
+                        <span className={`font-bold text-sm text-white ${checkedItems.includes(item) ? 'line-through opacity-50' : ''}`}>{item}</span>
                       </label>
                     ))}
                   </div>
@@ -809,9 +809,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             </button>
             <div className="bg-red-900/70 text-white p-4 rounded-2xl flex items-start gap-3 border border-yellow-400/50">
               <Info className="w-6 h-6 shrink-0 mt-1" />
-              <p className="text-xs font-bold">{t('crisis.report_help_text')}</p>
+              <p className="text-xs font-bold text-white">{t('crisis.report_help_text')}</p>
             </div>
-            <h2 className="text-3xl font-display font-black uppercase">{t('crisis.report_damage')}</h2>
+            <h2 className="text-3xl font-display font-black uppercase text-white">{t('crisis.report_damage')}</h2>
             <form onSubmit={handleSubmitDamageReport} className="space-y-6">
               {locationError && (
                 <div className="p-4 bg-red-900/70 text-white rounded-2xl font-bold text-sm flex items-center gap-3 border-l-8 border-yellow-400">
@@ -821,7 +821,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               )}
 
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest opacity-70">{t('crisis.visual_evidence')}</label>
+                <label className="text-xs font-black uppercase tracking-widest text-white/70">{t('crisis.visual_evidence')}</label>
                 <div className="relative">
                   <input 
                     type="file" 
@@ -856,7 +856,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest opacity-70">{t('crisis.damage_type')}</label>
+                <label className="text-xs font-black uppercase tracking-widest text-white/70">{t('crisis.damage_type')}</label>
                 <select 
                   required
                   value={damageType}
@@ -872,7 +872,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-black uppercase tracking-widest opacity-70">
+                  <label className="text-xs font-black uppercase tracking-widest text-white/70">
                     {isManualLocation ? t('crisis.manual_coords') : t('crisis.gps_location')}
                   </label>
                   <button 
@@ -965,7 +965,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest opacity-70">{t('reports.urgency_level')}</label>
+                <label className="text-xs font-black uppercase tracking-widest text-white/70">{t('reports.urgency_level')}</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button 
                     type="button"
@@ -985,7 +985,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-black uppercase tracking-widest opacity-70">{t('reports.description_label')} ({t('reports.optional')})</label>
+                  <label className="text-xs font-black uppercase tracking-widest text-white/70">{t('reports.description_label')} ({t('reports.optional')})</label>
                   <span className={cn(
                     "text-[10px] font-black uppercase tracking-widest",
                     description.length > 500 ? "text-red-400" : "text-white/40"
@@ -1038,14 +1038,14 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             <button onClick={() => setActiveSection('main')} className="flex items-center gap-2 font-bold text-yellow-400">
               <X className="w-5 h-5" /> {t('crisis.back')}
             </button>
-            <h2 className="text-3xl font-display font-black uppercase">{t('crisis.meeting_point')}</h2>
+            <h2 className="text-3xl font-display font-black uppercase text-white">{t('crisis.meeting_point')}</h2>
             
             <div className="space-y-4">
               <div className="bg-white/10 p-6 rounded-3xl border border-white/10 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Home className="w-6 h-6 text-yellow-400" />
-                    <h3 className="font-black text-sm uppercase tracking-widest">{t('crisis.safe_place_defined')}</h3>
+                    <h3 className="font-black text-sm uppercase tracking-widest text-white">{t('crisis.safe_place_defined')}</h3>
                   </div>
                   {isEditingMeeting && (
                     <button onClick={() => setIsEditingMeeting(false)} className="text-xs font-black text-yellow-400">{t('crisis.done')}</button>
@@ -1064,7 +1064,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                   </div>
                 ) : (
                   <div className="p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
-                    <p className="text-lg font-black">{meetingPoint.place}</p>
+                    <p className="text-lg font-black text-white">{meetingPoint.place}</p>
                   </div>
                 )}
                 
@@ -1081,7 +1081,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
               <div className="bg-white/10 p-6 rounded-3xl border border-white/10 space-y-4">
                 <div className="flex items-center gap-3">
                   <Users className="w-6 h-6 text-yellow-400" />
-                  <h3 className="font-black text-sm uppercase tracking-widest">{t('crisis.emergency_contacts')}</h3>
+                  <h3 className="font-black text-sm uppercase tracking-widest text-white">{t('crisis.emergency_contacts')}</h3>
                 </div>
                 <div className="space-y-2">
                   {contacts.map((contact: any, i: number) => {
@@ -1089,8 +1089,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     return (
                     <div key={i} className="flex items-center justify-between p-4 bg-red-900/40 rounded-2xl border border-red-400/30">
                       <div>
-                        <p className="font-black">{contact.name}</p>
-                        <p className="text-xs opacity-70 font-bold">{contact.phone}</p>
+                        <p className="font-black text-white">{contact.name}</p>
+                        <p className="text-xs text-white/70 font-bold">{contact.phone}</p>
                       </div>
                       <div className="flex gap-2">
                         <button 
@@ -1195,8 +1195,8 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
             <button onClick={() => setActiveSection('main')} className="flex items-center gap-2 font-bold text-yellow-400">
               <X className="w-5 h-5" /> {t('crisis.back')}
             </button>
-            <h2 className="text-3xl font-display font-black uppercase">{t('crisis.cut_guide')}</h2>
-            <p className="text-sm font-bold opacity-80">{t('crisis.cut_guide_desc')}</p>
+            <h2 className="text-3xl font-display font-black uppercase text-white">{t('crisis.cut_guide')}</h2>
+            <p className="text-sm font-bold text-white/85">{t('crisis.cut_guide_desc')}</p>
             
             <div className="space-y-6">
               {activeGuideIndex === null ? (
@@ -1210,7 +1210,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       <div className="p-3 bg-red-950 rounded-2xl transition-colors border border-yellow-400/30">
                         {guide.icon}
                       </div>
-                      <h3 className="text-xl font-display font-black uppercase tracking-tighter">{guide.title}</h3>
+                      <h3 className="text-xl font-display font-black uppercase tracking-tighter text-white">{guide.title}</h3>
                     </div>
                     <ChevronRight className="w-6 h-6 text-yellow-400 transition-colors" />
                   </button>
@@ -1222,7 +1222,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                       <div className="p-4 bg-red-950 rounded-2xl">
                         {SERVICE_GUIDES[activeGuideIndex].icon}
                       </div>
-                      <h3 className="text-2xl font-display font-black uppercase tracking-tighter">
+                      <h3 className="text-2xl font-display font-black uppercase tracking-tighter text-white">
                         {SERVICE_GUIDES[activeGuideIndex].title}
                       </h3>
                     </div>
@@ -1243,7 +1243,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     <span className="text-[10px] font-black text-yellow-400 uppercase tracking-[0.3em]">
                       {t('crisis.step_x_of_y').replace('{step}', (guideStep + 1).toString()).replace('{total}', SERVICE_GUIDES[activeGuideIndex].steps.length.toString())}
                     </span>
-                    <p className="text-xl font-bold leading-tight">
+                    <p className="text-xl font-bold leading-tight text-white">
                       {SERVICE_GUIDES[activeGuideIndex].steps[guideStep]}
                     </p>
                   </div>
@@ -1290,7 +1290,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
           <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" />
           <span className="text-[10px] font-black uppercase tracking-widest">{t('crisis.signal_active')}</span>
         </div>
-        <div className="text-[10px] font-black uppercase tracking-widest opacity-60">
+        <div className="text-[10px] font-black uppercase tracking-widest text-white/60">
           {t('crisis.version')}
         </div>
       </footer>
