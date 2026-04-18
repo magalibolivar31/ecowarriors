@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn, sanitizeText } from '../lib/utils';
+import { getCurrentLocation, geoErrorKey } from '../lib/geolocation';
 import { auth } from '../firebase';
 import { createReport } from '../services/reportService';
 import { ReportType, ReportLocation, UserSettings } from '../types';
@@ -366,36 +367,17 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     setFieldErrors(prev => ({ ...prev, contact_name: null, contact_phone: null }));
   };
 
-  const handleGetLocation = (): Promise<{ lat: number; lng: number } | null> => {
-    return new Promise((resolve) => {
-      if (!navigator.geolocation) {
-        setLocationError(t('crisis.browser_no_gps'));
-        resolve(null);
-        return;
-      }
-
-      setIsLocating(true);
-      setLocationError(null);
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const coords = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          setCurrentCoords(coords);
-          setIsLocating(false);
-          resolve(coords);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setLocationError(t('crisis.location_error_perms'));
-          setIsLocating(false);
-          resolve(null);
-        },
-        { timeout: 10000, enableHighAccuracy: true }
-      );
-    });
+  const handleGetLocation = async (): Promise<{ lat: number; lng: number } | null> => {
+    setIsLocating(true);
+    setLocationError(null);
+    const result = await getCurrentLocation();
+    setIsLocating(false);
+    if (result.ok) {
+      setCurrentCoords(result.coords);
+      return result.coords;
+    }
+    setLocationError(t(geoErrorKey(result.error)));
+    return null;
   };
 
   useEffect(() => {

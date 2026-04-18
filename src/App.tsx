@@ -64,6 +64,7 @@ import {
   Line
 } from 'recharts';
 import { cn, sanitizeText } from './lib/utils';
+import { getCurrentLocation, geoErrorKey } from './lib/geolocation';
 import { initializeImageOptimization } from './lib/imageOptimization';
 import { analyzeReport, validateDonation, validateRequest, ReportAnalysis } from './services/geminiService';
 import { CollaborativeMap, MapReport } from './components/CollaborativeMap';
@@ -1475,25 +1476,18 @@ function AppContent() {
     }
   };
 
-  const handleGetLocation = () => {
-    if (!navigator.geolocation) {
-      setError(t('reports.geo_not_supported'));
-      return;
-    }
+  const handleGetLocation = async () => {
     setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-        setCoords({ lat: latitude, lng: longitude });
-        setIsAutoLocation(true);
-        setLoading(false);
-      },
-      (err) => {
-        setError(t('reports.location_error'));
-        setLoading(false);
-      }
-    );
+    const result = await getCurrentLocation();
+    setLoading(false);
+    if (result.ok) {
+      const { lat, lng } = result.coords;
+      setLocation(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+      setCoords(result.coords);
+      setIsAutoLocation(true);
+    } else {
+      setError(t(geoErrorKey(result.error)));
+    }
   };
 
   const handleLogout = async () => {

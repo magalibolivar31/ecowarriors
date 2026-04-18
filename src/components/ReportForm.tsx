@@ -5,6 +5,7 @@ import { analyzeReport } from '../services/geminiService';
 import { createReport } from '../services/reportService';
 import { ReportType, ReportLocation } from '../types';
 import { cn } from '../lib/utils';
+import { getCurrentLocation, geoErrorKey } from '../lib/geolocation';
 import { SUCCESS_ANIMATION_DURATION_MS } from '../constants/feedback';
 
 import { useSettings } from '../contexts/SettingsContext';
@@ -57,27 +58,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     return error;
   };
 
-  const handleGetLocation = () => {
+  const handleGetLocation = async () => {
     setIsLocating(true);
     setError(null);
-    if (!navigator.geolocation) {
-      setError(t('reports.geolocation_not_supported'));
-      setIsLocating(false);
-      return;
+    const result = await getCurrentLocation();
+    if (result.ok) {
+      setLocation(result.coords);
+    } else {
+      setError(t(geoErrorKey(result.error)));
     }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ lat: latitude, lng: longitude });
-        setIsLocating(false);
-      },
-      (err) => {
-        setError(t('reports.location_error'));
-        setIsLocating(false);
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    setIsLocating(false);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
