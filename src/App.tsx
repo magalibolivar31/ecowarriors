@@ -406,6 +406,11 @@ function AppContent() {
       setFieldErrors(prev => ({ ...prev, [name]: null }));
       return null;
     }
+    if (name === 'sLocation') {
+      const error = value.trim() ? null : 'El lugar es requerido';
+      setFieldErrors(prev => ({ ...prev, [name]: error }));
+      return error;
+    }
     const errorKey = getValidationErrorKey(name, value);
     const error = errorKey ? t(errorKey) : null;
 
@@ -3949,7 +3954,7 @@ function AppContent() {
               "w-full py-5 sm:py-6 text-white rounded-3xl font-black text-lg sm:text-xl transition-all active:scale-95 disabled:bg-zinc-500 disabled:text-zinc-100 disabled:opacity-100 disabled:cursor-not-allowed",
               editingSquadId
                 ? "bg-stormy-teal shadow-xl shadow-stormy-teal/20 hover:bg-stormy-teal/90"
-                : "bg-amber-500 shadow-xl shadow-amber-100 dark:shadow-none hover:bg-amber-600"
+                : "bg-emerald-action shadow-xl shadow-emerald-action/20 hover:bg-emerald-action/90"
             )}
           >
             {loading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : (editingSquadId ? t('community.squad_save_changes') : t('community.squad_create_btn'))}
