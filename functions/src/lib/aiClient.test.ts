@@ -21,7 +21,7 @@ describe("aiClient", () => {
   it("crea modelo de Gemini con nombre por defecto", () => {
     const model = createGeminiModel("key-1");
     expect(model).toEqual({ model: "mocked-model" });
-    expect(aiMocks.getGenerativeModel).toHaveBeenCalledWith({ model: "gemini-1.5-flash" });
+    expect(aiMocks.getGenerativeModel).toHaveBeenCalledWith({ model: "gemini-2.5-flash" });
   });
 
   it("permite customizar nombre de modelo", () => {

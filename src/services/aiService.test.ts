@@ -49,7 +49,7 @@ describe('aiService', () => {
     const result = await summarizeFile('base64data', 'image/jpeg');
 
     expect(result).toBe('Resumen generado');
-    expect(aiMocks.getGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-3-flash-preview' });
+    expect(aiMocks.getGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-2.5-flash' });
     expect(aiMocks.generateContent).toHaveBeenCalledTimes(1);
   });
 

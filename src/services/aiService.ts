@@ -13,7 +13,7 @@ export interface AIAnalysisResult {
 
 export const summarizeFile = async (base64Data: string, mimeType: string): Promise<string> => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const prompt = "Resume el contenido de este archivo ambiental de forma concisa.";
     
     const result = await model.generateContent([
@@ -37,7 +37,7 @@ export const summarizeFile = async (base64Data: string, mimeType: string): Promi
 export const analyzePollutionImage = async (base64Image: string): Promise<AIAnalysisResult> => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
 
