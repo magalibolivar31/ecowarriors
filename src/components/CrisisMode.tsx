@@ -130,12 +130,6 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       if (trimmed.length > 0 && (trimmed.length < 10 || trimmed.length > 500)) {
         error = t('validation.description_min');
       }
-    } else if (name === 'lat') {
-      const val = parseFloat(value);
-      if (isNaN(val) || val < -90 || val > 90) error = t('validation.coordinate_invalid');
-    } else if (name === 'lng') {
-      const val = parseFloat(value);
-      if (isNaN(val) || val < -180 || val > 180) error = t('validation.coordinate_invalid');
     }
     
     setFieldErrors(prev => ({ ...prev, [name]: error }));
@@ -161,7 +155,10 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
   const [currentCoords, setCurrentCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [isManualLocation, setIsManualLocation] = useState(false);
-  const [manualCoords, setManualCoords] = useState({ lat: '', lng: '' });
+  const [addressInput, setAddressInput] = useState('');
+  const [isGeocoding, setIsGeocoding] = useState(false);
+  const [geocodeResult, setGeocodeResult] = useState<{ lat: number; lng: number; displayName: string } | null>(null);
+  const [geocodeError, setGeocodeError] = useState<string | null>(null);
   const isContactInvalid = !newContact.name || !newContact.phone || !!fieldErrors.contact_name || !!fieldErrors.contact_phone;
   const isSyncingPendingReportsRef = useRef(false);
 
@@ -407,6 +404,34 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     }
   }, [activeSection]);
 
+  const handleGeocode = async () => {
+    const trimmed = addressInput.trim();
+    if (!trimmed) return;
+    setIsGeocoding(true);
+    setGeocodeError(null);
+    setGeocodeResult(null);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(trimmed)}&format=json&limit=1`,
+        { headers: { 'Accept-Language': 'es', 'User-Agent': 'EcoWarriors/1.0' } }
+      );
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        setGeocodeError(t('crisis.geocode_not_found'));
+      } else {
+        setGeocodeResult({
+          lat: parseFloat(data[0].lat),
+          lng: parseFloat(data[0].lon),
+          displayName: data[0].display_name,
+        });
+      }
+    } catch {
+      setGeocodeError(t('crisis.geocode_error'));
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
+
   const handleSubmitDamageReport = async (e: React.FormEvent) => {
     e.preventDefault();
     const descriptionError = validateField('description', description);
@@ -415,22 +440,11 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
     let finalCoords = currentCoords;
 
     if (isManualLocation) {
-      const latError = validateField('lat', manualCoords.lat);
-      const lngError = validateField('lng', manualCoords.lng);
-      if (latError || lngError) {
-        setLocationError(t('validation.coordinate_invalid'));
+      if (!geocodeResult) {
+        setLocationError(t('crisis.coords_required'));
         return;
       }
-
-      const lat = parseFloat(manualCoords.lat);
-      const lng = parseFloat(manualCoords.lng);
-      
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-        setLocationError(t('crisis.wait_location_error'));
-        return;
-      }
-      
-      finalCoords = { lat, lng };
+      finalCoords = { lat: geocodeResult.lat, lng: geocodeResult.lng };
     } else if (!finalCoords) {
       // If not manual and no coords yet, try to get them now
       finalCoords = await handleGetLocation();
@@ -476,7 +490,9 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
         setDescription('');
         setSelectedImage(null);
         setCurrentCoords(null);
-        setManualCoords({ lat: '', lng: '' });
+        setAddressInput('');
+        setGeocodeResult(null);
+        setGeocodeError(null);
         setIsManualLocation(false);
       } catch (error) {
         console.error("Error creating crisis report:", error);
@@ -912,41 +928,55 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div className="space-y-1">
-                      <input 
-                        type="number"
-                        step="any"
-                        placeholder={t('crisis.latitude_placeholder')}
-                        value={manualCoords.lat}
-                        onChange={(e) => setManualCoords(prev => ({ ...prev, lat: e.target.value }))}
-                        onBlur={(e) => validateField('lat', e.target.value)}
-                        className={cn(
-                          "w-full p-4 bg-white/10 rounded-2xl border border-white/20 font-mono text-sm outline-none focus:border-yellow-400 placeholder:text-white/30",
-                          fieldErrors.lat && "border-red-400"
-                        )}
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder={t('crisis.address_placeholder')}
+                        value={addressInput}
+                        onChange={(e) => {
+                          setAddressInput(e.target.value);
+                          setGeocodeResult(null);
+                          setGeocodeError(null);
+                        }}
+                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleGeocode())}
+                        disabled={isGeocoding}
+                        className="flex-1 p-4 bg-white/10 rounded-2xl border border-white/20 text-sm outline-none focus:border-yellow-400 placeholder:text-white/30 disabled:opacity-50"
                       />
-                      {fieldErrors.lat && <p className="text-[8px] text-red-300 font-bold uppercase">{fieldErrors.lat}</p>}
+                      <button
+                        type="button"
+                        onClick={handleGeocode}
+                        disabled={isGeocoding || !addressInput.trim()}
+                        className="px-4 py-2 bg-yellow-400 text-red-900 rounded-2xl font-black text-xs uppercase tracking-widest disabled:opacity-50 transition-all hover:bg-yellow-300 whitespace-nowrap"
+                      >
+                        {isGeocoding ? t('crisis.geocoding') : t('crisis.geocode_search')}
+                      </button>
                     </div>
-                    <div className="space-y-1">
-                      <input 
-                        type="number"
-                        step="any"
-                        placeholder={t('crisis.longitude_placeholder')}
-                        value={manualCoords.lng}
-                        onChange={(e) => setManualCoords(prev => ({ ...prev, lng: e.target.value }))}
-                        onBlur={(e) => validateField('lng', e.target.value)}
-                        className={cn(
-                          "w-full p-4 bg-white/10 rounded-2xl border border-white/20 font-mono text-sm outline-none focus:border-yellow-400 placeholder:text-white/30",
-                          fieldErrors.lng && "border-red-400"
-                        )}
-                      />
-                      {fieldErrors.lng && <p className="text-[8px] text-red-300 font-bold uppercase">{fieldErrors.lng}</p>}
-                    </div>
+                    {geocodeResult && (
+                      <div className="flex items-start gap-2 p-3 bg-green-900/40 border border-green-500/40 rounded-xl">
+                        <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-black text-green-400 uppercase tracking-widest">{t('crisis.geocode_found')}</p>
+                          <p className="text-xs text-white/70 mt-0.5 truncate">{geocodeResult.displayName}</p>
+                        </div>
+                      </div>
+                    )}
+                    {geocodeError && (
+                      <div className="flex items-center justify-between p-3 bg-red-900/40 border border-red-500/40 rounded-xl">
+                        <p className="text-xs text-red-300 font-bold">{geocodeError}</p>
+                        <button
+                          type="button"
+                          onClick={handleGeocode}
+                          className="text-[10px] font-black text-yellow-400 uppercase tracking-widest hover:underline ml-2 shrink-0"
+                        >
+                          {t('crisis.geocode_retry')}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 
-                {((!currentCoords && !isLocating && !isManualLocation) || (isManualLocation && (!manualCoords.lat || !manualCoords.lng))) && (
+                {((!currentCoords && !isLocating && !isManualLocation) || (isManualLocation && !geocodeResult && !isGeocoding)) && (
                   <p className="text-[10px] text-red-300 font-bold uppercase tracking-widest mt-1">
                     {t('crisis.coords_required')}
                   </p>
@@ -996,7 +1026,7 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
                 )}
               </div>
               <button 
-                disabled={isSubmitting || (isLocating && !isManualLocation) || !!fieldErrors.description || (isManualLocation && (!!fieldErrors.lat || !!fieldErrors.lng))}
+                disabled={isSubmitting || (isLocating && !isManualLocation) || !!fieldErrors.description || (isManualLocation && !geocodeResult)}
                 className="w-full py-6 bg-yellow-400 text-red-900 rounded-3xl font-black text-xl shadow-xl active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
