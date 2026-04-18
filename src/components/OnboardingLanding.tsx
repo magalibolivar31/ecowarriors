@@ -490,13 +490,19 @@ export const OnboardingLanding: React.FC = () => {
       </section>
 
       {/* Agradecimientos y galería */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-zinc-50 dark:bg-[#0b1c25]">
+      <section
+        className="py-16 sm:py-24 px-4 sm:px-6"
+        style={{ backgroundColor: darkMode ? '#0b1c25' : undefined }}
+      >
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="space-y-6 text-center">
-            <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-tight dark:text-white">
+            <h2 className={cn(
+              "text-4xl md:text-5xl font-display font-black tracking-tighter uppercase leading-tight",
+              darkMode ? "text-white" : "text-zinc-900"
+            )}>
               {t('landing.support_thanks_title')}
             </h2>
-            <p className="text-zinc-500 dark:text-slate-400 max-w-3xl mx-auto font-medium">
+            <p className={cn("max-w-3xl mx-auto font-medium", darkMode ? "text-slate-400" : "text-zinc-500")}>
               {t('landing.support_thanks_subtitle')}
             </p>
           </div>
@@ -504,7 +510,15 @@ export const OnboardingLanding: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
             {LANDING_SUPPORT_LOGOS.map((logo) => {
               const logoContent = (
-                <div className="h-28 bg-white dark:bg-white rounded-2xl p-3 md:p-4 shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)] flex items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                <div
+                  className="h-28 rounded-2xl p-3 md:p-4 flex items-center justify-center hover:-translate-y-1 transition-transform duration-300"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    boxShadow: darkMode
+                      ? '0 4px 16px rgba(0,0,0,0.4)'
+                      : '0 4px 12px rgba(0,0,0,0.08)',
+                  }}
+                >
                   <img
                     src={logo.imageUrl}
                     alt={logo.name}
