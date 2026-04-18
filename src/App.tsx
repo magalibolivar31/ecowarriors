@@ -2444,12 +2444,30 @@ function AppContent() {
           )}
 
           {activeTab === 'REPORTES' && (
-            <motion.div 
+            <motion.div
               key="reportes"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="space-y-8"
             >
+              {/* CTA banner */}
+              <div
+                style={{ backgroundColor: '#1D9E75', borderRadius: 'var(--border-radius-lg, 1.5rem)', padding: '1.25rem 1.5rem' }}
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              >
+                <div>
+                  <p className="text-white font-bold text-lg leading-snug">¿Ves algo en tu barrio?</p>
+                  <p className="text-sm font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.85)' }}>Reportalo en segundos y ayudá a tu comunidad.</p>
+                </div>
+                <button
+                  onClick={() => { resetForm(); setIsReportModalOpen(true); }}
+                  className="shrink-0 self-start sm:self-auto"
+                  style={{ backgroundColor: '#ffffff', color: '#1D9E75', borderRadius: '32px', padding: '10px 20px', fontSize: '14px', fontWeight: 700, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                >
+                  + Reportar ahora
+                </button>
+              </div>
+
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
                   <h2 className="text-3xl sm:text-4xl font-display font-black text-stormy-teal uppercase tracking-tighter">
@@ -3042,25 +3060,6 @@ function AppContent() {
     </div>
 
       {/* FAB: Reportar — always visible, hidden only in Crisis Mode (early return above) */}
-      {/* FAB pill — bottom-20 on mobile clears the tab bar, bottom-6 on sm+ desktop */}
-      <button
-        onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-        aria-label="Reportar"
-        className="fixed bottom-20 right-6 sm:bottom-6 z-50 flex items-center gap-2"
-        style={{
-          backgroundColor: '#1D9E75',
-          color: '#ffffff',
-          borderRadius: '32px',
-          padding: '14px 20px',
-          fontSize: '14px',
-          fontWeight: 500,
-          border: 'none',
-          cursor: 'pointer',
-        }}
-      >
-        <Camera style={{ width: '18px', height: '18px', color: '#ffffff', flexShrink: 0 }} />
-        <span>Reportar</span>
-      </button>
 
       {/* Modals */}
       <AnimatePresence>
