@@ -4,6 +4,11 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    env: {
+      VITE_GEMINI_API_KEY: 'test-key-1',
+      VITE_GEMINI_API_KEY2: 'test-key-2',
+      VITE_GEMINI_API_KEY3: 'test-key-3',
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
