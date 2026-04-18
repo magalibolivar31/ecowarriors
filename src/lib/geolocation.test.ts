@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getCurrentLocation, geoErrorKey } from './geolocation';
 
-// Minimal GeolocationPositionError mock
 function makeGeoError(code: number): GeolocationPositionError {
   return {
     code,
@@ -45,37 +44,24 @@ describe('geoErrorKey', () => {
 });
 
 describe('getCurrentLocation', () => {
-  const originalGeo = globalThis.navigator?.geolocation;
-
   afterEach(() => {
-    vi.restoreAllMocks();
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: originalGeo,
-      configurable: true,
-      writable: true,
-    });
+    vi.unstubAllGlobals();
   });
 
   it('returns unsupported when navigator.geolocation is absent', async () => {
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: undefined,
-      configurable: true,
-      writable: true,
-    });
+    vi.stubGlobal('navigator', {});
     const result = await getCurrentLocation();
     expect(result.coords).toBeNull();
     expect(result.error).toBe('unsupported');
   });
 
   it('returns coords on success', async () => {
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: {
+    vi.stubGlobal('navigator', {
+      geolocation: {
         getCurrentPosition: (success: PositionCallback) => {
           success(makePosition(40.7128, -74.006));
         },
       },
-      configurable: true,
-      writable: true,
     });
     const result = await getCurrentLocation();
     expect(result.error).toBeNull();
@@ -83,14 +69,12 @@ describe('getCurrentLocation', () => {
   });
 
   it('returns permission error on PERMISSION_DENIED', async () => {
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: {
+    vi.stubGlobal('navigator', {
+      geolocation: {
         getCurrentPosition: (_: PositionCallback, error: PositionErrorCallback) => {
-          error(makeGeoError(1)); // PERMISSION_DENIED
+          error(makeGeoError(1));
         },
       },
-      configurable: true,
-      writable: true,
     });
     const result = await getCurrentLocation();
     expect(result.coords).toBeNull();
@@ -98,14 +82,12 @@ describe('getCurrentLocation', () => {
   });
 
   it('returns unavailable on POSITION_UNAVAILABLE', async () => {
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: {
+    vi.stubGlobal('navigator', {
+      geolocation: {
         getCurrentPosition: (_: PositionCallback, error: PositionErrorCallback) => {
-          error(makeGeoError(2)); // POSITION_UNAVAILABLE
+          error(makeGeoError(2));
         },
       },
-      configurable: true,
-      writable: true,
     });
     const result = await getCurrentLocation();
     expect(result.coords).toBeNull();
@@ -114,8 +96,8 @@ describe('getCurrentLocation', () => {
 
   it('retries with high accuracy on timeout and returns coords on second attempt', async () => {
     let callCount = 0;
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: {
+    vi.stubGlobal('navigator', {
+      geolocation: {
         getCurrentPosition: (
           success: PositionCallback,
           error: PositionErrorCallback,
@@ -123,16 +105,12 @@ describe('getCurrentLocation', () => {
         ) => {
           callCount++;
           if (!options?.enableHighAccuracy) {
-            // First call: low accuracy → timeout
-            error(makeGeoError(3)); // TIMEOUT
+            error(makeGeoError(3)); // TIMEOUT → triggers retry
           } else {
-            // Second call: high accuracy → success
             success(makePosition(51.505, -0.09));
           }
         },
       },
-      configurable: true,
-      writable: true,
     });
     const result = await getCurrentLocation();
     expect(callCount).toBe(2);
@@ -141,22 +119,20 @@ describe('getCurrentLocation', () => {
   });
 
   it('retries with high accuracy on timeout and returns error if second also fails', async () => {
-    Object.defineProperty(globalThis.navigator, 'geolocation', {
-      value: {
+    vi.stubGlobal('navigator', {
+      geolocation: {
         getCurrentPosition: (
           _: PositionCallback,
           error: PositionErrorCallback,
           options?: PositionOptions,
         ) => {
           if (!options?.enableHighAccuracy) {
-            error(makeGeoError(3)); // TIMEOUT → trigger retry
+            error(makeGeoError(3)); // TIMEOUT → triggers retry
           } else {
             error(makeGeoError(2)); // POSITION_UNAVAILABLE on retry
           }
         },
       },
-      configurable: true,
-      writable: true,
     });
     const result = await getCurrentLocation();
     expect(result.coords).toBeNull();
