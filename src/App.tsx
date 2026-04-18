@@ -136,7 +136,6 @@ import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 // --- Types ---
 
 type Tab = 'DASHBOARD' | 'REPORTES' | 'COMUNIDAD' | 'MAPA' | 'CHATBOT' | 'PERFIL';
-const TABS_WITHOUT_FAB: Tab[] = [];
 type Tag = 'ropa' | 'comida' | 'otros';
 type PostType = 'doy' | 'recibo';
 
@@ -3042,24 +3041,31 @@ function AppContent() {
       </div>
     </div>
 
-      {/* Global Floating Action Button: Reportar Ahora — hidden only in Crisis Mode (early return above) */}
-      {!TABS_WITHOUT_FAB.includes(activeTab) && (
-        <div className="fixed bottom-[calc(var(--mobile-tab-bar-height,5.25rem)+env(safe-area-inset-bottom))] sm:bottom-8 right-5 sm:right-8 z-[55]">
-          <div className="relative">
-            {/* Outer ping ring */}
-            <span className="absolute inset-0 rounded-2xl bg-emerald-action/50 animate-ping pointer-events-none" />
-            <button
-              onClick={() => { resetForm(); setIsReportModalOpen(true); }}
-              aria-label="Reportar ahora"
-              style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}
-              className="relative flex items-center gap-2 bg-emerald-action text-white px-6 py-4 rounded-2xl font-bold text-lg hover:bg-stormy-teal active:scale-95 transition-all border border-white/30"
-            >
-              <span>⚠️</span>
-              <span className="uppercase tracking-wide">REPORTAR AHORA</span>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* FAB: Reportar — always visible, hidden only in Crisis Mode (early return above) */}
+      <button
+        onClick={() => { resetForm(); setIsReportModalOpen(true); }}
+        aria-label="Reportar"
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 50,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          backgroundColor: '#1D9E75',
+          color: '#ffffff',
+          borderRadius: '32px',
+          padding: '14px 20px',
+          fontSize: '14px',
+          fontWeight: 500,
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        <Camera style={{ width: '18px', height: '18px', color: '#ffffff', flexShrink: 0 }} />
+        <span>Reportar</span>
+      </button>
 
       {/* Modals */}
       <AnimatePresence>
