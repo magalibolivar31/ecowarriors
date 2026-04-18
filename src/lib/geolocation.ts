@@ -18,7 +18,7 @@ export function geoErrorKey(error: GeoError): string {
   }
 }
 
-function attempt(highAccuracy: boolean): Promise<GeoResult> {
+function attempt(highAccuracy: boolean, timeoutMs = 10000): Promise<GeoResult> {
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -37,23 +37,40 @@ function attempt(highAccuracy: boolean): Promise<GeoResult> {
         }
         resolve({ coords: null, error });
       },
-      { enableHighAccuracy: highAccuracy, timeout: 10000, maximumAge: 30000 },
+      { enableHighAccuracy: highAccuracy, timeout: timeoutMs, maximumAge: 30000 },
     );
   });
 }
 
 /**
  * Wraps navigator.geolocation.getCurrentPosition in a Promise.
- * Tries low-accuracy first (fast on desktop/WiFi); retries with
- * high-accuracy only on timeout (better for outdoor mobile).
+ *
+ * Strategy:
+ *   1. Try low-accuracy (network/WiFi) with a 8 s timeout — fast on desktop and
+ *      devices with cell/WiFi positioning.
+ *   2. If that times out OR returns POSITION_UNAVAILABLE (common on Android when
+ *      enableHighAccuracy is false but GPS is available), retry once with
+ *      high-accuracy GPS and a 15 s timeout.
+ *   3. PERMISSION_DENIED is returned immediately — a retry won't help.
  */
 export async function getCurrentLocation(): Promise<GeoResult> {
+  console.log('[geo] geolocation disponible:', !!navigator?.geolocation);
+  console.log('[geo] protocol:', globalThis.location?.protocol ?? 'N/A');
+  console.log('[geo] hostname:', globalThis.location?.hostname ?? 'N/A');
+
   if (!navigator.geolocation) {
     return { coords: null, error: 'unsupported' };
   }
-  const first = await attempt(false);
-  if (first.error === 'timeout') {
-    return attempt(true);
+
+  const first = await attempt(false, 8000);
+  console.log('[geo] primer intento (low-accuracy):', first.error ?? 'ok', first.coords);
+
+  if (first.error === 'timeout' || first.error === 'unavailable') {
+    console.log('[geo] reintentando con high-accuracy GPS...');
+    const second = await attempt(true, 15000);
+    console.log('[geo] segundo intento (high-accuracy):', second.error ?? 'ok', second.coords);
+    return second;
   }
+
   return first;
 }

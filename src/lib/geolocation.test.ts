@@ -118,6 +118,30 @@ describe('getCurrentLocation', () => {
     expect(result.coords).toEqual({ lat: 51.505, lng: -0.09 });
   });
 
+  it('retries with high accuracy on POSITION_UNAVAILABLE and returns coords on second attempt', async () => {
+    let callCount = 0;
+    vi.stubGlobal('navigator', {
+      geolocation: {
+        getCurrentPosition: (
+          success: PositionCallback,
+          error: PositionErrorCallback,
+          options?: PositionOptions,
+        ) => {
+          callCount++;
+          if (!options?.enableHighAccuracy) {
+            error(makeGeoError(2)); // POSITION_UNAVAILABLE → triggers retry
+          } else {
+            success(makePosition(-34.603, -58.381)); // Buenos Aires
+          }
+        },
+      },
+    });
+    const result = await getCurrentLocation();
+    expect(callCount).toBe(2);
+    expect(result.error).toBeNull();
+    expect(result.coords).toEqual({ lat: -34.603, lng: -58.381 });
+  });
+
   it('retries with high accuracy on timeout and returns error if second also fails', async () => {
     vi.stubGlobal('navigator', {
       geolocation: {

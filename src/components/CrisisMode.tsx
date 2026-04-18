@@ -311,22 +311,15 @@ export const CrisisMode: React.FC<CrisisModeProps> = ({ onClose, userSettings, o
       }
     };
 
-    if (!navigator.geolocation) {
-      sendSignal();
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        sendSignal(`https://www.google.com/maps?q=${latitude},${longitude}`);
-      },
-      (error) => {
-        console.error("Error obtaining location:", error);
+    getCurrentLocation().then((result) => {
+      if (result.coords) {
+        const { lat, lng } = result.coords;
+        sendSignal(`https://www.google.com/maps?q=${lat},${lng}`);
+      } else {
+        console.warn('[crisis] location for safe signal failed:', result.error);
         sendSignal();
-      },
-      { timeout: 5000 }
-    );
+      }
+    });
 
     // Cooldown: 5 minutes (300000ms)
     setTimeout(() => setSignalSent(false), 300000);
