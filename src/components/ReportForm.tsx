@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, MapPin, Loader2, X, AlertTriangle, CheckCircle2, Search } from 'lucide-react';
+import { Camera, MapPin, Loader2, X, AlertTriangle, CheckCircle2, Search, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { analyzeReport } from '../services/geminiService';
 import { createReport } from '../services/reportService';
 import { ReportType, ReportLocation } from '../types';
 import { cn } from '../lib/utils';
-import { getCurrentLocation, geoErrorKey } from '../lib/geolocation';
+import { getCurrentLocation, geoErrorKey, GeoError } from '../lib/geolocation';
 import { SUCCESS_ANIMATION_DURATION_MS } from '../constants/feedback';
 
 import { useSettings } from '../contexts/SettingsContext';
@@ -24,6 +24,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
   const [location, setLocation] = useState<ReportLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [locationFailed, setLocationFailed] = useState(false);
+  const [geoError, setGeoError] = useState<GeoError | null>(null);
   const [addressInput, setAddressInput] = useState('');
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,8 +50,10 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
       if (result.coords) {
         setLocation(result.coords);
         setLocationFailed(false);
+        setGeoError(null);
       } else {
         setLocationFailed(true);
+        setGeoError(result.error);
       }
       setIsLocating(false);
     });
@@ -83,9 +86,15 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
     if (result.coords) {
       setLocation(result.coords);
       setLocationFailed(false);
+      setGeoError(null);
     } else {
-      setError(t(geoErrorKey(result.error)));
+      setGeoError(result.error);
       setLocationFailed(true);
+      // Only show the generic error banner for non-permission errors
+      // (permission has its own dedicated UI below the location row)
+      if (result.error !== 'permission') {
+        setError(t(geoErrorKey(result.error)));
+      }
     }
     setIsLocating(false);
   };
@@ -371,11 +380,30 @@ export const ReportForm: React.FC<ReportFormProps> = ({ onClose, onSuccess }) =>
                 <button
                   type="button"
                   onClick={handleGetLocation}
-                  className="w-full sm:w-auto p-4 bg-emerald-action/10 text-emerald-action rounded-2xl hover:bg-emerald-action/20 transition-colors flex items-center justify-center"
+                  disabled={isLocating}
+                  className="w-full sm:w-auto p-4 bg-emerald-action/10 text-emerald-action rounded-2xl hover:bg-emerald-action/20 transition-colors flex items-center justify-center disabled:opacity-50"
                 >
-                  <MapPin className="w-6 h-6" />
+                  {isLocating ? <Loader2 className="w-6 h-6 animate-spin" /> : <MapPin className="w-6 h-6" />}
                 </button>
               </div>
+
+              {/* Permission denied — special instructional banner */}
+              {geoError === 'permission' && !location && !isLocating && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
+                  <Lock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-amber-800 text-xs font-black uppercase tracking-wide mb-0.5">{t('reports.permission_denied_title')}</p>
+                    <p className="text-amber-700 text-xs font-medium leading-snug">{t('reports.permission_denied_hint')}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Other geo errors (timeout / unavailable) */}
+              {geoError && geoError !== 'permission' && !location && !isLocating && (
+                <p className="text-amber-600 text-xs font-bold ml-1">{t(geoErrorKey(geoError))}</p>
+              )}
+
+              {/* Address fallback — shown whenever GPS failed */}
               {locationFailed && !location && !isLocating && (
                 <div className="flex gap-2">
                   <input
