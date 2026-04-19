@@ -11,8 +11,10 @@ describe('getValidationErrorKey', () => {
   it('valida longitud en campos de nombre', () => {
     expect(getValidationErrorKey('title', 'a')).toBe('validation.name_invalid');
     expect(getValidationErrorKey('vZone', 'Zona Norte')).toBeNull();
-    expect(getValidationErrorKey('sLocation', 'X')).toBe('validation.name_invalid');
-    expect(getValidationErrorKey('sLocation', 'Plaza San Martín')).toBeNull();
+    // sLocation was removed from NAME_FIELDS — required-only check is done at component level
+    // so getValidationErrorKey always returns null for it (no length limit, Nominatim can be long)
+    expect(getValidationErrorKey('sLocation', 'X')).toBeNull();
+    expect(getValidationErrorKey('sLocation', 'Plaza San Martín, Ciudad Autónoma de Buenos Aires, Argentina')).toBeNull();
   });
 
   it('valida longitud en campos descriptivos', () => {
