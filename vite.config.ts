@@ -5,7 +5,7 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: '/',
+    base: '/ecowarriors/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
