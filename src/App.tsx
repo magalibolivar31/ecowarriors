@@ -223,7 +223,7 @@ const CAROUSEL_CARDS: CarouselCard[] = [
     description: 'carousel.resources_desc',
     videoLinks: [
       { label: 'carousel.video_presentation', url: 'https://youtu.be/lvZwQaB6-m0?si=UeL8WL246Y8Qyp3E' },
-      { label: 'carousel.video_technical', url: 'https://youtu.be/Sp47OiUobtU?si=Hy4N1ytCW4IBcjdG' }
+      { label: 'carousel.video_technical', url: 'https://youtu.be/rbEbCqbqynQ' }
     ]
   },
   {
@@ -564,7 +564,7 @@ function AppContent() {
         description: t('dashboard.resources_desc'),
         videoLinks: [
           { label: t('dashboard.view_presentation'), url: 'https://youtu.be/lvZwQaB6-m0?si=UeL8WL246Y8Qyp3E' },
-          { label: t('dashboard.technical_video'), url: 'https://youtu.be/Sp47OiUobtU?si=Hy4N1ytCW4IBcjdG' }
+          { label: t('dashboard.technical_video'), url: 'https://youtu.be/rbEbCqbqynQ' }
         ]
       },
       {
