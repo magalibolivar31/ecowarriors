@@ -3631,7 +3631,9 @@ function AppContent() {
           )}
         </AnimatePresence>
 
-    {/* Bottom Navigation - Mobile */}
+  </main>
+
+    {/* Bottom Navigation - Mobile (outside main to avoid overflow-hidden clipping fixed on iOS/Android) */}
     <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-zinc-100 px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] flex items-center justify-around z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       {[
         { id: 'DASHBOARD', icon: LayoutDashboard },
@@ -3653,7 +3655,6 @@ function AppContent() {
         </button>
       ))}
     </nav>
-  </main>
 
   {/* Modals */}
       <Modal 
